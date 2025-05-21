@@ -1,0 +1,35 @@
+{% if terms.items is not empty %}
+<div class="men-block-sidebar men-block-sidebar__list" id="men-block-sidebar_menu">
+    <div class="men-block-sidebar-title">{{ terms.title_block|upper }}</div>
+    <ul class="men-block-sidebar__list-first">
+
+        {% for items in terms.items %}
+            <li class="{% if items.children is not empty %}men-block-sidebar__list-first__with-children {% endif %}{% if item_active == items.tid %}is-active {% endif %}">
+                <a href="{{ path('view.primary_navigation.page_1', {'arg_0': items.tid|drupal_escape }) }}">{{ items.name }}</a>
+                {% if items.children is not empty %}
+                    <ul class="men-block-sidebar_list_child">
+                        {% for key, value in items.children %}
+                            {% set next = loop.index + 1 %}
+
+                            {% if loop.index == 1 %}
+                                {% set parentItem = value.parent %}
+                            {% endif %}
+
+                            <li {% if content.item_active == value.tid %} class="is-active" {% endif %}  >
+                                {% if parentItem != value.parent %}
+                                    <ul><li>
+                                {% endif %}
+                                    <a href="{{ path('view.primary_navigation.page_1', {'arg_0': value.tid|drupal_escape }) }}"> {{ value.name }} </a>
+                                {% if parentItem != value.parent %}
+                                    {% set parentItem = value.parent %}
+                                        </li></ul>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {%  endif %}
+            </li>
+    {% endfor %}
+</ul>
+</div>
+{% endif %}

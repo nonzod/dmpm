@@ -1,0 +1,292 @@
+@import 'settings';
+
+// Indication on labels for required fields
+span.form-required {
+  color: $brand-danger;
+}
+
+html.js .input-group-addon .glyphicon.glyphicon-spin {
+  color: $brand-primary;
+}
+
+// When a dropdown-toggle in a button group gets an extra class it should be ignored
+.form-actions .btn-group--primary .dropdown-toggle {
+  border-color: $btn-primary-border;
+}
+
+// inline form error
+.has-error {
+
+  .form-control {
+    border-color: $state-danger-text;
+
+    &:focus {
+      box-shadow: 0 2px 0 0 $state-danger-text;
+      border-color: $state-danger-text;
+    }
+  }
+
+}
+
+.form-item--error-message.alert-danger {
+
+  border-radius: $input-border-radius;
+
+  &:before {
+    color: $state-danger-bg;
+
+  }
+}
+
+.control-label {
+  font-weight: 300;
+}
+
+.form-wrapper__label {
+  font-weight: 500;
+}
+
+.form-wrapper {
+  border-radius: ($border-radius-base - 1);
+}
+
+.form-item-data-policy {
+  .card__block & {
+    label {
+      a {
+        color: $link-color;
+      }
+    }
+  }
+}
+
+.bef-exposed-form {
+  .complementary-title {
+    font-size: 18px;
+    text-align: left;
+    color: $men-link-all;
+  }
+}
+
+#views-exposed-form-events-list-page-all-events,
+#views-exposed-form-events-list-channel-streaming {
+  > div {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+  .form-actions,
+  .form-item {
+    margin-bottom: 10px;
+    margin-right: 3px;
+  }
+  .form-type-textfield {
+    display: flex;
+    align-items: flex-end;
+    label {
+      margin-bottom: 0;
+      margin-right: 5px;
+      font-size: 16px;
+    }
+    input {
+      border: 0;
+      border-bottom: 1px solid $border-list;
+      border-radius: 0!important;
+      line-height: 20px;
+      max-width: 100px;
+      height: auto;
+      padding: 0 5px;
+      @extend .font-arimo;
+    }
+  }
+  .form-submit {
+    margin-bottom: 0;
+    padding: 3px 15px;
+    border-radius: 0!important;
+    border: 0;
+    text-transform: uppercase;
+    color: $white;
+    background: $heading-highlight;
+    line-height: 24px;
+    &#edit-reset {
+      margin-right: 5px;
+    }
+  }
+}
+
+.ui-datepicker {
+  background: $calendar-bg;
+  z-index: 10!important;
+  @include z-depth-2;
+  @extend .font-arimo;
+  .ui-widget-header {
+    margin: 10px 15px;
+  }
+  .ui-datepicker-calendar {
+    margin: 0 15px 15px;
+  }
+  .ui-datepicker-next,
+  .ui-datepicker-prev {
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .ui-datepicker-prev {
+    float: left;
+  }
+  .ui-datepicker-next {
+    float: right;
+  }
+  .ui-datepicker-title {
+    clear: both;
+    padding-top: 5px;
+    text-align: center;
+  }
+  thead {
+    font-size: 12px;
+    text-transform: uppercase;
+  }
+  th {
+    font-weight: 400;
+    text-align: center;
+  }
+  td {
+    text-align: center;
+    a {
+      display: block;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+    }
+  }
+  .ui-datepicker-current-day a {
+    background-color: $heading-highlight;
+    color: $white;
+  }
+}
+
+// Passowrd/Login form
+.myaccess-password,
+.social-user-login-form {
+  position: fixed;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  @include for-tablet-portrait-up {
+    width: auto;
+  }
+}
+
+.myaccess-password,
+#password-session-form{
+  background: adjust-color($white, $alpha: -0.6);
+  backdrop-filter: blur(9px);
+  padding: 47px 15px;
+  font-size: 14px;
+  width: 90%;
+  margin: auto;
+  text-align: center;
+  @include for-tablet-portrait-up {
+    padding: 47px;
+    width: 500px;
+    top: 30%;
+    margin-top: 100px
+  }
+  h1 {
+    font-size: 36px;
+    margin-bottom: 44px;
+  }
+  .form-item-password {
+    @extend .font-arimo;
+    text-align: left;
+  }
+  label {
+    font-size: 16px;
+  }
+  input {
+    border: 0;
+    border-radius: 0!important;
+    width: 100%;
+    max-width: none!important;
+  }
+  .help-block {
+    color: $default-color;
+    font-size: 14px;
+  }
+  .form-submit {
+    background: $heading-highlight;
+    text-transform: uppercase;
+    border: 0;
+    border-radius: 0!important;
+    padding: 10px;
+    display: block;
+    margin: 40px auto 0;
+    width: 100%;
+    @extend .font-oswald-bold;
+    @include for-tablet-portrait-up {
+      width: 190px;
+    }
+    &:disabled{
+      background: $gray-light-1;
+    }
+  }
+}
+
+.odvsubmission-form {
+  margin-top: 50px;
+  > p {
+    font-size: 1.125rem;
+    line-height: 1.625rem;
+    margin-bottom: 40px;
+  }
+  .form-item {
+    label {
+      @extend .font-oswald;
+      font-size: 1rem;
+    }
+  }
+  .panel {
+    max-width: 600px;
+  }
+  .panel-heading {
+    header {
+      font-size: 1.125rem;
+      margin-bottom: 30px;
+      margin-top: 40px;
+      border-bottom: 1px solid $border-grey;
+    }
+  }
+  #edit-subject {
+    max-width: none;
+  }
+  .dropzone {
+    border: 1px solid $gray-light-1;
+    border-radius: 5px;
+  }
+  .form-submit {
+    margin-top: 20px;
+  }
+}
+form.odvsubmission-form .form-type-checkbox {
+  margin-bottom: 15px;
+  label {
+    font-size: 1rem;
+  }
+}
+
+.men-odv-thankyou {
+  max-width: 80%;
+  margin: 50px auto 0;
+  text-align: center;
+  p {
+    font-size: 1.125rem;
+    line-height: 1.625rem;
+    margin-bottom: 40px;
+  }
+  .btn-men {
+    font-size: 1.313rem;
+    line-height: 1.563rem;
+    padding: 10px 24px 13px;
+    @extend .font-oswald-medium;
+  }
+}

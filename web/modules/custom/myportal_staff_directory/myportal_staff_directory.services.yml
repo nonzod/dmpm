@@ -1,0 +1,5 @@
+services:
+  myportal_staff_directory.staff_member_importer_manager:
+    class: Drupal\myportal_staff_directory\Plugin\ImporterManager
+    parent: default_plugin_manager
+    arguments: ['@entity_type.manager']

@@ -1,0 +1,251 @@
+@import 'settings';
+
+.card {
+  border-top-left-radius: $card-border-radius;
+  border-bottom-left-radius: $card-border-radius;
+  border-top-right-radius: $card-border-radius;
+  border-bottom-right-radius: $card-border-radius;
+  background-color: $card-bg;
+}
+
+.card__title {
+  color: $gray;
+  font-weight: 500;
+  //text-transform: uppercase;
+
+  svg {
+    display: inline-block;
+    vertical-align: middle;
+    width: 19px;
+    height: 19px;
+    margin-right: 7px;
+  }
+}
+
+.block--custom-content-list {
+
+  .card__title .content-list__type {
+    display: none; /* temporary style */
+    width: 14px;
+    height: 14px;
+    margin-right: 1rem;
+    fill: #555; /* $$gray */
+  }
+
+  .card__actionbar {
+    text-align: center;
+  }
+}
+
+// Cards in the sidebar should have a centered title.
+.region--complementary,
+// Cards used on landing page streams as a sidebar should look the same.
+.paragraph--block .secondary-col {
+  .card__title,
+  .card__actionbar {
+    text-align: center;
+  }
+}
+
+.card__block {
+
+  &:first-child {
+    border-top-left-radius: $card-border-radius;
+    border-top-right-radius: $card-border-radius;
+  }
+
+  &:last-child {
+    border-bottom-left-radius: $card-border-radius;
+    border-bottom-right-radius: $card-border-radius;
+  }
+
+}
+
+.card__nested-section:last-child {
+  border-bottom-left-radius: $card-border-radius;
+  border-bottom-right-radius: $card-border-radius;
+}
+
+.card__link {
+  color: $men-link-all;
+  margin-top: 5px;
+  display: block;
+  width: 100%;
+  text-align: right;
+  &:hover {
+    color: darken($brand-primary, 10%);
+  }
+  a {
+    @extend .font-arimo-bold;
+    &:after {
+      content: '>';
+      margin-left: 5px;
+      vertical-align: middle;
+    }
+  }
+}
+
+.more-link,
+.less-link {
+  @extend .font-oswald;
+  font-size: 1.313rem;
+  line-height: 1.563rem;
+  color: $default-color;
+  text-transform: uppercase;
+  display: block;
+  text-align: right;
+  text-decoration: none !important;
+  position: relative;
+  padding-right: 65px;
+  background-image: url('../images/icon-arrow-long.svg');
+  background-position: center right;
+  background-repeat: no-repeat;
+  background-size: 40px;
+  &:after {
+    content: '';
+    height: 5px;
+    width: 195px;
+    position: absolute;
+    bottom: -6px;
+    right: 0;
+    background: $men-link-all;
+  }
+}
+
+.card.block-data-policy {
+  .card__title,
+  .card__block {
+    width: 100%;
+  }
+}
+
+.card {
+  &__actionbar {
+    padding: 0;
+    margin: 0;
+  }
+}
+
+.card-files {
+  .card-files__grid {
+    padding: 0;
+    margin: 10px 0;
+  }
+}
+
+.men-teaser--event {
+  .card__actionbar {
+    padding: 18px;
+  }
+}
+
+.men-topic--activity {
+  @include for-tablet-landscape-down {
+    .card__block {
+      padding: 0;
+    }
+  }
+}
+
+.men-node--full {
+  .body-text {
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+}
+
+.men-slider__in-content {
+  margin-bottom: 25px;
+  // If not carousel (less than 3)
+  > img {
+    display: inline-block;
+    vertical-align: middle;
+    padding: 0 10px;
+  }
+}
+.slick-slide {
+  margin: 0 15px;
+}
+.slick-slide a {
+  cursor: pointer;
+}
+.slick-arrow {
+  border: 0;
+  background: transparent;
+  height: 100%;
+  width: 40px;
+  padding: 0;
+  position: absolute;
+  top: 50%;
+  z-index: 10;
+  outline: unset;
+  transform: translateY(-50%);
+  svg {
+    max-width: 100%;
+    max-height: 100%;
+    fill: $dark-bg;
+  }
+}
+.slick-prev {
+  left: -30px;
+  @include for-tablet-landscape-up {
+    left: -40px;
+  }
+}
+.slick-next {
+  right: -30px;
+  @include for-tablet-landscape-up {
+    right: -40px;
+  }
+}
+
+.slick-lightbox-slick {
+  .slick-arrow {
+    font-size: 0;
+    line-height: 0;
+    &:before {
+      content: '';
+      width: 40px;
+      height: 40px;
+      display: block;
+    }
+  }
+  .slick-prev:before {
+    background: url('../images/icon-navigate_before.png');
+  }
+  .slick-next:before {
+    background: url('../images/icon-navigate_next.png');
+  }
+}
+
+.slick-lightbox-close {
+  right: 70px!important;
+  &:before {
+    font-size: 30px!important;
+  }
+}
+
+.men-topic--activity {
+  .slick-prev {
+    left: -30px;
+  }
+  .slick-next {
+    right: -30px;
+  }
+}
+
+.view-display-id-page_all_events,
+.view-display-id-channel_streaming {
+  padding: 1.25rem;
+  @include for-tablet-landscape-up {
+    padding: 2.5rem;
+  }
+}
+
+body.path-menarini-channel-streaming {
+  .bef-exposed-form {
+    > .card {
+      box-shadow: none;
+    }
+  }
+}

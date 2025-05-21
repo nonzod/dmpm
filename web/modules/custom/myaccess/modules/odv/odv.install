@@ -1,0 +1,45 @@
+<?php
+
+use Drupal\myaccess\Entity\Application;
+
+/**
+ * Implements hook_install().
+ *
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ */
+function odv_install() {
+  $odv = Application::create([
+    'title' => 'odv',
+    'description' => 'Organismo di Vigilanza',
+    'imageUrl' => '/modules/custom/myaccess/modules/odv/assets/odv.png',
+    'url' => '/applications/odv',
+    'categories' => [],
+    'remote_id' => NULL,
+    'settings' => [],
+    'status' => 1,
+    'bundle' => Application::LOCAL,
+  ]);
+  $odv->save();
+}
+
+/**
+ * Implements hook_uninstall().
+ *
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ */
+function odv_uninstall($is_syncing) {
+  $applications = Drupal::entityQuery('application')
+    ->condition('title', 'odv')
+    ->execute();
+  assert(is_array($applications));
+
+  if (empty($applications)) {
+    return;
+  }
+
+  $odv = reset($applications);
+  $application = Application::load($odv);
+  if ($application != NULL) {
+    $application->delete();
+  }
+}

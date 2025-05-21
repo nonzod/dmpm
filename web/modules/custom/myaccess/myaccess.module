@@ -1,0 +1,306 @@
+<?php
+
+/**
+ * @file
+ * Contains hook implementations for myportal_group module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
+use Drupal\myaccess\Event\UserEvents;
+use Drupal\myaccess\Event\UserLoginEvent;
+use Drupal\myaccess\StackMiddleware\IsExternalMiddleware;
+use Drupal\myportal_group\Access\MyPortalGroupAccessCheck;
+use Drupal\user\UserInterface;
+use Drupal\user\Entity\User;
+use Drupal\myaccess\Controller\ApplicationController;
+use Drupal\views\Plugin\views\query\QueryPluginBase;
+use Drupal\views\ViewExecutable;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\myaccess\SessionManager;
+use Drupal\myaccess\Model\HmrsUserRecord;
+
+//Includo il file che si occupa di tracciare l'evento GTM della login (Dashboard)
+\Drupal::moduleHandler()->loadInclude('myaccess', 'inc', 'includes/myaccess.dashboard_login');
+
+/**
+ * Implements hook_theme().
+ */
+function myaccess_theme(): array {
+  return [
+    'application' => [
+      'render element' => 'elements',
+    ],
+    'applications_wrapper' => [
+      'variables' => [
+        'myp_message' => NULL,
+      ],
+    ],
+    'favorites' => [
+      'variables' => [
+        'applications' => NULL,
+        'placeholders' => ApplicationController::MAX_FAVORITE_APPLICATIONS_NUMBER,
+      ],
+    ],
+    'grid' => [
+      'variables' => [
+        'applications' => NULL,
+        'title' => NULL,
+        'type' => NULL,
+      ],
+    ],
+    'application_opener' => [
+      'variables' => [
+        'application' => NULL,
+      ],
+    ],
+    'blocked' => [
+      'variables' => [],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function myaccess_page_attachments(array &$attachments) {
+  // Attach the myaccess library.
+  $attachments['#attached']['library'][] = 'myaccess/myaccess';
+
+  // Pass the external info to the page, to be used in javascript.
+  // See \Drupal\myaccess\StackMiddleware\IsExternalMiddleware::handle().
+  $external = \Drupal::request()->attributes->get(IsExternalMiddleware::KEY, TRUE);
+  $attachments['#attached']['drupalSettings']['myaccess']['external'] = $external;
+  /** @var  $session_manager SessionManager */
+  $session_manager = \Drupal::service('myaccess.session_manager');
+  $session_data = $session_manager->getAll();
+  $attachments['#attached']['drupalSettings']['myaccess']['hasPassword'] = $session_data->hasPassword();
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function myaccess_user_login(UserInterface $account) {
+  // Dispatch user login events.
+  $event = new UserLoginEvent($account);
+  \Drupal::service('event_dispatcher')->dispatch(UserEvents::LOGIN, $event);
+
+  if (!$event->isLoginAllowed()) {
+    $response = new RedirectResponse('/blocked');
+    $response->send();
+  }
+
+  //Setto una variabile tempstore per identificare che l'utente si è loggato, che poi andrò a verificare nel preprocess_html di questo modulo
+  $tempstoreJustLogged = \Drupal::service('tempstore.private')->get('myaccess');
+  $tempstoreJustLogged->set('msgJustLogged', true);
+}
+
+/**
+ * Prepares variables for application templates.
+ *
+ * Default template: application.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An array of elements to display in view mode.
+ *   - application: The application item.
+ *   - name: The label for the application item.
+ *   - view_mode: View mode; e.g., 'favorite', 'grid', etc.
+ */
+function template_preprocess_application(array &$variables): void {
+  /** @var \Drupal\myaccess\Entity\ApplicationInterface $application */
+  $application = $variables['elements']['#application'];
+  $variables['application'] = $application;
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  $variables['name'] = $application->label();
+  $variables['flag_favorite_application'] = !empty($variables['elements']['flag_favorite_application']) ? $variables['elements']['flag_favorite_application'] : [];
+  $variables['clickable'] = TRUE;
+  $variables['url_icon_image'] = $application->getImageUrl();
+  $variables['type'] = $application->getType();
+  $settings = $application->getSettings();
+  $variables['auth_type'] = 'other';
+  $variables['is_mya'] = 0;
+  if(!empty($settings['code'])){
+    if(!empty($settings['auth_type'])){
+      if($settings['auth_type'] == 'FORMFILL' || $settings['auth_type'] == 'SAML'){
+        $variables['auth_type'] = strtolower($settings['auth_type']);
+      } else {
+        $variables['auth_type'] = 'other';
+      }
+    }
+    $variables['is_mya'] = !empty($settings['myaccess_external_url']) && substr($settings['myaccess_external_url'], 0, 11) === 'https://mya' ? "1" : "0";
+  }
+
+
+  // Fallback image for application icon that can't download image.
+  // See JS "onerror" function in twig template.
+  $theme_path = \Drupal::service('extension.list.theme')->getPath('myportal_theme');
+  $variables['no_vpn_fallback_icon'] = $theme_path . '/application_menarini.png';
+
+  /** @var \Drupal\myaccess\UserManagerInterface $user_manager */
+  $user_manager = \Drupal::service('myaccess.user_manager');
+
+  // If user isn't in VPN, can't access applications from external network
+  // and application is 'private' change the icon and set as non-clickable.
+  // @see https://wellnet.atlassian.net/browse/MEN-778.
+  if ($application->getType() == 'remote'
+    && $application->getVisibility() == 'private'
+    && $user_manager->isExternal()
+    && !$user_manager->checkAccessExternal()
+  ) {
+    $variables['clickable'] = FALSE;
+    $variables['url_icon_image'] = $theme_path . '/application_no_vpn_fallback_icon.png';
+  }
+
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function myaccess_theme_suggestions_application(array $variables) {
+  $suggestions = [];
+  $application = $variables['elements']['#application'];
+  $sanitized_view_mode = strtr($variables['elements']['#view_mode'], '.', '_');
+
+  $suggestions[] = 'application__' . $sanitized_view_mode;
+  $suggestions[] = 'application__' . $application->getType();
+  $suggestions[] = 'application__' . $application->getType() . '__' . $sanitized_view_mode;
+
+  return $suggestions;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function myaccess_form_application_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  /** @var \Drupal\Core\Entity\EntityForm $form_object */
+  $form_object = $form_state->getFormObject();
+
+  /** @var \Drupal\myaccess\Entity\Application $entity */
+  $entity = $form_object->getEntity();
+
+  // Attach our custom submit handler.
+  $form['actions']['submit']['#submit'][] = '_myaccess_custom_submit';
+  if ('add' === $form_object->getOperation()) {
+    $form['#title'] = t('Add My Links');
+  }
+  else {
+    $form['#title'] = t('Edit %label My Links', ['%label' => $entity->label()]);
+  }
+
+  // Since the field_application_visibility field did not exist when
+  // the Application entity was created, so there are entities that
+  // have already been created without this field, in which case
+  // for those entities the value of the field in the form will always be
+  // the first in the list because it was not saved in the database, so for
+  // such entities, to not confuse the user, we choose "All group members"
+  // by default.
+  if ($form_id === 'application_mylinks_edit_form') {
+    if ($entity->hasField(MyPortalGroupAccessCheck::FIELD_APPLICATION_VISIBILITY) && empty($entity->get(MyPortalGroupAccessCheck::FIELD_APPLICATION_VISIBILITY)->getString())) {
+      $form[MyPortalGroupAccessCheck::FIELD_APPLICATION_VISIBILITY]['widget']['#default_value'] = MyPortalGroupAccessCheck::CONTENT_VISIBILITY_GROUP_ALL;
+    }
+  }
+}
+
+/**
+ * Custom submit for application mylinks submit.
+ */
+function _myaccess_custom_submit($form, FormStateInterface $form_state) {
+  /** @var \Drupal\Core\Entity\EntityForm $form_object */
+  $form_object = $form_state->getFormObject();
+
+  /** @var \Drupal\myaccess\Entity\Application $entity */
+  $entity = $form_object->getEntity();
+  $groups = [];
+
+  if (!empty($form_state->getValue('field_application_access'))) {
+
+    // Save the groups associated with the mylinks application.
+    foreach ($form_state->getValue('field_application_access')['container'] as $value) {
+      $value = reset($value);
+      if (!empty($value)) {
+        foreach ($value as $group_item) {
+          $groups[] = $group_item['target_id'];
+        }
+      }
+    }
+  }
+
+  if (!empty($groups)) {
+    $entity->set('field_application_access', $groups);
+  }
+  $entity->save();
+  $form_state->setRedirect('view.mylinks_overview.overview');
+}
+
+/**
+ * Implements template_preprocess_HOOK().
+ */
+function template_preprocess_grid(array &$variables): void {
+  $user = User::load(\Drupal::currentUser()->id());
+  $variables['mylinks_active'] = FALSE;
+  if (!empty($user)) {
+    /** @var \Drupal\myaccess\ApplicationsManagerInterface $myaccess */
+    $myaccess = \Drupal::service('myaccess.applications_manager');
+    if (!empty($myaccess->getMyLinksApplications($user))) {
+      $variables['mylinks_active'] = TRUE;
+    }
+  }
+}
+
+/**
+ * Retrieve the template message formatter for client debug.
+ *
+ * @return string
+ *   An string formatter template.
+ */
+function _myaccess_get_template_message_formatter() {
+  $debug_full = ">>>>>>>> {request} <<<<<<<< {response} -------- {error}";
+  $debug_short = "{method} {host} {target} HTTP/{version} {code} {error}";
+  return filter_var(getenv('MYACCESS_CLIENT_DEBUG'), FILTER_VALIDATE_BOOL) === TRUE ? $debug_full : $debug_short;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function myaccess_flagging_delete(EntityInterface $entity) {
+  if ($entity->bundle() !== 'favorite_application') {
+    return;
+  }
+
+  /** @var \Drupal\myaccess\ApplicationsManager $myaccess_manager */
+  $myaccess_manager = \Drupal::service('myaccess.applications_manager');
+  $sorted_application_ids = $myaccess_manager->getSortedFavoriteApplicationIds();
+
+  // @phpstan-ignore-next-line
+  if (($key = array_search($entity->entity_id->value, $sorted_application_ids)) !== FALSE) {
+    unset($sorted_application_ids[$key]);
+    $myaccess_manager->setSortedFavoriteApplicationIds($sorted_application_ids);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function myaccess_flagging_insert(EntityInterface $entity) {
+  if ($entity->bundle() !== 'favorite_application') {
+    return;
+  }
+
+  /** @var \Drupal\myaccess\ApplicationsManager $myaccess_manager */
+  $myaccess_manager = \Drupal::service('myaccess.applications_manager');
+  $sorted_application_ids = $myaccess_manager->getSortedFavoriteApplicationIds();
+  // @phpstan-ignore-next-line
+  $entity_id = $entity->entity_id->value;
+
+  if (!in_array($entity_id, $sorted_application_ids)) {
+    $sorted_application_ids[] = $entity_id;
+    $myaccess_manager->setSortedFavoriteApplicationIds($sorted_application_ids);
+  }
+}

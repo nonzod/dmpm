@@ -1,0 +1,6 @@
+myportal_weather.settings_form:
+  title: 'Weather Settings Form'
+  route_name: myportal_weather.settings_form
+  description: 'The configuration settings for weather widget'
+  parent: myportal.admin.config
+  weight: 99

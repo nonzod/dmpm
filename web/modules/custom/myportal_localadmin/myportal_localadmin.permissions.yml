@@ -1,0 +1,4 @@
+access local admin panel:
+  title: 'Access local local'
+  description: 'Allow access to local admin panel'
+  restrict access: true

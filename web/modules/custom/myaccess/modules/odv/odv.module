@@ -1,0 +1,79 @@
+<?php
+
+declare(strict_types=1);
+
+use Drupal\odv\DTO\Submission;
+use Drupal\odv\EventSubscriber\SendEmailSubscriber;
+
+/**
+ * Implements hook_theme().
+ */
+function odv_theme(): array {
+  return [
+    'odv_thank_you' => [
+      'variables' => [
+        'file_id' => NULL,
+        'thank_you_message' => NULL,
+      ],
+    ],
+    'odv_pdf' => [
+      'variables' => [
+        'submission' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_cron().
+ */
+function odv_cron() {
+  /** @var \Drupal\odv\FilesCleanerInterface $files_cleaner */
+  $files_cleaner = \Drupal::service('odv.file_cleaner.time_based');
+  $files_cleaner->clean();
+}
+
+/**
+ * Implements hook_mail().
+ */
+function odv_mail($key, &$message, $params) {
+  switch ($key) {
+    case SendEmailSubscriber::NEW_SUBMISSION:
+      $submission = $params['submission'];
+      assert($submission instanceof Submission);
+
+      /** @var \Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface $mime_type_guesser */
+      $mime_type_guesser = \Drupal::service('file.mime_type.guesser');
+      $attachments = array_map(function (SplFileInfo $element) use (
+        $mime_type_guesser
+      ) {
+        $file = new StdClass();
+        $file->uri = $element->getPathname();
+        $file->filename = $element->getFilename();
+        $file->filemime = $mime_type_guesser->guess($element->getPathname());
+
+        return $file;
+      }, $submission->getAttachments());
+
+      $message['subject'] = $submission->getSubject();
+      $message['body'][] = $submission->getBody();
+      $message['params']['files'] = $attachments;
+
+      // Non-anonymous subscriptions are sent from the email address of the
+      // user that have made the submission. Otherwise, the sender_email
+      // configuration is used.
+      if ($submission->isAnonymous()) {
+        $from = \Drupal::config('odv.settings')->get('sender_email');
+      }
+      else {
+        $from = $submission->getSenderEmail();
+      }
+
+      $message['from'] = $from;
+      $message['headers']['From'] = $from;
+      $message['headers']['Sender'] = $from;
+      $message['headers']['Return-Path'] = $from;
+
+      break;
+  }
+}

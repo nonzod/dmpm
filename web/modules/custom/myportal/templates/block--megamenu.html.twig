@@ -1,0 +1,54 @@
+<div class="container">
+  <div class="close_megamenu">
+    <span></span>
+    <span></span>
+  </div>
+  <div class="row block__menu-row">
+    {% if items_menu is not empty %}
+
+      {% for item in items_menu %}
+        <div class="block__menu">
+          {% if item.url_image is not empty %}
+            <figure class="block__menu--image">
+              <img src="{{ item.url_image | image_style('image_megamenu') }}"
+                   class="img-responsive" alt="{{ item.name }}">
+              <h3>{{ item.name }}</h3>
+            </figure>
+          {% else %}
+            <a
+              href="{{ path('view.primary_navigation.page_1', {'arg_0': item.tid|drupal_escape }) }}">
+              {{ item.name }}
+            </a>
+          {% endif %}
+          {# render third level #}
+
+          {% if item.children is not empty %}
+            <ul class="block__menu-list">
+              {% for item_menu in item.children %}
+                <li>
+                  <svg class="icon icon-menu_arrow">
+                    <use xlink:href="#icon-navigate_next"></use>
+                  </svg>
+                  <a
+                    href="{{ path('view.primary_navigation.page_1', {'arg_0': item_menu.tid|drupal_escape }) }}">
+                    {{ item_menu.name }}
+                  </a>
+                  {% if item_menu.description is not empty %}
+                    {{ item_menu.description|raw }}
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+      {% endfor %}
+
+    {% endif %}
+
+    {% if block_menu is not empty %}
+      <div class="block__menu_special">
+        {{ drupal_entity('node', block_menu) }}
+      </div>
+    {% endif %}
+  </div>
+</div>

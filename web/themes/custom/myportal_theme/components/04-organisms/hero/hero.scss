@@ -1,0 +1,119 @@
+@import "settings";
+
+// Used on a hero block that can hold a background image.
+.cover {
+  color: white;
+  background-color: $brand-primary;
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70%;
+    background: linear-gradient(to bottom, rgba(20, 63, 89, 1) 0%,rgba(20, 63, 89,0.5) 50%,rgba(255,255,255,0) 100%);
+    pointer-events: none;
+  }
+  &.p0 {
+    padding: 0;
+  }
+
+  .page-title {
+    z-index: 1; // For video background
+    @extend .font-oswald-regular;
+    text-shadow: 0 3px 6px rgba(0,0,0, .3);
+    h1 {
+      color: white;
+      @extend .font-oswald-regular;
+      font-size: 2.5rem;
+      line-height: 3.688rem;
+      @include for-tablet-landscape-up {
+        font-size: 3.75rem;
+        line-height: 5.563rem;
+      }
+    }
+  }
+
+  .hero-avatar {
+    border-radius: 50%;
+    border: 2px solid white;
+
+    @include for-tablet-portrait-up {
+      border-width: 3px;
+    }
+  }
+
+  .hero-canvas {
+    border-radius: $border-radius-base;
+    background-color: rgba($gray-dark, 0.8);
+    color: white;
+  }
+
+  .hero-form[role="search"] {
+    .form-control {
+      border-radius: $input-border-radius;
+
+      &:focus,
+      &:active,
+      &:focus ~ .search-icon,
+      &:active ~ .search-icon {
+        box-shadow: 0 2px 0 0 $brand-secondary;
+      }
+    }
+
+    .form-submit,
+    .search-icon {
+      border-radius: 0 $input-border-radius $input-border-radius 0;
+    }
+
+    .search-icon {
+      fill: $brand-primary;
+      background: white;
+    }
+  }
+}
+
+// Fix because get hidden from a fixed header
+.hero-action-button {
+  top: 85%;
+}
+
+.cover-wrap {
+  height: 340px;
+  min-height: 340px;
+  overflow: hidden;
+  video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: 0;
+    -ms-transform: translateX(-50%) translateY(-50%);
+    -moz-transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+  }
+}
+
+
+.hero-footer__cta .enroll-action-form {
+  display: none;
+}
+
+.hero__bgimage-overlay {
+  background: transparent!important;
+}
+
+
+// Only for seach page because of gsuite overlay
+.path-search {
+  .cover-wrap {
+    @include for-tablet-landscape-down {
+      min-height: auto;
+      height: 160px;
+    }
+  }
+}

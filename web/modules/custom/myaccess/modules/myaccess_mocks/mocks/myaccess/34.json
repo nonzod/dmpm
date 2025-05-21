@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "myAccessCode": "menSSOIntMrFogg",
+  "myAccessUrl": "https://mrfogg.menarini.com",
+  "externalMyAccessCode": "menSSOPubMrFogg",
+  "externalEnabled": true,
+  "externalMyAccessUrl": "https://mrfogg.menarini.com",
+  "formAction": "/Default.aspx?m=1",
+  "postAction": "/Default.aspx?m=1",
+  "formParams": "[{\"name\":\"db\",\"value\":\"EleaProd\"},{\"name\":\"un\",\"value\":\"$username\"},{\"name\":\"pw\",\"value\":\"$password\"},{\"name\":\"lg\",\"value\":null},{\"name\":\"login_data\",\"value\":\"1\"},{\"name\":\"force\",\"value\":\"0\"}]"
+}

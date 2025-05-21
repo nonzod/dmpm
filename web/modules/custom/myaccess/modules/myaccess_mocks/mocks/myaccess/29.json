@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "myAccessCode": "menSSOIntMBS",
+  "myAccessUrl": "https://mbs-test.menarini.net/mbs",
+  "externalMyAccessCode": "menSSOPubMBS",
+  "externalEnabled": true,
+  "externalMyAccessUrl": "https://mya-mbs-qa.menarini.net/mbs",
+  "formAction": "/logonProxy.jsp",
+  "postAction": null,
+  "formParams": "[ { \"name\":\"username\", \"value\":\"$username\" }, { \"name\":\"password\", \"value\":\"$password\" } ]"
+}

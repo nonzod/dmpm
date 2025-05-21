@@ -1,0 +1,265 @@
+@import 'settings';
+
+//    Paragraphs Layout
+//-------------------------
+
+// Layout 30/70
+.layout--twocol-30-70 .layout__region--second {
+  @media screen and (min-width: 40em) {
+    padding-left: 50px;
+  }
+}
+
+.layout--twocol-70-30 .layout__region--first {
+  @media screen and (min-width: 40em) {
+    padding-right: 50px;
+    margin-bottom: 0;
+  }
+  margin-bottom: 30px;
+}
+
+// Layout 50/50 Two col
+.layout--twocol {
+  @media screen and (min-width: 40em) {
+    .layout__region {
+      display: flex;
+      flex-direction: column;
+      // Push button to bottom only if is preceded from a media and text
+      .paragraph--type--media-box ~ .paragraph--type--text-only ~ {
+        .paragraph--type--button {
+          margin-top: auto;
+        }
+      }
+      // but not if more than one button
+      .paragraph--type--button ~ .paragraph--type--button {
+        margin-top: 0;
+      }
+    }
+    .layout__region--first {
+      padding-right: 10px;
+      margin-bottom: 0;
+      .paragraph--type--button,
+      .paragraph--type--attachments,
+      .paragraph--type--text-only {
+        padding-right: 40px;
+      }
+      //if there is an image up to it, don't add padding
+      .paragraph--type--media-box ~ {
+        .paragraph--type--button,
+        .paragraph--type--attachments,
+        .paragraph--type--text-only {
+          padding-right: 0;
+        }
+      }
+    }
+    .layout__region--second {
+      padding-left: 10px;
+    }
+  }
+  .layout__region--first {
+    margin-bottom: 30px;
+  }
+}
+//Layout 3 columns
+.layout--threecol,
+.layout--threecol-33-34-33 {
+  justify-content: space-between;
+  @media screen and (min-width: 40em) {
+    .layout__region {
+      flex: 0 1 32%;
+      display: flex;
+      flex-direction: column;
+      .paragraph--type--button {
+        margin-top: auto;
+      }
+      .paragraph--type--button ~ .paragraph--type--button {
+        margin-top: 0;
+      }
+    }
+    .layout__region--first,
+    .layout__region--second {
+      margin-bottom: 0;
+    }
+  }
+  .layout__region.layout__region--top {
+    flex: 0 1 100%;
+  }
+  .layout__region--first,
+  .layout__region--second {
+    margin-bottom: 30px;
+  }
+}
+
+//    Paragraphs
+//-------------------
+
+// for when they add image-left/right inside text editor
+.paragraph {
+  clear: both;
+  hr {
+    border-color: $default-color;
+  }
+}
+
+.paragraph--type--section {
+  margin-bottom: 10px;
+}
+
+// Spacing
+.paragraph--type--spacing {
+  margin-bottom: 20px;
+  border: none;
+  height: 0;
+  &:after {
+    content: none;
+  }
+  @media screen and (min-width: 40em) {
+    margin-bottom: 90px;
+  }
+}
+
+// Media box
+.paragraph--type--media-box {
+  margin-bottom: 10px;
+  video {
+    width: 100%;
+    height: auto;
+  }
+
+  .field--item > div {
+    position: relative;
+    .men-video--thumbnail {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+      img {
+        width: 100%;
+        height: auto;
+      }
+      .icon-youtube {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 60px;
+      }
+    }
+  }
+}
+
+// Button
+.paragraph--type--button {
+  a {
+    background: $btn-men-highlight;
+    color: $white;
+    @extend .font-oswald-medium;
+    font-size: 1.313rem;
+    line-height: 1.563rem;
+    text-transform: uppercase;
+    padding: 12px 40px;
+    margin-top: 28px;
+    display: inline-block;
+    max-width: 100%;
+    @include on-event {
+      background: $btn-men-highlight--hover;
+    }
+  }
+}
+
+// iframe
+.paragraph--type--iframe {
+  padding: 0 25px;
+  @include for-tablet-landscape-up {
+    padding: 0 70px
+  }
+  .men-iframe-container {
+    overflow: hidden;
+    /* 16:9 aspect ratio */
+    padding-top: 56.25%;
+    position: relative;
+    margin-top: 40px;
+    iframe {
+      border: 0;
+      height: 100%;
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: 100%;
+    }
+  }
+}
+
+.field--name-field-media-oembed-video {
+  overflow: hidden;
+  /* 16:9 aspect ratio */
+  padding-top: 56.25%;
+  position: relative;
+  .field--item {
+    border: 0;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    .media-oembed-content {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+//Text
+.paragraph--type--text-only {
+  ~ .paragraph--type--text-only {
+    .men--paragraph-title {
+      margin-top: 20px;
+    }
+  }
+}
+
+.field--name-field-body {
+  a {
+    color: $men-link-all;
+    @include on-event {
+      color: $men-link-all-hover;
+    }
+  }
+}
+
+// Carousel
+.paragraph--type--carousel {
+  max-width: 90%;
+  margin: 0 auto;
+  .slick-slide {
+    @include for-tablet-portrait-up {
+      margin: 0 25px;
+    }
+  }
+  .slick-slide img {
+    width: 100%;
+  }
+  .slick-list {
+    @media (max-width: 450px) {
+      padding: 0!important;
+    }
+    @include for-tablet-landscape-up {
+      padding: 0 100px!important;
+    }
+  }
+  @include for-tablet-landscape-up {
+    .slick-prev {
+      left: -70px;
+    }
+    .slick-next {
+      right: -70px;
+    }
+  }
+}
+
+.paragraph--type--attachments-multilanguage {
+  display: inline-block;
+  margin-right: 30px;
+  margin-bottom: 30px;
+}

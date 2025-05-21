@@ -1,0 +1,7 @@
+myportal_cdn.invalidate_cdn_form:
+  path: '/admin/config/myportal/invalidate-cdn'
+  defaults:
+    _form: 'Drupal\myportal_cdn\Form\InvalidateCdnForm'
+    _title: 'Invalidate cdn'
+  requirements:
+    _permission: 'invalidate cdn'

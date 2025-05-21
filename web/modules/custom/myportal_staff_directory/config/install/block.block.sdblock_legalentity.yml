@@ -1,0 +1,29 @@
+uuid: 96693d5f-46c5-4e6b-8540-dc1fa883b9ba
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.sdblock_legal_entity
+  module:
+    - facets
+    - system
+  theme:
+    - myportal_theme
+id: sdblock_legalentity
+theme: myportal_theme
+region: complementary_top
+weight: 0
+provider: null
+plugin: 'facet_block:sdblock_legal_entity'
+settings:
+  id: 'facet_block:sdblock_legal_entity'
+  label: 'Legal entity'
+  label_display: '0'
+  provider: facets
+  block_id: sdblock_legalentity
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /page-navigation/287
+

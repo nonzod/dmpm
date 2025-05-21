@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+id: postman_mockup
+label: 'Postman mockup'
+url: 'https://d104ff19-25d2-44f1-80d0-31c002724976.mock.pstmn.io/api/HRDPData/?WsName=STAFF_DIRECTORY'
+plugin: json
+retention_days: 7

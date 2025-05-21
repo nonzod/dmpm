@@ -1,0 +1,7 @@
+name: 'MyAccess mocks'
+type: module
+description: 'Contains mocked version of some External systems'
+package: 'Menarini'
+core_version_requirement: ^8.8.0 || ^9.0
+dependencies:
+  - myaccess:myaccess

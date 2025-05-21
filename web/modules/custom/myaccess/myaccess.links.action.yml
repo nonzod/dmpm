@@ -1,0 +1,8 @@
+entity.mylinks.add_form:
+  route_name: myaccess.application.add
+  route_parameters:
+    application_type: 'mylinks'
+  title: 'Add My Links'
+  appears_on:
+    - view.mylinks_overview.overview
+    - entity.application.collection

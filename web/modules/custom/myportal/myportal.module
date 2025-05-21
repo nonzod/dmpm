@@ -1,0 +1,358 @@
+<?php
+
+//@msg_clean
+
+/**
+ * @file
+ * Contains hook implementations for myportal module.
+ */
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\myaccess\GroupManagerInterface;
+use Drupal\myaccess\UserManagerInterface;
+use Drupal\myportal\Access\MyPortalAccessResult;
+use Drupal\node\NodeInterface;
+use Drupal\user\EntityOwnerInterface;
+use Drupal\user\UserInterface;
+use Drupal\views\Plugin\views\query\QueryPluginBase;
+use Drupal\views\Plugin\views\query\Sql;
+use Drupal\views\ViewExecutable;
+use Drupal\views\Views;
+use Drupal\Core\Form\FormStateInterface;
+
+\Drupal::moduleHandler()
+  ->loadInclude('workflow', 'inc', 'includes/myportal.form');
+\Drupal::moduleHandler()
+  ->loadInclude('workflow', 'inc', 'includes/myportal.views');
+
+/**
+ * Implements hook_theme().
+ */
+function myportal_theme() {
+  return [
+    'taxonomy_list' => [
+      'variables' => [
+        'terms' => NULL,
+        'item_active' => NULL,
+        'parent_active' => NULL,
+      ],
+      'template' => 'block--taxonomy-list',
+    ],
+    'block_navigation' => [
+      'variables' => [
+        'terms' => NULL,
+        'item_active' => NULL,
+      ],
+      'template' => 'block--navigation-item',
+    ],
+    'block_linkedin' => [
+      'variables' => [
+        'view_block' => NULL,
+      ],
+      'template' => 'block--linkedin',
+    ],
+    'layout_twocol_50_50' => [
+      'template' => 'layouts/twocol/layout--twocol',
+      'render element' => 'content',
+    ],
+    'layout_twocol_30_70' => [
+      'template' => 'layouts/twocol_30_70/layout--twocol-30-70',
+      'render element' => 'content',
+    ],
+    'layout_twocol_70_30' => [
+      'template' => 'layouts/twocol_70_30/layout--twocol-70-30',
+      'render element' => 'content',
+    ],
+    'block_megamenu' => [
+      'variables' => [
+        'items_menu' => NULL,
+        'block_menu' => NULL,
+      ],
+      'template' => 'block--megamenu',
+    ],
+    'layout_threecol' => [
+      'template' => 'layouts/threecol/layout--threecol',
+      'render element' => 'content',
+    ],
+    'block-menarini-network' => [
+      'template' => 'block--menarini-network',
+      'variables' => [],
+    ],
+    'gsuite_results' => [
+      'template' => 'gsuite-results',
+      'render element' => 'content',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function myportal_preprocess_node(array &$variables): void {
+  /** @var \Drupal\node\NodeInterface $node */
+  $node = $variables['node'];
+  $hide_author = "";
+
+  if ($node->hasField('field_hide_author')) {
+    $hide_author = $node->get('field_hide_author')->getString();
+  }
+
+  if ($hide_author === "1") {
+    $variables['display_submitted'] = FALSE;
+  }
+}
+
+/**
+ * Implements hook_preprocess_username().
+ */
+function myportal_preprocess_username(array &$variables): void {
+  $node = \Drupal::routeMatch()->getParameter('node');
+  $new_author = '';
+  if (!empty($node) && $node instanceof NodeInterface) {
+    if ($node->hasField('field_author')) {
+      $new_author = $node->get('field_author')->getString();
+    }
+  }
+  $variables['new_author'] = $new_author;
+}
+
+/**
+ * Implements hook_language_fallback_candidates_alter().
+ */
+function myportal_language_fallback_candidates_alter(array &$candidates, array $context): void {
+  $languages = \Drupal::languageManager()->getLanguages();
+  $default_language = \Drupal::languageManager()->getDefaultLanguage();
+
+  $attempted_langcode = $context['langcode'];
+  $candidates = [$attempted_langcode => $attempted_langcode];
+
+  // Set fallback candidates for all enabled languages, default excluded.
+  unset($languages[$default_language->getId()]);
+  if (in_array($attempted_langcode, array_keys($languages))) {
+    $candidates['en'] = 'en';
+  }
+}
+
+/**
+ * Implements hook_node_access().
+ */
+function myportal_node_access(NodeInterface $node, string $op, AccountInterface $account) {
+  $operations = ['create', 'delete', 'update'];
+
+  if (in_array($op, $operations)) {
+    return MyPortalAccessResult::allowedIfBelongToNavigationSection($account, $node);
+  }
+
+  return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_entity_operation_alter().
+ *
+ * The 'translate link' operation is normally created from 'content_translation_entity_operation'
+ * but use the function 'content_translation_translate_access' where I can't
+ * alter the condition used for check if show or not the link operation.
+ * We need to create the link apart from.
+ */
+function myportal_entity_operation_alter(array &$operations, EntityInterface $entity) {
+  $account = \Drupal::currentUser();
+  if (!isset($operations['translate']) && $entity->hasLinkTemplate('drupal:content-translation-overview')
+    && $entity instanceof ContentEntityInterface
+    && $entity instanceof EntityOwnerInterface
+    && $entity->getOwnerId() === $account->id()
+    && $account->hasPermission('translate editable entities') && $entity->access('update')
+  ) {
+    $operations['translate'] = [
+      'title' => t('Translate'),
+      'url' => $entity->toUrl('drupal:content-translation-overview'),
+      'weight' => 50,
+    ];
+  }
+  return $operations;
+}
+
+/**
+ * Implements hook_node_insert().
+ */
+function myportal_node_insert(NodeInterface $node): void {
+  if ($node->getType() === 'page') {
+    $view = Views::getView('primary_navigation');
+    if (!empty($view->storage)) {
+      $view->storage->invalidateCaches();
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_links__language_block().
+ */
+function myportal_preprocess_links__language_block(&$variables) {
+  $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $variables['heading']['text'] = strtoupper($current_language);
+  foreach (array_keys($variables['links']) as &$code) {
+    $variables['links'][$code]['link']['#title'] = strtoupper($code);
+  }
+}
+
+/**
+ * Implements hook_element_info_alter().
+ */
+function myportal_element_info_alter(array &$types) {
+  $types['datetime']['#process'][] = '__myportal_datetime_set_format';
+}
+
+/**
+ * Element process callback for datetime fields.
+ */
+function __myportal_datetime_set_format($element) {
+  // Remove seconds in browsers that support HTML5 type=date.
+  $element['time']['#attributes']['step'] = 60;
+
+  return $element;
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function myportal_page_attachments(array &$attachments) {
+  $theme = \Drupal::service('theme.manager')->getActiveTheme();
+
+  if ($theme->getName() == 'myportal_theme') {
+    $attachments['#attached']['library'][] = 'myportal/myportal';
+    $attachments['#attached']['library'][] = 'myportal/search';
+  }
+}
+
+/**
+ * Implements hook_form_views_exposed_form_alter().
+ */
+function myportal_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $view_ids = ['events_list'];
+  if (in_array($form_state->get('view')->id(), $view_ids)) {
+    if (isset($form['field_event_date_value'])) {
+      $form['field_event_date_value']['#attributes']['autocomplete'] = 'off';
+    }
+    if (isset($form['field_event_date_end_value'])) {
+      $form['field_event_date_end_value']['#attributes']['autocomplete'] = 'off';
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_field_access_alter().
+ *
+ * Remove the 'entity_field_access' of 'system', added by wrong patch in the
+ * Social distribution.
+ *
+ * @see https://www.drupal.org/project/drupal/issues/2842405
+ */
+function myportal_entity_field_access_alter(array &$grants, array $context) {
+  $field_definition = $context['field_definition'];
+  if ($field_definition instanceof FieldDefinitionInterface
+    && $field_definition->getName() == 'langcode') {
+    unset($grants['system']);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function myportal_user_insert(UserInterface $user): void {
+  $user->set('preferred_admin_langcode', 'en');
+  $user->save();
+}
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function myportal_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
+  if ($view->id() == 'content' && $query instanceof Sql) {
+
+    switch ($view->current_display) {
+      case 'page_1':
+        // Use field_group how distinct node results.
+        $query->addField('node_field_data', 'nid', '', ['function' => 'groupby']);
+        $query->addGroupBy('node_field_data.nid');
+
+        // ---------------------------------------------------------------------
+        if (isset($query->relationships['node_field_data'])
+          && isset($query->relationships['taxonomy_term_field_data_node__field_navigation_section'])
+          && isset($query->relationships['groups_field_data_group_content_field_data'])) {
+
+          // Add some extra where statements.
+          $current_user = \Drupal::currentUser();
+          $group_manager = \Drupal::service('myaccess.group_manager');
+          assert($group_manager instanceof GroupManagerInterface);
+          $user_manager = \Drupal::service('myaccess.user_manager');
+          assert($user_manager instanceof UserManagerInterface);
+
+          // Retrieve the taxonomy where the current user is "editor".
+          // Exclude the first and second level of vocabulary.
+          $term_ids = $user_manager->getTermsIdNavigationThatUserIsEditor($current_user);
+
+          // Retrieve the groups ID where current use is member and
+          // he has the role 'editor'.
+          $group_ids = $group_manager->getGroupIdsByUserAndRole($current_user, 'editor');
+          // Retrieve the groups ID where current use is member and
+          // he has the role 'Local Admin'.
+          $group_la_ids = $group_manager->getGroupIdsByUserAndRole($current_user, 'local_admin');
+
+          // Add new group.
+          $query_group_id = $query->setWhereGroup('OR');
+          $query->addWhere($query_group_id, 'node_field_data.uid', $current_user->id());
+          
+          // For Local Admins include all group posts
+          if(count($group_la_ids) > 0)
+            $query->addWhereExpression($query_group_id, 'groups_field_data_group_content_field_data.id IN (:group_la_ids[])', [':group_la_ids[]' => $group_la_ids]);
+
+          // This works for pages ignored for posts
+          if (!empty($term_ids) && !empty($group_ids)) {
+            $query->addWhereExpression(
+              $query_group_id,
+              'taxonomy_term_field_data_node__field_navigation_section.tid IN (:tids[]) AND groups_field_data_group_content_field_data.id IN (:group_ids[])',
+              [
+                ':tids[]' => $term_ids,
+                ':group_ids[]' => $group_ids,
+              ]
+            );
+          }
+        }
+        // ---------------------------------------------------------------------
+
+        break;
+
+      case 'page_admin':
+
+        // Use field_group how distinct node results.
+        $query->addField('node_field_data', 'nid', '', ['function' => 'groupby']);
+        $query->addField('node_field_data', 'langcode', '', ['function' => 'groupby']);
+        $query->addGroupBy('node_field_data.nid');
+        $query->addGroupBy('node_field_data.langcode');
+
+        break;
+    }
+  }
+
+}
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function myportal_views_data_alter(array &$data) {
+  // Registers an entity area handler per entity type.
+  foreach (Drupal::service('entity_type.manager')
+             ->getDefinitions() as $entity_info) {
+    $data[$entity_info->getBaseTable()]['translations'] = [
+      'title' => 'Entity translations field',
+      'help' => t('Displays all available translations language.'),
+      'field' => [
+        'id' => 'myportal_entity_translations',
+      ],
+    ];
+  }
+
+}

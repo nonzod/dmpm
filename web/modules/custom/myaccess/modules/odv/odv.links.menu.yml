@@ -1,0 +1,5 @@
+odv.configuration_form:
+  title: 'ODV configuration'
+  description: 'Configuration for the ODV local application.'
+  route_name: odv.configuration_form
+  parent: myaccess.admin_config

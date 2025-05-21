@@ -1,0 +1,5 @@
+name: 'Observability suite - Metrics'
+type: module
+description: 'Expose internal Drupal metrics as Prometheus endpoint.'
+core_version_requirement: ^8.8.0 || ^9.0
+package: 'Observability'

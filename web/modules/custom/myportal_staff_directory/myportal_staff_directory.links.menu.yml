@@ -1,0 +1,34 @@
+entity.staff_member.index:
+  title: 'Staff directory'
+  route_name: myportal_staff_directory.index
+  description: 'List Staff Members'
+  parent: system.admin_structure
+  weight: 99
+
+entity.staff_member.collection:
+  title: 'Staff member list'
+  route_name: entity.staff_member.collection
+  description: 'List Staff Members'
+  parent: entity.staff_member.index
+  weight: 100
+
+entity.staff_member_importer.collection:
+  title: 'Importer list'
+  route_name: entity.staff_member_importer.collection
+  description: 'List Importers'
+  parent: entity.staff_member.index
+  weight: 101
+
+entity.import_backup.collection:
+  title: 'Backup list'
+  route_name: entity.import_backup.collection
+  description: 'List Backup'
+  parent: entity.staff_member.index
+  weight: 102
+
+myportal_staff_directory.settings:
+  title: 'Staff directory settings'
+  route_name: myportal_staff_directory.settings
+  description: 'Staff directory settings'
+  parent: entity.staff_member.index
+  weight: 103

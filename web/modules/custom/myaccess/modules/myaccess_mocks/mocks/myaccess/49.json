@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "myAccessCode": "menSSOIntZabbix",
+  "myAccessUrl": "https://mcdmonitor.menarini.net/zabbix",
+  "externalMyAccessCode": "menSSOPubZabbix",
+  "externalEnabled": true,
+  "externalMyAccessUrl": "https://mya-zabbix-qa.menarini.net/zabbix",
+  "formAction": "/index.php",
+  "postAction": null,
+  "formParams": "[ { \"name\":\"name\", \"value\":\"$username\", \"function\":\"toLowerCase()\" }, { \"name\":\"password\", \"value\":\"$password\" }, { \"name\":\"enter\", \"value\":\"Sign in\" } ]"
+}

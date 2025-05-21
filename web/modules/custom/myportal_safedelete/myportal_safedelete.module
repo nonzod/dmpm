@@ -1,0 +1,203 @@
+<?php
+/**
+ * @file
+ * Primary module hooks for myportal_safedelete module.
+ *
+ * Questo modulo modifica il form di conferma eliminazione dei gruppi.
+ */
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Alters the flexible group deletion form.
+ */
+function myportal_safedelete_form_group_flexible_group_delete_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  // Verify that it's the correct form.
+  if ($form_id == 'group_flexible_group_delete_form') {
+    // Change the form description text.
+    $form['description']['#markup'] = t('Are you sure you want to delete this group? This action cannot be undone.');
+    
+    // Get the current group
+    $group = $form_state->getFormObject()->getEntity();
+    
+    // Add table with group contents
+    $form['group_contents'] = [
+      '#type' => 'table',
+      '#caption' => [
+        '#markup' => '<strong>' . t('Content still present in the group that will be deleted:') . '</strong>',
+        '#allowed_tags' => ['div', 'strong'],
+      ],
+      '#header' => [
+        t('Content type'),
+        t('Title'),
+        t('Author'),
+        t('Created date'),
+        t('Operations'),
+      ],
+      '#empty' => t('There is no content in this group.'),
+      '#weight' => -1,
+    ];
+    
+    // Populate the table with group contents
+    if ($group) {
+      $form['#attached']['library'][] = 'system/drupal.system.modules';
+      $contents = _myportal_safedelete_get_group_contents($group);
+      
+      foreach ($contents as $index => $content) {
+        $form['group_contents'][$index] = [
+          'type' => ['#markup' => $content['type']],
+          'title' => ['#markup' => $content['title']],
+          'author' => ['#markup' => $content['author']],
+          'created' => ['#markup' => $content['created']],
+          'operations' => [
+            '#type' => 'operations',
+            '#links' => [
+              'edit' => [
+                'title' => t('Edit'),
+                'url' => $content['edit_url'],
+              ],
+            ],
+          ],
+        ];
+      }
+    }
+
+    // Add confirmation checkbox only if there are contents
+    if (!empty($contents)) {
+      $form['confirm_deletion'] = [
+        '#type' => 'checkbox',
+        '#title' => t('I confirm that I want to permanently delete this group and all its content'),
+        '#required' => TRUE,
+        '#weight' => 0,
+      ];
+    }
+
+    // Modify the confirm button text.
+    $form['actions']['submit']['#value'] = t('Delete permanently');
+    
+    // Add custom validation.
+    $form['#validate'][] = 'myportal_safedelete_group_delete_validate';
+
+    // Add custom submit handler.
+    array_unshift($form['#submit'], 'myportal_safedelete_group_delete_submit');
+  }
+}
+
+/**
+ * Custom validation for the delete form.
+ */
+function myportal_safedelete_group_delete_validate(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  // Example of additional validation.
+  if (isset($form['confirm_deletion']) && !$form_state->getValue('confirm_deletion')) {
+    $form_state->setErrorByName('confirm_deletion', t('You must confirm the deletion of the group.'));
+  }
+}
+
+/**
+ * Custom submit handler for the delete form.
+ */
+function myportal_safedelete_group_delete_submit(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  // Log the deletion operation.
+  \Drupal::logger('myportal_safedelete')->notice('Group @group_id deleted by user @user_id', [
+    '@group_id' => $form_state->getFormObject()->getEntity()->id(),
+    '@user_id' => \Drupal::currentUser()->id(),
+  ]);
+}
+
+/**
+ * Helper function to get group contents.
+ *
+ * @param \Drupal\group\Entity\GroupInterface $group
+ *   The group entity.
+ *
+ * @return array
+ *   Array with information about group contents.
+ */
+function _myportal_safedelete_get_group_contents($group) {
+  $contents = [];
+  
+  // For Group 8.x-1.4, we use the plugin manager to get content enabler plugins
+  $plugin_manager = \Drupal::service('plugin.manager.group_content_enabler');
+  $plugins = $plugin_manager->getInstalled($group->getGroupType());
+  $group_content_types = [];
+  
+  // Create a list of all group content types
+  foreach ($plugins as $plugin_id => $plugin) {
+    // Get all group_content_type_id for this plugin
+    $group_content_type_ids = \Drupal::entityQuery('group_content_type')
+      ->condition('content_plugin', $plugin_id)
+      ->execute();
+    
+    if (!empty($group_content_type_ids)) {
+      foreach ($group_content_type_ids as $group_content_type_id) {
+        $group_content_types[] = $group_content_type_id;
+      }
+    }
+  }
+  
+  // Get all content for this group
+  $group_contents = \Drupal::entityTypeManager()
+    ->getStorage('group_content')
+    ->loadByProperties(['gid' => $group->id()]);
+  
+  // Get current path for destination parameter
+  $current_path = \Drupal::service('path.current')->getPath();
+  $current_url = \Drupal::service('path_alias.manager')->getAliasByPath($current_path);
+  
+  foreach ($group_contents as $group_content) {
+    // Get the contained entity
+    $entity = $group_content->getEntity();
+    if ($entity) {
+      // Show only nodes, ignore users and other entity types
+      $entity_type_id = $entity->getEntityTypeId();
+      if ($entity_type_id !== 'node') {
+        continue;
+      }
+      
+      // Get author data if available
+      $author_name = t('Unknown user');
+      if (method_exists($entity, 'getOwner')) {
+        $author = $entity->getOwner();
+        $author_name = $author ? $author->getDisplayName() : t('Unknown user');
+      }
+      
+      // Format creation date if available
+      $created_date = '';
+      if (method_exists($entity, 'getCreatedTime')) {
+        $created_time = $entity->getCreatedTime();
+        $created_date = \Drupal::service('date.formatter')->format($created_time, 'short');
+      }
+      
+      // Get title or label of the entity
+      $title = method_exists($entity, 'getTitle') ? $entity->getTitle() : $entity->label();
+      
+      // Get entity type
+      $entity_type = \Drupal::entityTypeManager()->getDefinition($entity_type_id)->getLabel();
+      
+      // Get bundle if available
+      $bundle_label = $entity->bundle();
+      if (method_exists($entity, 'bundle')) {
+        $bundle_info = \Drupal::service('entity_type.bundle.info')->getBundleInfo($entity_type_id);
+        if (isset($bundle_info[$entity->bundle()]['label'])) {
+          $bundle_label = $bundle_info[$entity->bundle()]['label'];
+        }
+      }
+      
+      // Create URL for entity editing with destination parameter
+      $edit_url = \Drupal\Core\Url::fromRoute("entity.{$entity_type_id}.edit_form", 
+        [$entity_type_id => $entity->id()],
+        ['query' => ['destination' => $current_url]]
+      );
+      
+      $contents[] = [
+        'type' => $entity_type . ' (' . $bundle_label . ')',
+        'title' => $title,
+        'author' => $author_name,
+        'created' => $created_date,
+        'edit_url' => $edit_url,
+      ];
+    }
+  }
+  
+  return $contents;
+}

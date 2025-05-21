@@ -1,0 +1,205 @@
+myaccess.admin_config:
+  path: '/admin/config/myaccess'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'MyAccess Settings'
+  requirements:
+    _permission: 'administer myaccess'
+
+myaccess.login:
+  path: '/oidc/login'
+  defaults:
+    _controller: '\Drupal\myaccess\Controller\UserController::login'
+    _title: 'Authenticate'
+  requirements:
+    _user_is_logged_in: 'FALSE'
+
+myaccess.blocked:
+  path: '/blocked'
+  defaults:
+    _controller: '\Drupal\myaccess\Controller\UserController::blocked'
+    _title: 'Authenticate'
+  requirements:
+    _user_is_logged_in: 'FALSE'
+
+myaccess.password_form:
+  path: '/password'
+  defaults:
+    _form: '\Drupal\myaccess\Form\PasswordForm'
+    _title: 'Password'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+myaccess.oidc_login_force:
+  path: '/oidc-login-force'
+  defaults:
+    _controller: '\Drupal\myaccess\Controller\UserController::loginForce'
+    _title: 'OiDC Login Force'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+myaccess.password_session_form:
+  path: '/pw-session-form'
+  defaults:
+    _controller: '\Drupal\myaccess\Controller\UserController::passwordSessionForm'
+    _title: 'Password Session Form'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+myaccess.password_session_save:
+  path: '/pw-session-save'
+  defaults:
+    _controller: '\Drupal\myaccess\Controller\UserController::passwordSessionSave'
+    _title: 'Password Session Save'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+  options:
+    no_cache: TRUE
+
+myaccess.applications-favorite:
+  path: '/myaccess/applications-favorite'
+  defaults:
+    _controller: '\Drupal\myaccess\Controller\ApplicationController::favorite'
+    _title: 'Welcome'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+myaccess.applications-favorite-sort:
+  path: '/myaccess/applications-favorite-sort'
+  defaults:
+    _controller: '\Drupal\myaccess\Controller\ApplicationController::sortFavoriteApplications'
+    _title: 'Welcome'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+myaccess.applications-grid:
+  path: '/myaccess/applications-grid'
+  defaults:
+    _controller: '\Drupal\myaccess\Controller\ApplicationController::grid'
+    _title: 'My App'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+myaccess.applications-google:
+  path: '/myaccess/applications-google'
+  defaults:
+    _controller: '\Drupal\myaccess\Controller\ApplicationController::google'
+    _title: 'Google APP'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+myaccess.open:
+  path: '/myaccess/open/{application}'
+  defaults:
+    _controller: '\Drupal\myaccess\Controller\ApplicationOpenerController::open'
+    _title: 'Open'
+  options:
+    parameters:
+      application:
+        type: 'myaccess:application'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+myaccess.application.add:
+  path: '/admin/application/add/{application_type}'
+  defaults:
+    _entity_form: 'application.add'
+  requirements:
+    _permission: 'administer application types'
+  options:
+    parameters:
+      application_type:
+        type: entity:application_type
+
+myaccess.application.edit:
+  path: '/admin/application/edit/{application}'
+  defaults:
+    _entity_form: 'application.edit'
+  requirements:
+    _permission: 'administer application types'
+  options:
+    parameters:
+      application_type:
+        type: entity:application_type
+
+myaccess.application.delete:
+  path: '/admin/application/delete/{application}'
+  defaults:
+    _entity_form: 'application.delete'
+  requirements:
+    _permission: 'administer application types'
+  options:
+    parameters:
+      application_type:
+        type: entity:application_type
+
+entity.application_type.collection:
+  path: '/admin/structure/applications'
+  defaults:
+    _entity_list: 'application_type'
+    _title: 'Application types'
+  requirements:
+    _permission: 'administer application types'
+
+entity.application_type.edit_form:
+  path: '/admin/structure/applications/manage/{application_type}'
+  defaults:
+    _entity_form: 'application_type.edit'
+    _title_callback: '\Drupal\Core\Entity\Controller\EntityController::title'
+  requirements:
+    _permission: 'administer application types'
+
+entity.application_type.delete_form:
+  path: '/admin/structure/applications/manage/{application_type}/delete'
+  defaults:
+    _entity_form: 'application_type.delete'
+    _title: 'Delete'
+  requirements:
+    _entity_access: 'application_type.delete'
+
+myaccess.applications-mylinks:
+  path: '/myaccess/applications-mylinks'
+  defaults:
+    _controller: '\Drupal\myaccess\Controller\ApplicationController::myLinks'
+    _title: 'MyLinks'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+myaccess.oidc-token-info:
+  path: '/myaccess/oidc-token-info/{uid}'
+  defaults:
+    _controller: '\Drupal\myaccess\Controller\OIDCTokenController::tokenInfo'
+    _title: 'OIDC Token Info'
+    _disable_route_normalizer: 'TRUE'
+    uid: 0
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+myaccess.oidc-token-refresh:
+  path: '/myaccess/oidc-token-refresh/{uid}'
+  defaults:
+    _controller: '\Drupal\myaccess\Controller\OIDCTokenController::tokenRefresh'
+    _title: 'OIDC Token Refresh'
+    _disable_route_normalizer: 'TRUE'
+    uid: 0
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+myaccess.oidc-token-polling:
+  path: '/myaccess/poll-refresh'
+  defaults:
+    _controller: '\Drupal\myaccess\Controller\OIDCTokenController::pollRefresh'
+    _title: 'Poll Refresh'
+    _disable_route_normalizer: 'TRUE'
+    uid: 0
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+myaccess.oidc_token_refresh_settings_form:
+  path: '/admin/config/myaccess/oidc-token-refresh-settings'
+  defaults:
+    _form: '\Drupal\myaccess\Form\OIDCTokenRefreshConfigForm'
+    _title: 'OIDC Token Refresh Settings'
+  requirements:
+    _permission: 'administer myaccess'
+

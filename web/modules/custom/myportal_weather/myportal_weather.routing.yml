@@ -1,0 +1,23 @@
+myportal_weather.settings_form:
+  path: '/admin/config/myportal/weather'
+  defaults:
+    _form: '\Drupal\myportal_weather\Form\SettingsForm'
+    _title: 'SettingsForm'
+  requirements:
+    _permission: 'administer site configuration'
+  options:
+    _admin_route: TRUE
+
+myportal_weather.location_autocomplete:
+  path: '/myportal/weather/autocomplete/location'
+  defaults:
+    _controller: '\Drupal\myportal_weather\Controller\LocationAutocompleteController::autocomplete'
+  requirements:
+    _permission: 'access content'
+
+myportal_weather.ajax_widget:
+  path: '/myportal/weather/ajax-widget'
+  defaults:
+    _controller: '\Drupal\myportal_weather\Controller\AjaxWeatherController::widget'
+  requirements:
+    _permission: 'access content'

@@ -1,0 +1,5 @@
+name: 'MyLinks migrations'
+type: module
+description: 'Migrate MyLinks applications from csv file'
+package: 'Menarini'
+core_version_requirement: ^8.8.0 || ^9.0

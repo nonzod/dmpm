@@ -1,0 +1,199 @@
+// Blockquote
+blockquote {
+  border-left: 3px solid $brand-primary;
+}
+
+strong {
+  font-weight: $font-weight-strong;
+}
+
+@include text-emphasis-variant('.text-primary', $brand-primary);
+@include text-emphasis-variant('.text-success', $state-success-text);
+@include text-emphasis-variant('.text-info', $state-info-text);
+@include text-emphasis-variant('.text-warning', $state-warning-text);
+@include text-emphasis-variant('.text-danger', $state-danger-text);
+@include text-emphasis-variant('.text-muted', $text-muted);
+@include text-emphasis-variant('.text-gray', $gray);
+@include text-emphasis-variant('.text-gray-light', $gray-light);
+@include text-emphasis-variant('.text-gray-lighter', $gray-light-1);
+@include text-emphasis-variant('.text-gray-lightest', $gray-lighter);
+@include text-emphasis-variant('.text-accent', $brand-accent);
+
+// Brand colors
+.bg-primary { background-color: $brand-primary;}
+.bg-secondary { background-color: $brand-secondary;}
+.bg-accent { background-color: $brand-accent;}
+
+// States
+.bg-success { background-color: $state-success-bg;}
+.bg-warning { background-color: $state-warning-bg;}
+.bg-danger { background-color: $state-danger-bg;}
+.bg-info { background-color: $state-info-bg;}
+
+
+// Grayscale
+.bg-gray-base { background-color: $gray-base;}
+.bg-gray-darker { background-color: $gray-darker;}
+.bg-gray-dark { background-color: $gray-dark;}
+.bg-gray { background-color: $gray;}
+.bg-gray-light { background-color: $gray-light;}
+.bg-gray-light-1 { background-color: $gray-light-1;}
+.bg-gray-lighter { background-color: $gray-lighter;}
+.bg-gray-lighter-1 { background-color: $gray-lighter-1;}
+.bg-gray-lightest { background-color: $gray-lightest;}
+.bg-white { background-color: white;}
+
+
+@include style-variant('.brand-primary', $brand-primary, white);
+@include style-variant('.brand-secondary', $brand-secondary, white);
+@include style-variant('.brand-accent', $brand-accent, $default-color);
+@include style-variant('.brand-user', $gray-darker, white);
+
+@include style-variant('.default-light', $gray-lighter, $default-color);
+
+a {
+  @include on-event {
+    box-shadow: none;
+    opacity: 1;
+  }
+}
+
+.men-header {
+  @extend .font-oswald;
+}
+
+// Type of title inside ckeditor
+.men--main-title,
+.men--secondary-title,
+.men--box-title {
+  @extend .font-oswald-light;
+}
+
+.men--main-title {
+  font-size: 2.75rem;
+  line-height: 4.063rem;
+  color: $new-highlight;
+  margin-bottom: 8px;
+  margin-top: 0;
+}
+.men--secondary-title {
+  font-size: 2.5rem;
+  line-height: 3.75rem;
+  margin-bottom: 29px;
+  margin-top: 0;
+  color: $default-color;
+}
+.men--box-title {
+  font-size: 1.875rem;
+  line-height: 2.813rem;
+  margin-bottom: 20px;
+  margin-top: 0;
+  color: $men-link-all;
+}
+.men--paragraph-title {
+  font-size: 1.125rem;
+  line-height: 1.625rem;
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: $default-color;
+}
+// Custom style for sidebarblock
+.region--complementary {
+  .men-block--events,
+  .block-facets {
+    @extend .font-oswald;
+    .men-block__title {
+      font-size: 1.125rem;
+      line-height: 1.625rem;
+      @extend .font-oswald-light;
+      color: $new-highlight;
+    }
+  }
+}
+
+.men-block--events {
+  .upcoming__events-title {
+    color: $heading-highlight;
+    font-size: 14px;
+  }
+}
+
+.block-facets {
+  ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+  .facet-item__value {
+    display: flex;
+    flex-direction: column;
+    @include for-tablet-landscape-up {
+      justify-content: space-between;
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+  .facet__title {
+    margin-right: 5px;
+    flex: 0 0 100%;
+    @include for-tablet-landscape-up {
+      flex: 1 1 60%;
+    } 
+  }
+  .facet__members {
+    font-size: 0.875rem;
+    color: adjust-color($default-color, $alpha: -0.5);
+    flex: 0 0 100%;
+    @include for-tablet-landscape-up {
+      flex: 1 0 40%;
+    }
+  }
+}
+
+.body-text {
+  strong {
+    @extend .font-arimo-bold;
+  }
+}
+
+.men-node__title {
+  font-size: 2.75rem;
+  line-height: 4.063rem;
+  @extend .font-oswald-light;
+  color: $new-highlight;
+}
+
+.men-node--page {
+  .men-node__title h2 {
+    font-size: 2.75rem;
+    line-height: 4.063rem;
+    @extend .font-oswald-light;
+    color: $new-highlight;
+    margin-top: 0;
+    margin-bottom: 8px;
+  }
+}
+
+.men-node--full {
+  .body-text {
+    @extend .font-arimo;
+    font-size: 1.125rem;
+    line-height: 1.625rem;
+    a {
+      @extend .font-arimo-bold;
+      text-decoration: underline;
+    }
+  }
+}
+
+.paragraph {
+  .field--name-field-body {
+    font-size: 1.125rem;
+    line-height: 1.625rem;
+    font-weight: 400;
+    strong {
+      @extend .font-oswald-bold;
+    }
+  }
+}

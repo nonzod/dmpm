@@ -1,0 +1,4 @@
+invalidate cdn:
+  description: 'Invalidate the cdn cache.'
+  title: 'Invalidate cdn'
+  restrict access: TRUE

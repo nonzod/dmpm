@@ -1,0 +1,7 @@
+myportal_user.transfer_ownership_contents_form:
+  path: '/admin/config/myportal/transfer-ownership-contents'
+  defaults:
+    _form: '\Drupal\myportal_user\Form\TransferOwnershipContentsForm'
+    _title: 'Transfer Ownership Contents'
+  requirements:
+    _permission: 'access transfer ownership contents'

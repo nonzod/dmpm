@@ -1,0 +1,137 @@
+<?php
+
+use Drupal\Core\Entity\EntityForm;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\myportal_weather\LocationInterface;
+
+/**
+ * @file
+ * Primary module hooks for MyPortal Weather module.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function myportal_weather_theme($existing, $type, $theme, $path) {
+  return [
+    'myportal_weather_widget' => [
+      'variables' => [
+        'attributes' => [],
+        'weather' => NULL,
+        'location' => NULL,
+        'context' => [],
+      ],
+    ],
+  ];
+}
+
+/**
+ * Prepares variables for myportal_weather templates.
+ *
+ * Default template: myportal-weather-widget.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing the data.
+ */
+function template_preprocess_myportal_weather_widget(array &$variables) {
+  $variables['user'] = $variables['user'] ?? \Drupal::currentUser();
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function myportal_weather_form_user_form_alter(array &$form, FormStateInterface $form_state) {
+  $form_object = $form_state->getFormObject();
+  if (!$form_object instanceof EntityForm) {
+    return;
+  }
+
+  $form['weather_settings'] = [
+    '#type' => 'fieldset',
+    '#title' => t('Weather Settings'),
+    '#tree' => TRUE,
+  ];
+
+  // User specific settings are stored and retrieved using the UserData service.
+  /** @var \Drupal\user\UserDataInterface $user_data */
+  $user_data = \Drupal::service('user.data');
+  $user = $form_object->getEntity();
+
+  $form['weather_settings']['degrees'] = [
+    '#type' => 'select',
+    '#title' => t('Weather Unit Celsius or Fahrenheit'),
+    '#description' => t('Select unit of weather measurement'),
+    '#default_value' => $user_data->get('myportal_weather', (int) $user->id(), 'degrees'),
+    '#options' => [
+      'metric' => t('Celsius'),
+      'imperial' => t('Fahrenheit'),
+    ],
+  ];
+  $location_selected = $user_data->get('myportal_weather', (int) $user->id(), 'location');
+  $form['weather_settings']['location'] = [
+    '#type' => 'textfield',
+    '#title' => t('Location'),
+    '#description' => t('Select the location for which you want to know the weather information.'),
+    '#autocomplete_route_name' => 'myportal_weather.location_autocomplete',
+    '#default_value' => $location_selected['name'] ?? NULL,
+  ];
+
+  // Add a custom validate/submit handler so the form values can be saved.
+  $form['#validate'][] = 'myportal_weather_user_form_validate';
+  $form['actions']['submit']['#submit'][] = 'myportal_weather_user_form_submit';
+}
+
+/**
+ * Custom validate handler.
+ *
+ * @see myportal_weather_form_user_form_alter()
+ */
+function myportal_weather_user_form_validate(array &$form, FormStateInterface $form_state) {
+  $input_location = $form_state->getValue(['weather_settings', 'location']);
+  if (empty($input_location)) {
+    return;
+  }
+
+  /** @var \Drupal\myportal_weather\Service\Geocoding\GeocodingProviderInterface $geocoding_provider */
+  $geocoding_provider = \Drupal::service('myportal_weather.geocoding.openweathermap');
+
+  $locations = $geocoding_provider->getCoordinatesByLocationName($input_location);
+  $location = reset($locations);
+
+  if ($location instanceof LocationInterface) {
+    $form_state->set('location', $location);
+  }
+  else {
+    $form_state->setErrorByName('weather_settings][location', "Could not find the coordinates for location inserted. Please try again.");
+  }
+}
+
+/**
+ * Custom submit handler, saves user settings for the weather widget.
+ *
+ * @see myportal_weather_form_user_form_alter()
+ */
+function myportal_weather_user_form_submit(array &$form, FormStateInterface $form_state) {
+  $form_object = $form_state->getFormObject();
+  if (!$form_object instanceof EntityForm) {
+    return;
+  }
+
+  // Get the user whose account object is being modified.
+  $user = $form_object->getEntity();
+
+  /** @var \Drupal\user\UserDataInterface $user_data */
+  $user_data = \Drupal::service('user.data');
+
+  // Save the submitted data to the user's UserData.
+  $user_data->set('myportal_weather', (int) $user->id(), 'degrees', $form_state->getValue([
+    'weather_settings',
+    'degrees',
+  ]));
+
+  if ($form_state->has('location')) {
+    /** @var \Drupal\myportal_weather\LocationInterface $location */
+    $location = $form_state->get('location');
+    $user_data->set('myportal_weather', (int) $user->id(), 'location', $location->toArray());
+  }
+}

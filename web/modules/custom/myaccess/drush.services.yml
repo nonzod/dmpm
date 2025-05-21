@@ -1,0 +1,11 @@
+services:
+  logger.channel.myaccess:
+    class: Drupal\Core\Logger\LoggerChannel
+    factory: logger.factory:get
+    arguments: [ 'myaccess' ]
+
+  hrms.commands:
+    class: Drupal\myaccess\Commands\HmrsCommands
+    arguments: [ '@database', '@myaccess.hmrs_client', '@entity_type.manager' ]
+    tags:
+      - { name: drush.command }

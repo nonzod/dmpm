@@ -1,0 +1,28 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display the news list how marquee.
+ *
+ * Available variables:
+ * - news: the news items.
+ *
+ * @see template_preprocess_myportal_news_marquee()
+ *
+ * @ingroup themeable
+ */
+#}
+
+{{ attach_library('myportal_theme/jquery-marquee') }}
+<div class="marquee">
+
+  {% for new in news %}
+    <a href="{{ new.getUrl }}" target="_blank">
+      {% set new_date = new.getData is not empty ? new.getData|date_from_format('Y-m-d\\TH:i:s', 'H:i,') %}
+      {{ new_date }} {{ new.getTitle|striptags|raw }}
+    </a>
+    {% if not loop.last %}
+      <span class="separator"> - </span>
+    {% endif %}
+  {% endfor %}
+
+</div>

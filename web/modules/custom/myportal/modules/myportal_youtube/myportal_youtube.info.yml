@@ -1,0 +1,10 @@
+name: 'MyPortal Youtube'
+description: 'Allows you to connect to a YouTube account and import recent data using Youtube API.'
+type: module
+configure: myportal_youtube.admin
+core_version_requirement: ^9
+dependencies:
+  - myportal:myportal
+  - drupal:key
+  - drupal:block
+package: 'Menarini'

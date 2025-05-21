@@ -1,0 +1,18 @@
+disclaimer: 'In order to facilitate the reporting of potential violations of the "Company\''s Organization, Management and Control Model", pursuant to Legislative Decree 231/2001, the mailboxes and reporting channels of the "231 Supervisory Body" (e-mail and/ or certified e-mail) may be accessed through the tab "Reporting to the 231 SB" available on the My Access platform. From here you will be able to select the Menarini Group Company concerned and subsequently send your report to the relevant Supervisory Body. Under no circumstances is the system able to record information concerning: i) user name or identification (such as IP address), ii) information, data or any other content submitted, iii) any other operations carried out by the user through the MY Access platform. Any information sent will be considered strictly confidential and handled as such. Those who submit a report in good faith will be protected from any form of retaliation and/or discrimination.'
+thank_you: 'Lorem ipsum.'
+companies:
+  -
+    name:
+      Company1
+    recipients:
+      - email1@example.com
+      - email2@example.com
+  -
+    name:
+      Company2
+    recipients:
+      - email3@example.com
+      - email4@example.com
+allowed_extensions: 'png jpg pdf xlsx docx'
+sender_email: 'odv@menarini.com'
+langcode: en

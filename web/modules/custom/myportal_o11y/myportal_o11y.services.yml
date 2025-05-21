@@ -1,0 +1,5 @@
+services:
+  myportal_o11y.add_labels_subscriber:
+    class: Drupal\myportal_o11y\EventSubscriber\AddLabelsSubscriber
+    tags:
+      - { name: event_subscriber }

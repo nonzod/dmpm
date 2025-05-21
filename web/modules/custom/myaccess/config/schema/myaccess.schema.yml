@@ -1,0 +1,79 @@
+# Schema for the configuration files of the MyAccess module.
+
+myaccess.settings:
+  type: config_object
+  label: 'MyAccess settings'
+  mapping:
+    openid:
+      type: mapping
+      label: 'OpenID Connect settings'
+      mapping:
+        redirect_uri:
+          type: uri
+          label: 'URL to redirect after external login'
+        redirect_logout_uri:
+          type: uri
+          label: 'URL to redirect after external logout'
+        base_uri:
+          type: uri
+          label: 'URL of the IDM'
+        realm:
+          type: string
+          label: 'OpenID Connect realm'
+        application_id:
+          type: string
+          label: 'OpenID Connect application id'
+        application_secret:
+          type: string
+          label: 'OpenID Connect application secret'
+        scope:
+          type: sequence
+          label: 'OpenID Connect scopes'
+          sequence:
+            type: string
+            label: 'scope'
+    session:
+      type: mapping
+      label: 'Session settings'
+      mapping:
+        password_encrypt_method:
+          type: string
+          label: 'Method used to encrypt the password in the session'
+        password_encrypt_key:
+          type: string
+          label: 'Shared key used to encrypt the password in the session'
+    resource_admin_uri:
+      type: uri
+      label: 'URL of the resource admin Web Services'
+    jwt_user_duration_in_minutes:
+      type: integer
+      label: 'How long the jwt token sent to applications via cookie last'
+    hmrs:
+      type: mapping
+      label: 'Hmrs integration settings'
+      mapping:
+        client:
+          type: string
+          label: 'The client to use: csv or api'
+        local_csv_path:
+          type: string
+          label: 'Path for the local csv file'
+        hmrs_authenticate:
+          type: string
+          label: 'URL of the authenticate HMRS api'
+        base_uri:
+          type: string
+          label: 'URL of the HMRS api'
+        username:
+          type: string
+          label: 'HMRS username'
+        password:
+          type: string
+          label: 'HMRS password'
+    event_subscriber:
+      type: mapping
+      label: 'Event subscriber class settings'
+      mapping:
+        time_within_which_not_update:
+          type: integer
+          label: 'Time within which not to update'

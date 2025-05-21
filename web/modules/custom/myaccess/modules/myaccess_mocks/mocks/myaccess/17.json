@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "myAccessCode": "menSSOIntEinstein",
+  "myAccessUrl": "https://einstein.menarini.net",
+  "externalMyAccessCode": "menSSOPubEinstein",
+  "externalEnabled": true,
+  "externalMyAccessUrl": "https://mya-einstein-qa.menarini.net",
+  "formAction": "/index.php",
+  "postAction": null,
+  "formParams": "[ { \"name\":\"url_login\", \"value\":\"$username\" }, { \"name\":\"url_password\", \"value\":\"$password\" }, { \"name\":\"url_account\", \"value\":\"50004\" } ] "
+}

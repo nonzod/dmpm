@@ -1,0 +1,8 @@
+{% if display_submitted %}
+    {% if node.field_author.value %}
+        {{ node.field_author.value }}
+    {% else %}
+        {{ author_name }}
+    {% endif %}
+{% endif %}
+<span class="metainfo__published-date">{% if display_submitted %} &bullet; {% endif %} {{ created_date_formatted }} </span>

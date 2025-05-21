@@ -1,0 +1,31 @@
+odv.submission_form:
+  path: '/applications/odv'
+  defaults:
+    _form: '\Drupal\odv\Form\SubmissionForm'
+    _title: 'ODV'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+odv.configuration_form:
+  path: '/admin/config/myaccess/odv'
+  defaults:
+    _form: '\Drupal\odv\Form\ConfigurationForm'
+    _title: 'ODV Settings'
+  requirements:
+    _permission: 'administer odv configuration'
+
+odv.thank_you:
+  path: '/applications/odv/thank_you'
+  defaults:
+    _controller: '\Drupal\odv\Controller\ThankYouController::view'
+    _title: 'Receipt'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+odv.download:
+  path: '/applications/odv/download'
+  defaults:
+    _controller: '\Drupal\odv\Controller\ThankYouController::download'
+    _title: 'ODV'
+  requirements:
+    _user_is_logged_in: 'TRUE'

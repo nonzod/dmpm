@@ -1,0 +1,7 @@
+myp welcome message:
+  title: 'Write welcome message'
+  description: 'Provides access to the form to write a welcome message.'
+
+administer myportal:
+  description: 'View area Myportal Settings.'
+  title: 'Administrator Myportal Settings'

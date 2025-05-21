@@ -1,0 +1,29 @@
+uuid: 94e040c4-d694-4aec-a7be-65f912616d6d
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.sdblock_function
+  module:
+    - facets
+    - system
+  theme:
+    - myportal_theme
+id: sdblock_function
+theme: myportal_theme
+region: complementary_top
+weight: 0
+provider: null
+plugin: 'facet_block:sdblock_function'
+settings:
+  id: 'facet_block:sdblock_function'
+  label: Function
+  label_display: '0'
+  provider: facets
+  block_id: sdblock_function
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /page-navigation/287
+

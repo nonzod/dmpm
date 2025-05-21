@@ -1,0 +1,19 @@
+<div class="teaser__content-line">
+  <div class="teaser__content-text">
+    {%- block field_value %}
+      <div class="teaser__published">
+        <div class="teaser__published-date"> {{ date }} {% if display_submitted %} &bullet; {% endif %}</div>
+        {% if display_submitted %}
+          <div class="teaser__published-author">
+            {% if node.field_author.value %}
+              {{ node.field_author.value }}
+            {% else %}
+              {{ author_name }}
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+    {%- endblock -%}
+  </div>
+</div>
+  

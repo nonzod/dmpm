@@ -1,0 +1,4 @@
+odv.configuration_form_tab:
+  route_name: odv.configuration_form
+  title: Settings
+  base_route: odv.configuration_form

@@ -1,0 +1,25 @@
+myportal_autologout.settings:
+  type: config_object
+  mapping:
+    use_watchdog:
+      type: boolean
+      label: 'Use watchdog'
+    state:
+      type: sequence
+      label: 'State'
+      sequence:
+        - type: myportal_autologout_state
+
+myportal_autologout_state:
+  type: mapping
+  label: 'State Settings'
+  mapping:
+    enabled:
+      type: boolean
+      label: 'Enabled'
+    timeout:
+      type: integer
+      label: 'Timeout'
+    delay:
+      type: string
+      label: 'Delay to active timeout from last login'

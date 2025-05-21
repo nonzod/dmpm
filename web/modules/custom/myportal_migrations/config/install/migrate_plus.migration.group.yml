@@ -1,0 +1,33 @@
+langcode: en
+status: true
+dependencies: {  }
+id: group
+migration_tags:
+  - myportal
+migration_group: myportal
+label: Group
+source:
+  plugin: csv
+  path: /var/www/html/web/modules/custom/myportal_migrations/source/groups.csv
+  delimiter: ;
+  enclosure: '"'
+  ids:
+    - id
+process:
+  label: name
+  field_group_scope: scope
+  uid:
+    plugin: default_value
+    default_value: 1
+  type:
+    plugin: default_value
+    default_value: 'flexible_group'
+  field_group_allowed_join_method:
+    plugin: default_value
+    default_value: 'added'
+  field_group_allowed_visibility:
+    plugin: default_value
+    default_value: 'group'
+destination:
+  plugin: 'entity:group'
+  destination_module: group

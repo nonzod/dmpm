@@ -1,0 +1,9 @@
+myportal_youtube.admin:
+  path: '/admin/config/services/youtube'
+  defaults:
+    _form: 'Drupal\myportal_youtube\Form\YoutubeSettingsForm'
+    _title: 'Configure YouTube'
+  requirements:
+    _permission: 'administer site configuration'
+  options:
+    _admin_route: TRUE

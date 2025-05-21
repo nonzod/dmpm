@@ -1,0 +1,90 @@
+@import "settings";
+
+.pagination {
+
+  > li {
+    position: relative;
+    &:after {
+      content: '';
+      width: 4px;
+      height: 4px;
+      background: $default-color;
+      display: inline-block;
+      border-radius: 50%;
+      position: absolute;
+      top: 45%;
+      left: 100%;
+    }
+    > a,
+    > span {
+      color: $pagination-color;
+      min-width: auto;
+      @extend .font-arimo-bold;
+    }
+
+    &:first-child {
+      > a,
+      > span {
+        border-radius: $border-radius-small;
+      }
+    }
+
+    &:last-child {
+      > a,
+      > span {
+        border-radius: $border-radius-small;
+      }
+    }
+
+  }
+
+  > li > a,
+  > li > span {
+    &:hover,
+    &:focus {
+      color: $pagination-hover-color;
+    }
+  }
+
+  > .active > a,
+  > .active > span {
+    text-decoration: underline;
+    &,
+    &:hover,
+    &:focus {
+      color: $pagination-active-color;
+    }
+  }
+
+  > .disabled {
+    > span,
+    > span:hover,
+    > span:focus,
+    > a,
+    > a:hover,
+    > a:focus {
+      color: $pagination-disabled-color;
+      background-color: $pagination-disabled-bg;
+      border-color: $pagination-disabled-border;
+    }
+  }
+}
+
+
+.mini-pager {
+  background-image: none;
+}
+
+// TODO: Check if this style can be applied everywhere
+.view-display-id-page_all_events {
+  .pager__item--next,
+  .pager__item--prev {
+    &:after {
+      display: none;
+    }
+  }
+  .pager__item--first,
+  .pager__item--last {
+    display: none;
+  }
+}

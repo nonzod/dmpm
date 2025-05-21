@@ -1,0 +1,67 @@
+<?php
+
+/** Module file */
+
+use Drupal\Core\Url;
+use Drupal\Core\Link;
+use Drupal\views\ViewExecutable;
+use Drupal\views\Plugin\views\query\QueryPluginBase;
+
+/**
+ * hook_email()
+ */
+function myportal_staff_directory_mail($key, &$message, $params) {
+  $link = Link::fromTextAndUrl('Go to settings', Url::fromRoute('myportal_staff_directory.index', [], ['absolute' => 'true']))->toString();
+
+  switch ($key) {
+    case 'importer_error':
+      $message['from'] = \Drupal::config('system.site')->get('mail');
+      $message['subject'] = t('There is an error during staff directory import');
+      $message['body'][] = '<h3>Error during staff directory import process</h3>';
+      $message['body'][] = "<p>{$params['message']}</p>";
+      $message['body'][] = "<p>$link</p>";
+      break;
+  }
+}
+
+/**
+ * hook_form_alter()
+ * Try to integrate facets with exposed filter block
+ */
+function myportal_staff_directory_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  if ($form["#id"] == "views-exposed-form-staff-directory-search-block") {
+    $facets = \Drupal::request()->query->get('f');
+    if ($facets) {
+      if (!is_array($facets))
+        $facets = [$facets];
+
+      $fa = [];
+      // ?f[0]=sdblock_country:Vietnam&f[1]=sdblock_employee_scope:REGIONAL
+      foreach ($facets as $idx => $facet) {
+        $fa[] = "f[$idx]=$facet";
+
+        $form["f[$idx]"] = [
+          '#type' => 'hidden',
+          '#default_value' => $facet
+        ];
+      }
+
+      $f = implode('&', $fa);
+      $form['#action'] .= "?$f";
+    }
+  }
+}
+
+/**
+ * Implements hook_views_pre_view().
+ */
+function myportal_staff_directory_views_pre_view($view, $display_id, array &$args) {
+  if ($view->id() == 'staff_directory') {
+    $filters = $view->getExposedInput();
+    if (!empty($filters['name'])) {
+      // Convert the exposed filter value to lowercase
+      $filters['name'] = strtolower($filters['name']);
+      $view->setExposedInput($filters);
+    }
+  }
+}

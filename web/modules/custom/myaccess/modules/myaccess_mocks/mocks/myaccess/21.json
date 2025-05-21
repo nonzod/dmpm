@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "myAccessCode": "menSSOIntD2",
+  "myAccessUrl": "https://documentum.menarini.net/",
+  "externalMyAccessCode": "menSSOPubD2",
+  "externalEnabled": true,
+  "externalMyAccessUrl": "https://mya-documentum-qa.menarini.net/",
+  "formAction": null,
+  "postAction": null,
+  "formParams": null
+}

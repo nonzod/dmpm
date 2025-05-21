@@ -1,0 +1,17 @@
+{
+  "name": "drupal/myportal_staff_directory",
+  "description": "Importing staff members.",
+  "type": "drupal-module",
+  "autoload": {
+    "psr-4": {
+      "Drupal\\myportal_staff_directory\\": "src/"
+    }
+  },
+  "extra": {
+    "drush": {
+      "services": {
+        "drush.services.yml": "^9"
+      }
+    }
+  }
+}

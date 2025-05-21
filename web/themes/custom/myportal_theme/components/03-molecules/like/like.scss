@@ -1,0 +1,70 @@
+@import "settings";
+
+.vote-widget {
+  margin-top: 10px;
+  .icon-vote {
+    vertical-align: baseline;
+  }
+  // Added like
+  a.voted .icon-vote {
+    fill: $icon-like!important;
+  }
+
+  a:active {
+
+    // Voted like focus
+    &.voted .icon-vote {
+      fill: $icon-like;
+    }
+
+    // Not voted like focus
+    &:not(.voted) .icon-vote {
+      fill: transparent;
+    }
+
+  }
+
+  @include for-tablet-portrait-up {
+    a:focus {
+
+      // Not voted like hover
+      &:not(.disable-status) .icon-vote,
+      &:not(.voted) .icon-vote {
+        fill: transparent;
+      }
+
+      &.disable-status .icon-vote,
+      .voted .icon-vote {
+        fill: $icon-like!important;
+        stroke: $icon-like!important;
+      }
+    }
+  }
+}
+
+.view--who-liked .views-field-rendered-entity-1 img {
+  border-radius: 50%;
+}
+
+.view--who-liked .views-field-view-user a {
+  @include button-variant($brand-primary, transparent, transparent);
+  fill: $brand-primary;
+}
+
+.icon-vote {
+  stroke-width: 1px;
+}
+.vote__count {
+  font-size: 16px;
+  color: $text;
+  @extend .font-arimo;
+  a {
+    cursor: default;
+  }
+}
+
+.vote__wrapper {
+  @include for-phone-only {
+    justify-content: flex-start;
+  }
+}

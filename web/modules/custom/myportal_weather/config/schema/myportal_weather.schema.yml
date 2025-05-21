@@ -1,0 +1,27 @@
+myportal_weather.settings:
+  type: config_object
+  label: 'MyPortal Weather settings'
+  mapping:
+    default:
+      type: mapping
+      label: "Default settings"
+      mapping:
+        name:
+          label: 'Name'
+          type: string
+        lat:
+          label: 'Lat'
+          type: string
+        lon:
+          label: 'Lon'
+          type: string
+    location_hdp:
+      type: sequence
+      label: "Location HDP Mapping"
+      sequence:
+        type: string
+    country_location:
+      type: sequence
+      label: "Country Location Mapping"
+      sequence:
+        type: string

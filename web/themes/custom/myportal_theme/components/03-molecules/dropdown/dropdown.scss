@@ -1,0 +1,96 @@
+@import "settings";
+
+.dropdown-menu {
+  border-radius: 3px;
+
+  // Links within the dropdown menu
+  > li > a {
+    font-weight: 300;
+  }
+
+  // Disabled state
+  > .disabled {
+    > a,
+    > span {
+      &,
+      &:hover,
+      &:focus {
+        color: $dropdown-link-disabled-color;
+      }
+    }
+  }
+
+}
+.dropdown {
+  @include for-phone-only {
+    &.has-alert > a:before {
+      background-color: $brand-accent;
+    }
+  }
+
+  // There are now items that don't have their own top level icon so these
+  // should show notifications in the user menu also on desktop.
+  &.has-alert.has-alert--desktop > a:before {
+    background-color: $brand-accent;
+  }
+}
+
+.meta-addtocal {
+  .dropdown-menu {
+    min-width: 100%;
+  }
+}
+
+// Profile and language
+
+.region--toolbar .divider {
+  background-color: $divider;
+  height: 2px;
+}
+
+.region--toolbar .navbar-nav .open .dropdown-menu {
+  width: auto;
+  height: auto;
+  left: auto;
+  right: auto;
+  background: $default-color;
+  @extend .font-arimo;
+  li a,
+  li span {
+    color: $white;
+    font-size: 13px;
+    padding: 2px 13px;
+    @include on-event {
+      background-color: transparent;
+    }
+  }
+}
+
+.profile {
+  .dropdown-menu {
+    transform: translateX(-50%);
+    @include for-tablet-landscape-down {
+      transform: translate(-50%, 10px);
+    }
+  }
+  &.dropdown.open:before {
+    content: '';
+    height: 100%;
+    width: 55px;
+    background-color: $dark-bg-op;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .header-nav-current-user {
+    padding: 0;
+    background: $default-color;
+    color: $white;
+    font-size: 13px;
+    strong {
+      color: $heading-highlight;
+      font-weight: 700;
+    }
+  }
+}

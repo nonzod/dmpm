@@ -1,0 +1,5 @@
+odv.configuration_form:
+  title: 'ODV Settings'
+  base_route_name: odv.configuration_form
+  names:
+    - odv.settings

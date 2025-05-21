@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "myAccessCode": "menSSOIntODP",
+  "myAccessUrl": "http://misgapd.menarini.net/odp",
+  "externalMyAccessCode": "menSSOPubODP",
+  "externalEnabled": true,
+  "externalMyAccessUrl": "https://mya-odp-qa.menarini.net/odp",
+  "formAction": "/logonProxy.jsp",
+  "postAction": null,
+  "formParams": "[ { \"name\":\"username\", \"value\":\"$username\" }, { \"name\":\"password\", \"value\":\"$password\" } ]"
+}

@@ -1,0 +1,10 @@
+myaccess_mocks.login:
+  path: '/mocks/login'
+  defaults:
+    _title: 'Fake login'
+    _form: 'Drupal\myaccess_mocks\Form\LoginForm'
+  requirements:
+    _user_is_logged_in: 'FALSE'
+  options:
+    _maintenance_access: TRUE
+    no_cache: TRUE

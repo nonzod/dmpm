@@ -1,0 +1,5 @@
+services:
+  social_xoverride.route_subscriber:
+    class: Drupal\social_xoverride\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }

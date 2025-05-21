@@ -1,0 +1,67 @@
+{% set url = url('<current>') %}
+{%
+  set classes = [
+    'region--' ~ region|clean_class,
+    region == 'content_top' ? 'row',
+    region == 'content_bottom' ? 'row',
+    is_front or 'staff-directory' in url|render|render ? 'men-filter-home'
+  ]
+%}
+{% if content %}
+  {# {% if is_front %} #}
+  {{ attach_library('myportal_theme/nav-tabs') }}
+  <div class="men-trigger__filter-bar">
+    <nav class="navbar">
+      <ul class="nav nav-tabs men-nav-tabs">
+        <li>
+          <button class="men-tab men-trigger__tab men-trigger__tab-filters" data-trigger="filters">
+            <span>{% if is_front or 'search' in url|render|render %}{{ 'Filters' | t }}{% else %}{{ 'Menu' | t }}{% endif %} </span>
+            <div class="men-trigger-desktop">
+              <div class="men-trigger-menu__open">
+                <svg class="icon icon-sidemenu-open">
+                  <use xlink:href="#icon-sidemenu-open"></use>
+                </svg>
+              </div>
+              <div class="men-trigger-menu__close">
+                <svg class="icon icon-sidemenu-close">
+                  <use xlink:href="#icon-sidemenu-close"></use>
+                </svg>
+              </div>
+            </div>
+            <div class="men-trigger-mobile">
+              <div class="men-trigger-menu__open">
+                <svg class="icon icon-sidemenu-open">
+                  <use xlink:href="#icon-accordion-down"></use>
+                </svg>
+              </div>
+              <div class="men-trigger-menu__close">
+                <svg class="icon icon-sidemenu-close">
+                  <use xlink:href="#icon-accordion-up"></use>
+                </svg>
+              </div>
+            </div>
+          </button>
+        </li>
+        <li class="men-trigger__search-provider">
+          <button>
+          <span>{{ 'More results'|t }}</span>
+            <div class="men-trigger-provider__open">
+              <svg class="icon icon-sidemenu-open">
+                <use xlink:href="#icon-add"></use>
+              </svg>
+            </div>
+            <div class="men-trigger-provider__close">
+              <svg class="icon icon-sidemenu-close">
+                <use xlink:href="#icon-remove"></use>
+              </svg>
+            </div>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  {# {% endif %} #}
+  <div{{ attributes.addClass(classes) }}>
+    {{ content }}
+  </div>
+{% endif %}

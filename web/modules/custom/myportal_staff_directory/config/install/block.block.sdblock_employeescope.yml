@@ -1,0 +1,29 @@
+uuid: de62ca20-9690-4134-887d-c35ae44575c3
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.sdblock_employee_scope
+  module:
+    - facets
+    - system
+  theme:
+    - myportal_theme
+id: sdblock_employeescope
+theme: myportal_theme
+region: complementary_top
+weight: 0
+provider: null
+plugin: 'facet_block:sdblock_employee_scope'
+settings:
+  id: 'facet_block:sdblock_employee_scope'
+  label: 'Employee scope'
+  label_display: '0'
+  provider: facets
+  block_id: sdblock_employeescope
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /page-navigation/287
+

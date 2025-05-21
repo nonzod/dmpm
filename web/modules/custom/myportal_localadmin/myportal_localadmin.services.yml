@@ -1,0 +1,9 @@
+services:
+  myportal_localadmin.groups_list:
+    class: Drupal\myportal_localadmin\Tables\LocalAdminGroups
+  myportal_localadmin.users_list:
+    class: Drupal\myportal_localadmin\Tables\LocalAdminUsers
+  myportal_localadmin.group_role_manager:
+    class: Drupal\myportal_localadmin\Manager\LocalAdminGroupRoleManager
+    arguments:
+      - '@database'

@@ -1,0 +1,8 @@
+langcode: en
+status: true
+id: local_admin
+label: 'Local Admin'
+weight: 6
+is_admin: null
+permissions:
+  - 'access local admin panel'

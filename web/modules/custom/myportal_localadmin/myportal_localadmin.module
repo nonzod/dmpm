@@ -1,0 +1,164 @@
+<?php
+
+use Drupal\user\UserInterface;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Add callback to group_membership_edit_form
+ * used for syncing Local Admin role
+ */
+function myportal_localadmin_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  if ($form_id == "group_content_flexible_group-group_membership_edit_form") {
+    $form['#validate'][] = 'myportal_localadmin_sync_role';
+  }
+
+  // Disable Drupal Local Admin role from user edit form
+  if ($form_id == "user_form") {
+    $form["account"]["roles"]["local_admin"]['#disabled'] = TRUE;
+  }
+
+  if ($form_id = "role_delegation_role_assign_form") {
+    $form["account"]["role_change"]["local_admin"]['#disabled'] = TRUE;
+  }
+}
+
+/**
+ * Assign drupal role "Local Admin" when group role "Local Admin" are assigned
+ */
+function myportal_localadmin_sync_role(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  $uid = $form_state->getValue('entity_id')[0]["target_id"];
+  $user = \Drupal::entityTypeManager()
+    ->getStorage('user')
+    ->load($uid);
+
+  $roles = array_search('flexible_group-local_admin', array_column($form_state->getValue('group_roles'), 'target_id'));
+
+  if ($roles !== false) {
+    $user->addRole('local_admin');
+    $user->addRole('editor'); // Also assign the role editor to inherit its permissions
+  } else {
+    if (!is_local_admin_in_groups($uid))
+      $user->removeRole('local_admin');
+  }
+
+  $user->save();
+}
+
+/**
+ * Check if uid is local admin in a group
+ */
+function is_local_admin_in_groups($uid) {
+  // If is admin in other groups do not remove Drupal role local admin
+  $local_admins = 0;
+  $group_content_storage = \Drupal::entityTypeManager()->getStorage('group_content');
+  $user_groups = $group_content_storage->getQuery()
+    ->condition('type', 'flexible_group-group_membership')
+    ->condition('entity_id', $uid)
+    ->execute();
+
+  if (!empty($user_groups)) {
+    $group_role_storage = \Drupal::entityTypeManager()->getStorage('group_role');
+    $memberships = $group_content_storage->loadMultiple($user_groups);
+
+    foreach ($memberships as $membership) {
+      $roles = $group_role_storage->loadByUserAndGroup($membership->getEntity(), $membership->getGroup());
+
+      if (array_key_exists('flexible_group-local_admin', $roles))
+        $local_admins++;
+    }
+  }
+
+  // If is admin in other groups do not remove Drupal role local admin
+  if ($local_admins <= 1)
+    return false;
+
+  return true;
+}
+
+/**
+ * Local admin can masquerade only users in his groups
+ * 
+ * {@inheritdoc}
+ */
+function myportal_localadmin_masquerade_access($from_user, UserInterface $target_account) {
+  if (
+    !array_intersect(['administrator', 'sitemanager'], $from_user->getAccount()->getRoles())
+    && in_array('local_admin', $from_user->getAccount()->getRoles())
+  ) {
+
+    $roles = $target_account->getRoles();
+
+    // Non si può mascherare da admins
+    if(array_intersect(['administrator', 'sitemanager'], $target_account->getRoles()))
+      return FALSE;
+
+    $group_content_storage = \Drupal::entityTypeManager()->getStorage('group_content');
+    $user_groups = $group_content_storage->getQuery()
+      ->condition('type', 'flexible_group-group_membership')
+      ->condition('entity_id', $target_account->id())
+      ->execute();
+
+    if (!empty($user_groups)) {
+      $group_role_storage = \Drupal::entityTypeManager()->getStorage('group_role');
+      $memberships = $group_content_storage->loadMultiple($user_groups);
+
+      // Check local_admin role in target user groups
+      foreach ($memberships as $membership) {
+        $roles = $group_role_storage->loadByUserAndGroup($from_user, $membership->getGroup());
+
+        if (array_key_exists('flexible_group-local_admin', $roles))
+          return TRUE;
+      }
+    }
+
+    return FALSE;
+  }
+
+  // In other cases do not alter access.
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+/*function myportal_localadmin_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Get the user entity from the form
+  $account = $form_state->getFormObject()->getEntity();
+
+  // Add the select field
+  $form['favourite_legalentity'] = [
+    '#type' => 'select',
+    '#title' => t('Favorite Legal Entity'),
+    '#description' => t('Select your preferred legal entity.'),
+    '#options' => myportal_localadmin_get_legalentity_options(),
+    '#default_value' => $account->get('favourite_legalentity')->value ?? '',
+    '#weight' => 1,
+  ];
+}*/
+
+/**
+ * Function that generates options for the legal entity select field.
+ */
+/*function myportal_localadmin_get_legalentity_options() {
+  $options = ['' => t('None')];
+
+  $current_user = \Drupal::currentUser();
+  $group_content_storage = \Drupal::entityTypeManager()->getStorage('group_content');
+  $user_groups = $group_content_storage->getQuery()
+    ->condition('type', 'flexible_group-group_membership')
+    ->condition('entity_id', $current_user->id())
+    ->execute();
+
+  if (!empty($user_groups)) {
+    $memberships = $group_content_storage->loadMultiple($user_groups);
+
+    foreach ($memberships as $membership) {
+      $group = $membership->getGroup();
+      $scope = $group->get('field_group_scope')->first();
+
+      if($scope && $scope->value == "legal_entity")
+      $options[$group->id()] = $group->label();
+    }
+  }
+
+  return $options;
+}*/

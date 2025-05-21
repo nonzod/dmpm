@@ -1,0 +1,6 @@
+services:
+  myportal_staff_directory.commands:
+    class: Drupal\myportal_staff_directory\Commands\StaffMemberCommands
+    arguments: ['@myportal_staff_directory.staff_member_importer_manager']
+    tags:
+      - { name: drush.command }

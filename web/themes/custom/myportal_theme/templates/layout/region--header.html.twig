@@ -1,0 +1,9 @@
+{% if content %}
+  <nav {{ attributes.addClass('navbar navbar-default men-header--region') }} role="banner">
+    <div class="container container--navbar">
+      {{ content }}
+    </div>
+  </nav>
+{% endif %}
+{# include svg file #}
+{% include ('/modules/custom/myaccess/icons/google-app-sprite.svg') %}

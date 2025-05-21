@@ -1,0 +1,5 @@
+host: redis
+port: 6379
+password: ''
+paths: "/\r\n/profile/*"
+purge_metrics_after_collect: TRUE

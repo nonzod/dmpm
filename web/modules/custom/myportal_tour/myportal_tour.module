@@ -1,0 +1,90 @@
+<?php
+
+use Drupal\myportal_tour\TourViewBuilder;
+use Drupal\tour\Entity\Tour;
+
+/**
+ * Implements hook_page_attachments().
+ */
+function myportal_tour_page_attachments(array &$attachments) {
+  // Automatically launch tour if not disabled by user.
+  if (\Drupal::currentUser()->hasPermission('access tour')) {
+    $attachments['#attached']['library'][] = 'myportal_tour/tour';
+  }
+
+  $tempstore = \Drupal::service('tempstore.private')->get('myportal_tour');
+  $account_login = $tempstore->get('account_firstlogin');
+
+  $attachments['#attached']['drupalSettings']['access'] = FALSE;
+  if ($account_login === "TRUE") {
+    $attachments['#attached']['drupalSettings']['access'] = TRUE;
+  }
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function myportal_tour_user_login($account) {
+  $accessUser = $account->getLastAccessedTime();
+  $tempstore = \Drupal::service('tempstore.private')->get('myportal_tour');
+  $tempstore->set('account_firstlogin', 'FALSE');
+  if ($accessUser === "0") {
+    $tempstore->set('account_firstlogin', 'TRUE');
+  }
+}
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function myportal_tour_preprocess_node(&$variables) {
+  // Load all the items and match on route name.
+  $route_match = \Drupal::routeMatch();
+  $route_name = $route_match->getRouteName();
+
+  // Get all the tours available for the current route name.
+  $results = \Drupal::entityQuery('tour')
+    ->condition('routes.*.route_name', $route_name)
+    ->execute();
+
+  if (is_array($results) && !empty($results) && $tours = Tour::loadMultiple(array_keys($results))) {
+    foreach ($tours as $id => $tour) {
+      $variables['#attached']['drupalSettings']['tour_id'] = $id;
+      // Now we check the user data, if it's set for the current tour we don't
+      // have to render it anymore. because that means the user has already
+      // seen it, either they finished the tour or they skipped the tour.
+      // But in any way we don't want the user to see the tour twice.
+      if (\Drupal::currentUser()->isAuthenticated()) {
+        $variables['#attached']['drupalSettings']['tour'][$id] = FALSE;
+      }
+    }
+    if (!empty($tours)) {
+      // Ah so we rendered the tour in the bottom of the page, we can also set
+      // it to the user data so the user doesn't see it anymore.
+      foreach ($tours as $id => $tour) {
+        if (\Drupal::currentUser()->isAuthenticated()) {
+          $variables['#attached']['drupalSettings']['tour'][$id] = TRUE;
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_tour_tips_info_alter().
+ */
+function myportal_tour_tour_tips_info_alter(&$info) {
+  if (isset($info['myp_video_extended'])) {
+    $info['myp_video_extended']['class'] = 'Drupal\myportal_tour\Plugin\tour\tip\TipPluginVideoExtended';
+  }
+}
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function myportal_tour_entity_type_alter(array &$entity_types) {
+  foreach ($entity_types as $entity_type) {
+    if ($entity_type->id() == 'tour') {
+      $entity_type->setHandlerClass('view_builder', TourViewBuilder::class);
+    }
+  }
+}

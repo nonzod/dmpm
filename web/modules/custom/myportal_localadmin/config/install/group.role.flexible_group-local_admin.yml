@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.flexible_group
+id: flexible_group-local_admin
+label: 'Local Admin'
+weight: 10
+internal: false
+audience: member
+group_type: flexible_group
+permissions_ui: true
+permissions:
+  - 'access group_node overview'
+  - 'administer group'
+  - 'administer members'
+  - 'create group_node:page entity'
+  - 'create group_node:topic entity'
+  - 'delete own group_node:topic entity'
+  - 'update any group_node:page entity'
+  - 'update any group_node:topic entity'
+  - 'update own group_membership content'
+  - 'update own group_node:page entity'
+  - 'update own group_node:topic entity'
+  - 'view group'
+  - 'view group_node:page entity'
+  - 'view group_node:topic entity'
+  - 'view unpublished group_node:page entity'

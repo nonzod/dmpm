@@ -1,0 +1,22 @@
+myportal.admin.config:
+  title: MyPortal Settings
+  parent: system.admin_config
+  route_name: myportal.admin.config
+
+myportal.welcome_message:
+  title: 'Welcome message'
+  description: 'Set the welcome message for all users.'
+  route_name: myportal.welcome_message
+  parent: myportal.admin.config
+
+myportal.check_content:
+  title: 'Check content'
+  description: 'Provide a form to check the visibility rules applied to user.'
+  route_name: myportal.check_content
+  parent: myportal.admin.config
+
+myportal.tech_help_link:
+    title: 'Tech Help Link'
+    description: 'Provide a form to set the tech help link configuration.'
+    route_name: myportal.tech_help_link
+    parent: myportal.admin.config

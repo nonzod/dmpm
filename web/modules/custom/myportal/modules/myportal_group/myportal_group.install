@@ -1,0 +1,43 @@
+<?php
+
+/**
+ * @file
+ * Requirements and update functions for the myportal_group module.
+ */
+
+use Drupal\group\Entity\Storage\GroupStorage;
+use Drupal\myaccess\GroupManagerInterface;
+
+/**
+ * Create new groups for (non)Manager.
+ */
+function myportal_group_update_9301(&$sandbox) {
+  $group_storage = \Drupal::entityTypeManager()->getStorage('group');
+  assert($group_storage instanceof GroupStorage);
+  $groups_to_create = [
+    GroupManagerInterface::MANAGER,
+    GroupManagerInterface::NO_MANAGER,
+  ];
+  foreach ($groups_to_create as $group_name) {
+    $exist_group = $group_storage->loadByProperties([
+      'label' => $group_name,
+      'type' => 'flexible_group',
+    ]);
+    if (empty($exist_group)) {
+      $group = $group_storage->create([
+        'type' => 'flexible_group',
+        'label' => $group_name,
+        'uid' => 1,
+        'field_flexible_group_visibility' => 'members',
+        'field_group_allowed_visibility' => ['public', 'community', 'group'],
+        'field_group_allowed_join_method' => 'added',
+        'field_group_scope' => '',
+        'field_group_context' => [
+          GroupManagerInterface::CONTEXT_CONTENT,
+          GroupManagerInterface::CONTEXT_MYLINKS,
+        ],
+      ]);
+      $group->save();
+    }
+  }
+}

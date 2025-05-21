@@ -1,0 +1,71 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the Social override module.
+ */
+
+use Drupal\user\UserInterface;
+
+/**
+ * Implements hook_install().
+ */
+function social_xoverride_install($is_syncing) {
+  // Set the weight of the social_xoverride.module.
+  module_set_weight('social_xoverride', 10);
+}
+
+/**
+ * Increase social_xoverride module weight.
+ */
+function social_xoverride_update_8001() {
+  // Increase module weight to perform later.
+  module_set_weight('social_xoverride', 10);
+}
+
+/**
+ * Add role "verified" to existing users.
+ *
+ * Give all existing users on the platform the new role to ensure backward
+ * compatibility (even blocked users).
+ *
+ * @param string[] $sandbox
+ *   Stores information for batch updates.
+ *
+ * @return bool
+ *   TRUE if the operation was finished, FALSE otherwise.
+ *
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ */
+function social_xoverride_update_9301(array &$sandbox) : bool {
+  /** @var \Drupal\user\UserStorageInterface $user_storage */
+  $user_storage = \Drupal::entityTypeManager()->getStorage('user');
+
+  if (!isset($sandbox['count'])) {
+    // Get all user's IDs and set them to the sandbox.
+    $sandbox['ids'] = \Drupal::entityQuery('user')
+      ->accessCheck(FALSE)
+      ->execute();
+
+    $sandbox['count'] = count((array) $sandbox['ids']);
+  }
+
+  $sandbox['ids'] = (array) $sandbox['ids'];
+  $ids = array_splice($sandbox['ids'], 0, 50);
+
+  // Load accounts by users IDs.
+  $accounts = $user_storage->loadMultiple($ids);
+
+  /** @var \Drupal\Core\Session\AccountInterface $account */
+  foreach ($accounts as $account) {
+    if ($account instanceof UserInterface) {
+      // Add role "verified".
+      $account->addRole('verified');
+      $account->save();
+    }
+  }
+
+  $sandbox['#finished'] = empty($sandbox['ids']) ? 1 : (((int) $sandbox['count']) - count($sandbox['ids'])) / ($sandbox['count']);
+
+  return (bool) $sandbox['#finished'];
+}

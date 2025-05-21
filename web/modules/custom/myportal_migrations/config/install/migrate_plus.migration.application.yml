@@ -1,0 +1,30 @@
+langcode: en
+status: true
+dependencies: {  }
+id: application
+migration_tags:
+  - myportal
+migration_group: myportal
+label: Application
+source:
+  plugin: csv
+  path: /var/www/html/web/modules/custom/myportal_migrations/source/applications.csv
+  delimiter: ;
+  enclosure: '"'
+  ids:
+    - id
+process:
+  title: name
+  description: name
+  imageUrl: image
+  url: url
+  status:
+    plugin: default_value
+    default_value: 1
+  type:
+    plugin: default_value
+    default_value: 'google'
+  bundle: bundle
+destination:
+  plugin: 'entity:application'
+  destination_module: myaccess

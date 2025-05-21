@@ -1,0 +1,21 @@
+hmrs_mocks.hmrs-authenticate:
+  path: '/hmrs/authenticate'
+  defaults:
+    _controller: '\Drupal\hmrs_mocks\Controller\HmrsController::getToken'
+  methods: [ POST ]
+  options:
+    no_cache: TRUE
+  requirements:
+    _format: 'json'
+    _user_is_logged_in: 'FALSE'
+
+hmrs_mocks.hmrs-endpoint:
+  path: '/hmrs/hmrs-endpoint'
+  defaults:
+    _controller: '\Drupal\hmrs_mocks\Controller\HmrsController::hmrsEndpoint'
+  methods: [ GET ]
+  options:
+    no_cache: TRUE
+  requirements:
+    _format: 'json'
+    _user_is_logged_in: 'FALSE'

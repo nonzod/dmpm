@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "myAccessCode": "menSSOIntPeP",
+  "myAccessUrl": "http://portal11g.menarini.net",
+  "externalMyAccessCode": "menSSOPubPeP",
+  "externalEnabled": true,
+  "externalMyAccessUrl": "https://mya-pep-qa.menarini.net",
+  "formAction": "/portal/pls/portal/SPP.DYN_APP_ENTER_SSO.show",
+  "postAction": null,
+  "formParams": "[{\"name\" : \"p_arg_names\", \"value\":\"username\"},{\"name\":\"p_arg_values\",\"value\":\"$username\"}]"
+}

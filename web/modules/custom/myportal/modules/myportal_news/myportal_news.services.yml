@@ -1,0 +1,16 @@
+services:
+
+  # Logger.
+  logger.channel.myportal_news:
+    class: Drupal\Core\Logger\LoggerChannel
+    factory: logger.factory:get
+    arguments: [ 'myportal_news' ]
+
+  # Services.
+  myportal_news.provider_feed.lapresseit:
+    class: Drupal\myportal_news\Service\ProviderFeed\LaPresseItService
+    arguments: [ '@http_client' ]
+
+  myportal_news.news_feed:
+    class: Drupal\myportal_news\Service\NewsFeedService
+    arguments: [ '@cache.data', '@config.factory', '@myportal_news.provider_feed.lapresseit', '@myaccess.user_manager', '@current_user' ]

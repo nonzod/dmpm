@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "myAccessCode": "menSSOIntOTL",
+  "myAccessUrl": "https://otl-test.menarini.net/otl-web",
+  "externalMyAccessCode": "menSSOPubOTL",
+  "externalEnabled": true,
+  "externalMyAccessUrl": "https://mya-otl-qa.menarini.net/otl-web",
+  "formAction": "/api/authenticate/myaccess/sso",
+  "postAction": "",
+  "formParams": "[ { \"name\":\"userName\", \"value\":\"$username\" }, { \"name\":\"password\", \"value\":\"$password\" }, { \"name\":\"redirectTo\", \"value\":\"https://otl-test.menarini.net/otl-web/#/home\" } ] "
+}

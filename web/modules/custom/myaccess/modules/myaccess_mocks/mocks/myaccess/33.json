@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "myAccessCode": "menSSOIntHDMWeb",
+  "myAccessUrl": "http://hdmweb.menarini.net",
+  "externalMyAccessCode": "menSSOPubHDMWeb",
+  "externalEnabled": true,
+  "externalMyAccessUrl": "https://mya-hdmweb-qa.menarini.net",
+  "formAction": "/fnlogin.asp",
+  "postAction": null,
+  "formParams": "[ { \"name\":\"userid\", \"value\":\"$username\" }, { \"name\":\"password\", \"value\":\"$password\" } ]"
+}

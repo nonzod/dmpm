@@ -1,0 +1,142 @@
+name: Myportal Theme
+description: Myportal Theme
+screenshot: screenshot.png
+type: theme
+
+base theme: socialbase
+CustomActionLinkController:
+  php:
+core_version_requirement: ^8.8.0 || ^9.0
+
+libraries:
+  - myportal_theme/brand
+  - myportal_theme/site-footer
+  - myportal_theme/block
+  - myportal_theme/application
+  - myportal_theme/paragraphs
+  - myportal_theme/search
+  - myportal_theme/modal
+
+libraries-extend:
+  socialbase/base:
+    - myportal_theme/base
+  socialbase/alert:
+    - myportal_theme/alert
+  socialbase/badge:
+    - myportal_theme/badge
+  socialbase/button:
+    - myportal_theme/button
+  socialbase/cards:
+    - myportal_theme/cards
+  socialbase/form-controls:
+    - myportal_theme/form-controls
+  socialbase/list:
+    - myportal_theme/list
+  socialbase/spinner:
+    - myportal_theme/spinner
+  # Extend molecules
+  socialbase/block--informblock:
+    - myportal_theme/block--informblock
+  socialbase/breadcrumb:
+    - myportal_theme/breadcrumb
+  socialbase/dropdown:
+    - myportal_theme/dropdown
+  socialbase/file:
+    - myportal_theme/file
+  socialbase/form-elements:
+    - myportal_theme/form-elements
+  socialbase/form--input-groups:
+    - myportal_theme/form--input-groups
+  socialbase/like:
+    - myportal_theme/like
+  # attach the datepicker stylesheet to all date fields
+  core/drupal.date:
+    - myportal_theme/form--datepicker
+  # extend the core datepicker with a stylesheet
+  core/jquery.ui.datepicker:
+    - myportal_theme/form--timepicker
+  socialbase/form--password:
+    - myportal_theme/form--password
+  socialbase/pagination:
+    - myportal_theme/pagination
+  socialbase/popover:
+    - myportal_theme/popover
+  socialbase/nav-book:
+    - myportal_theme/nav-book
+  socialbase/nav-tabs:
+    - myportal_theme/nav-tabs
+  socialbase/navbar:
+    - myportal_theme/navbar
+  socialbase/select2:
+    - myportal_theme/select2
+  socialbase/teaser:
+    - myportal_theme/teaser
+  socialbase/tour:
+    - myportal_theme/tour
+  # Extend Organisms
+  socialbase/comment:
+    - myportal_theme/comment
+  socialbase/hero:
+    - myportal_theme/hero
+  socialbase/message:
+    - myportal_theme/message
+  socialbase/meta:
+    - myportal_theme/meta
+  socialbase/modal:
+    - myportal_theme/modal
+  socialbase/offcanvas:
+    - myportal_theme/offcanvas
+  socialbase/stream:
+    - myportal_theme/stream
+  socialbase/page-node:
+    - myportal_theme/page-node
+  socialbase/layout:
+    - myportal_theme/layout
+
+ckeditor_stylesheets:
+  - assets/css/ckeditor.css
+
+libraries-override:
+  socialbase/like:
+    js:
+      assets/js/like_and_dislike_service.min.js: assets/js/like_and_dislike_service.min.js
+  socialbase/tour:
+    css:
+      component:
+        assets/css/tour.css: assets/css/tour.css
+
+# This section is used by the contrib module, Component Libraries. It allows you
+# to reference .twig files in your components/ directory.
+component-libraries:
+  base:
+    paths:
+      - components/01-base
+  atoms:
+    paths:
+      - components/02-atoms
+  molecules:
+    paths:
+      - components/03-molecules
+  organisms:
+    paths:
+      - components/04-organisms
+  templates:
+    paths:
+      - components/05-templates
+
+regions:
+  hidden: Hidden
+  toolbar: Toolbar
+  header: Header
+  breadcrumb: Breadcrumb
+  hero: Hero
+  secondary_navigation: Secondary navigation
+  content_top: Content top
+  title: Page title
+  content: Content
+  complementary_top: Complementary top
+  complementary_bottom: Complementary bottom
+  content_bottom: Content bottom
+  sidebar_first: Sidebar First
+  sidebar_second: Sidebar Second
+  footer: Footer

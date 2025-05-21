@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "myAccessCode": "menSSOIntScanVisio",
+  "myAccessUrl": "http://10.11.14.240:8021",
+  "externalMyAccessCode": "menSSOPubScanVisio",
+  "externalEnabled": true,
+  "externalMyAccessUrl": "https://mya-scanvisio-qa.menarini.net",
+  "formAction": "/webviewer/login.htm",
+  "postAction": null,
+  "formParams": "[{\"name\":\"user\", \"value\":\"$username\", \"function\":\"toLowerCase()\"}, {\"name\":\"password\", \"value\":\"$password\"}]"
+}

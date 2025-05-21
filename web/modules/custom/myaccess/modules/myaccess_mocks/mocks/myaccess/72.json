@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "myAccessCode": "menSSOIntPtP",
+  "myAccessUrl": " https://ptp.menarini.net",
+  "externalMyAccessCode": "menSSOPubPtP",
+  "externalEnabled": true,
+  "externalMyAccessUrl": "https://mya-ptp-qa.menarini.net",
+  "formAction": "/ngp413/loginprocessing",
+  "postAction": "/",
+  "formParams": "[ { \"name\":\"j_username\", \"value\":\"$username\" }, { \"name\":\"j_password\", \"value\":\"$password\" }, { \"name\":\"_spring_security_remember_me\", \"value\":\"on\" } ]"
+}

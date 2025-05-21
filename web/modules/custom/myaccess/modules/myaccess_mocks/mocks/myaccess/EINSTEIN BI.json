@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "myAccessCode": "Portal_BIEinstein",
+  "myAccessUrl": "http://10.1.23.89:9502/analytics/saw.dll?dashboard&PortalPath=%2Fshared%2FEinstein%20BI%2F_portal%2FProject%20Analysis",
+  "externalMyAccessCode": "Portal_BIEinstein",
+  "externalEnabled": true,
+  "externalMyAccessUrl": "https://mya-bieinstein.menarini.net/analytics/saw.dll?dashboard&PortalPath=%2Fshared%2FEinstein%20BI%2F_portal%2FProject%20Analysis",
+  "formAction": "",
+  "postAction": null,
+  "formParams": ""
+}

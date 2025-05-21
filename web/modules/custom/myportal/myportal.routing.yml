@@ -1,0 +1,40 @@
+myportal.admin.config:
+  path: '/admin/config/myportal'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'MyPortal Settings'
+  requirements:
+    _permission: 'administer myportal'
+
+myportal.welcome_message:
+  path: '/admin/config/myportal/myp-welcome-message'
+  defaults:
+    _form: '\Drupal\myportal\Form\WelcomeMessageForm'
+    _title: 'Welcome Message'
+  requirements:
+    _permission: 'myp welcome message'
+
+myportal.megamenu-generate:
+  path: '/megamenu-generate/{entity_id}'
+  defaults:
+    _controller: '\Drupal\myportal\Controller\MegaMenuController::generateMenu'
+  options:
+    no_cache: TRUE
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+myportal.check_content:
+  path: '/admin/config/myportal/check-content'
+  defaults:
+    _title: 'Check content'
+    _form: 'Drupal\myportal\Form\CheckContentForm'
+  requirements:
+    _permission: 'administer site configuration'
+
+myportal.tech_help_link:
+  path: '/admin/config/myportal/tech-help'
+  defaults:
+    _title: 'Tech Help Link'
+    _form: 'Drupal\myportal\Form\TechHelpForm'
+  requirements:
+    _permission: 'administer site configuration'

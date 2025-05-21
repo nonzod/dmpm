@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "myAccessCode": "menSSOIntImprove",
+  "myAccessUrl": "https://test-improve.menarini.net",
+  "externalMyAccessCode": "menSSOPubImprove",
+  "externalEnabled": true,
+  "externalMyAccessUrl": "https://mya-i-improve-qa.menarini.net",
+  "formAction": "/login/index.php",
+  "postAction": "",
+  "formParams": "[{\"name\":\"username\",\"value\":\"$username\"},{\"name\":\"password\",\"value\":\"$password\"},{\"name\":\"anchor\",\"value\":\"\"},{\"name\":\"logintoken\",\"value\":\"b60fc51a3fc792c9430461ee2847e761\"}]"
+}

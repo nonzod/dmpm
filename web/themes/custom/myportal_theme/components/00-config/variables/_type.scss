@@ -1,0 +1,51 @@
+$font-family-webfont:         'arimo', sans-serif;
+
+$font-size-base:              16px;
+$font-size-large:             floor(($font-size-base * 1.25)); // ~18px
+$font-size-small:             ceil(($font-size-base * 0.875)); // ~12px
+
+$font-weight-strong:          500;
+
+//** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
+$font-family-monospace:       Menlo, Monaco, Consolas, "Courier New", monospace !default;
+
+$code-color:                  #c7254e;
+$code-bg:                     #f9f2f4;
+
+$kbd-color:                   #fff;
+$kbd-bg:                      #333;
+$kbd-border-radius:           3px;
+
+$pre-bg:                      #f5f5f5;
+$pre-color:                   $gray-dark;
+$pre-border-color:            #ccc;
+
+// helper class for fonts 
+.font-arimo {
+  font-family: 'arimo', sans-serif;
+  font-weight: 400;
+}
+.font-arimo-bold {
+  font-family: 'arimo', sans-serif;
+  font-weight: 700;
+}
+.font-oswald {
+  font-family: 'oswald', sans-serif;
+  font-weight: 400;
+}
+.font-oswald-bold {
+  font-family: 'oswald', sans-serif;
+  font-weight: 700;
+}
+.font-oswald-regular {
+  font-family: 'oswald', sans-serif;
+  font-weight: 400;
+}
+.font-oswald-medium {
+  font-family: 'oswald', sans-serif;
+  font-weight: 500;
+}
+.font-oswald-light {
+  font-family: 'oswald', sans-serif;
+  font-weight: 300;
+}

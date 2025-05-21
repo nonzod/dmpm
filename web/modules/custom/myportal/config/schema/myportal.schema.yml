@@ -1,0 +1,7 @@
+plugin.plugin_configuration.facets_processor.group_scope:
+  type: mapping
+  label: 'Settings for the group-scope processor'
+  mapping:
+    group_scope:
+      type: string
+      label: Group Scope

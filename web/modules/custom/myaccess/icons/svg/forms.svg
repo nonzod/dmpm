@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 67.496 92.921">
+  <defs>
+    <linearGradient id="c">
+      <stop offset="0" stop-opacity=".144"/>
+      <stop offset="1" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="b">
+      <stop offset="0" stop-opacity=".196"/>
+      <stop offset="1" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="a">
+      <stop offset="0" stop-opacity=".244"/>
+      <stop offset="1" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient xlink:href="#b" id="e" x1="196.436" y1="142.451" x2="196.837" y2="147.797" gradientUnits="userSpaceOnUse"/>
+    <linearGradient xlink:href="#c" id="f" x1="172.249" y1="218.846" x2="172.635" y2="200.939" gradientUnits="userSpaceOnUse"/>
+    <radialGradient xlink:href="#a" id="d" cx="131.764" cy="141.723" fx="131.764" fy="141.723" r="11.96" gradientTransform="matrix(1.03906 -1.35658 1.42248 1.08954 -132.316 165.919)" gradientUnits="userSpaceOnUse"/>
+  </defs>
+  <g stroke-width=".265">
+    <path d="M41.861 0L5.571.2S4.118.048 1.951 1.986C.376 3.568.435 5.543.435 5.543L.033 86.595s.535 5.346 4.945 5.747c4.41.4 56.661 0 56.661 0s5.48.133 5.746-5.48c.268-5.612-.033-61.338-.033-61.338z" fill="#8d6ac8" fill-opacity=".988"/>
+    <path d="M41.828.4L5.537.603S4.086.448 1.919 2.386C.343 3.969.402 5.944.402 5.944L0 86.996s.535 5.346 4.944 5.747c4.41.4 56.662 0 56.662 0s5.479.133 5.746-5.48c.267-5.612 0-61.739 0-61.739z" fill="#734abc"/>
+    <path d="M182.271 139.177l23.654 25.257.267-22.851z" fill="url(#d)" transform="translate(-138.84 -116.059)"/>
+    <path d="M206.192 141.583l-23.92-2.406 23.983 25.683z" fill="url(#e)" transform="translate(-138.84 -116.059)"/>
+    <g transform="translate(-64.076 -116.21)" fill="#fff">
+      <circle r="3.166" cy="164.567" cx="83.485"/>
+      <circle cx="83.485" cy="175.15" r="3.166"/>
+      <circle r="3.166" cy="185.355" cx="83.58"/>
+      <path d="M92.037 162.44h23.057v4.252H92.037zM91.943 172.929H115v4.252H91.943zM91.848 183.418h23.057v4.252H91.848z"/>
+    </g>
+    <path d="M41.961 0v19.377s.268 6.014 6.415 6.147c6.147.134 18.976 0 18.976 0z" fill="#b6a1dc"/>
+    <path d="M180.668 116.46l-36.291.2s-1.451-.153-3.618 1.784c-1.577 1.583-1.518 3.559-1.518 3.559l-.401 81.052s.534 5.345 4.944 5.746c4.41.4 56.661 0 56.661 0s5.48.134 5.747-5.479c.267-5.613 0-61.74 0-61.74z" fill="url(#f)" transform="translate(-138.84 -116.059)"/>
+  </g>
+</svg>

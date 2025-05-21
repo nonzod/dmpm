@@ -1,0 +1,49 @@
+{#
+/**
+ * @file
+ * Default theme implementation to present a MyAccess application.
+ *
+ * Available variables:
+ * - application: The Application item, with limited access to object
+ *   properties and methods. Only method names starting with "get", "has",
+ *   or "is" and a few common methods such as "id", "label", and "bundle" are available.
+ *   For example:
+ *   - entity.getEntityTypeId() will return the entity type ID.
+ *   - entity.hasField('field_example') returns TRUE if the entity includes
+ *     field_example. (This does not indicate the presence of a value in this
+ *     field.)
+ *   Calling other methods, such as entity.delete(), will result in
+ *   an exception.
+ *   See \Drupal\Core\Entity\EntityInterface for a full list of methods.
+ * - name: Name of the Application.
+ * - view_mode: View mode; for example, "teaser" or "full".
+ * - flag_favorite_application: Link to flag or unflag an application.
+ * - attributes: HTML attributes for the containing element.
+ *
+ * @see template_preprocess_myaccess_application()
+ *
+ * @ingroup themeable
+ */
+#}
+
+{% set classes = [
+  'applications__tile',
+  'view-' ~ view_mode|clean_class,
+] %}
+<div{{ attributes.addClass(classes) }} data-application-id="{{ application.id() }}">
+  <div class="applications__tile_linkwrap">
+    {% if clickable %}
+    <a href="{{ application.getUrl }}" target="_blank" data-auth-type="{{ auth_type }}" data-url-mya="{{ is_mya }}">
+      {% endif %}
+      <img class="applications__img"
+           src="{{ url_icon_image }}"
+           alt="{{ application.label }}"
+           title="{{ application.label }}"
+           onerror="this.src='{{ no_vpn_fallback_icon }}'"
+      />
+      {% if clickable %}
+    </a>
+    {% endif %}
+  </div>
+  <p class="applications__title">{{ application.label }}</p>
+</div>

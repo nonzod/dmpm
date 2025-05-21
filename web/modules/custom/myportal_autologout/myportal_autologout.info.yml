@@ -1,0 +1,6 @@
+name: MyPortal autologout
+type: module
+description: Adds automated timed logout.
+package: Menarini
+core: 8.x
+core_version_requirement: ^8 || ^9

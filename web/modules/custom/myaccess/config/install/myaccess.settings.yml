@@ -1,0 +1,23 @@
+openid:
+  redirect_uri: 'https://myportal.eu.ngrok.io/oidc/login'
+  redirect_logout_uri: 'https://myportal.eu.ngrok.io'
+  base_uri: 'https://keycloak-dev.menarini.net/auth'
+  realm: 'menarini'
+  application_id: 'mg-app_Menarini Intranet Portal'
+  application_secret: 'fe116e82-db7a-40cf-8bd2-e2b0708546dc'
+  scope:
+    - openid
+resource_admin_uri: 'https://kresource-dev.menarini.net'
+session:
+  password_encrypt_method: 'AES-256-CBC'
+  password_encrypt_key: 'paperino'
+jwt_user_duration_in_minutes: 60
+hmrs:
+  client: 'csv'
+  local_csv_path: 'private://hmrs/local.csv'
+  hmrs_authenticate: 'https://dilws.menarini.net/api/authenticate'
+  base_uri: 'https://dilws.menarini.net/api/HRDPData'
+  username: test
+  password: test
+event_subscriber:
+  time_within_which_not_update: 0

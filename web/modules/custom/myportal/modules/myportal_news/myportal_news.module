@@ -1,0 +1,55 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for MyPortal News module.
+ */
+
+use Drupal\group\Entity\GroupInterface;
+use Drupal\myaccess\GroupManagerInterface;
+
+/**
+ * Implements hook_theme().
+ */
+function myportal_news_theme() {
+  return [
+    'myportal_news_marquee' => [
+      'variables' => [
+        'news' => [],
+        'account_id' => NULL,
+        'lang_code' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Prepares variables for myportal_news_marquee template.
+ *
+ * Default template: myportal-news-marquee.html.twig.
+ *
+ * @param array $variables
+ *   An associative array.
+ */
+function template_preprocess_myportal_news_marquee(array &$variables) {
+  $variables['account_id'] = $variables['account_id'] ??
+    \Drupal::currentUser()->id();
+  $variables['lang_code'] = $variables['lang_code'] ??
+    \Drupal::languageManager()->getCurrentLanguage()->getId();
+
+  /** @var \Drupal\myaccess\UserManagerInterface $user_manager */
+  $user_manager = \Drupal::service('myaccess.user_manager');
+  /** @var \Drupal\group\Entity\GroupInterface $group */
+  $group = $user_manager->getGroupScopeForUser(\Drupal::currentUser(), GroupManagerInterface::SCOPE_COUNTRY);
+
+  $variables['#cache']['keys'][] = 'languages:' . $variables['lang_code'];
+  if ($group instanceof GroupInterface) {
+    $variables['#cache']['keys'][] = 'group:' . $group->id();
+  }
+
+  $cache_maximum_age = \Drupal::config('myportal_news.settings')
+    ->get('cache_maximum_age');
+  if ($cache_maximum_age >= 0) {
+    $variables['#cache']['max-age'] = $cache_maximum_age;
+  }
+}

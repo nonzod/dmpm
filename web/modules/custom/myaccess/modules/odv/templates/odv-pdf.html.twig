@@ -1,0 +1,30 @@
+<h1>{{ 'ODV submission receipt'|t }}</h1>
+
+<div>
+  <b>{{ 'Subject'|t }}:</b> {{ submission.subject }}
+</div>
+
+<div>
+  <b>{{ 'Body'|t }}:</b> {{ submission.body|nl2br }}
+</div>
+
+<div>
+  <b>{{ 'Company'|t }}:</b> {{ submission.company }}
+</div>
+
+<div>
+  <b>{{ 'Company email'|t }}:</b> {{ submission.recipient }}
+</div>
+
+<div>
+  <b>{{ 'Anonymous request'|t }}:</b> {% if submission.anonymous %}yes{% else %}no{% endif %}
+</div>
+
+<div>
+  <b>{{ 'Attachments'|t }}:</b>
+  <ul>
+  {% for attachment in submission.attachments %}
+    <li>{{ attachment.filename }}</li>
+  {% endfor %}
+  </ul>
+</div>

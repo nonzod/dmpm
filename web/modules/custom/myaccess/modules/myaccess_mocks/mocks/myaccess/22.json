@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "myAccessCode": "menSSOIntBIHQHDM",
+  "myAccessUrl": "http://10.1.23.89:9502/analytics",
+  "externalMyAccessCode": "menSSOPubBIHQHDM",
+  "externalEnabled": true,
+  "externalMyAccessUrl": "https://mya-bihqhdm-qa.menarini.net/analytics",
+  "formAction": "/saw.dll?dashboard&PortalPath=%2Fshared%2FHDMBI%2F_portal%2FHDMBI%20Dashboard",
+  "postAction": null,
+  "formParams": "[ { \"name\":\"NQUser\", \"value\":\"$username\" }, { \"name\":\"NQPassword\", \"value\":\"$password\" } ]"
+}

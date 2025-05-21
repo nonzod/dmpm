@@ -1,0 +1,199 @@
+services:
+  logger.channel.myaccess:
+    class: Drupal\Core\Logger\LoggerChannel
+    factory: logger.factory:get
+    arguments: [ 'myaccess' ]
+
+  logger.channel.myaccess_client:
+    class: Drupal\Core\Logger\LoggerChannel
+    factory: logger.factory:get
+    arguments: [ 'myaccess_client' ]
+
+  # Cache context.
+  cache_context.myaccess_is_external:
+    class: Drupal\myaccess\CacheContext\IsExternalCacheContext
+    arguments: [ '@request_stack', '@myaccess.user_manager' ]
+    tags:
+      - { name: cache.context }
+
+  # Monolog processors.
+  monolog.processor.filter_sensitive_data:
+    class: Drupal\myaccess\Logger\Processor\SensitiveDataProcessor
+
+  myaccess.oidc_session:
+    class: Drupal\myaccess\OpenId\Session
+    arguments: [ '@session' ]
+
+  myaccess.oidc_client:
+    class: Drupal\myaccess\OpenId\Client
+    arguments:
+      - '@myaccess.oidc_session'
+      - '@config.factory'
+      - '@logger.channel.myaccess'
+      - '@logger.channel.myaccess_client'
+
+  myaccess.hmrs_csv_client:
+    class: Drupal\myaccess\Hmrs\CsvClient
+    arguments:
+      - '@config.factory'
+      - '@logger.channel.myaccess'
+
+  myaccess.hmrs_api_client:
+    class: Drupal\myaccess\Hmrs\ApiClient
+    arguments:
+      - '@logger.channel.myaccess'
+      - '@http_client'
+      - '@database'
+      - '@config.factory'
+      - '@logger.channel.myaccess_client'
+
+  myaccess.hmrs_client:
+    class: Drupal\myaccess\Hmrs\ClientInterface
+    factory: Drupal\myaccess\Hmrs\ClientFactory::getClient
+    arguments: [ '@config.factory' ]
+
+  myaccess.group_manager:
+    class: Drupal\myaccess\GroupManager
+    arguments:
+      - '@group.entity.storage'
+      - '@group.membership_loader'
+      - '@logger.channel.myaccess'
+      - '@cache.data'
+
+  myaccess.session_manager:
+    class: Drupal\myaccess\SessionManager
+    arguments: [ '@session' ]
+
+  user.entity.storage:
+    class: Drupal\user\UserStorage
+    factory: entity_type.manager:getStorage
+    arguments: [ 'user' ]
+
+  profile.entity.storage:
+    class: Drupal\profile\ProfileStorage
+    factory: entity_type.manager:getStorage
+    arguments: [ 'profile' ]
+
+  group.entity.storage:
+    class: Drupal\Core\Entity\EntityStorageBase
+    factory: entity_type.manager:getStorage
+    arguments: [ 'group' ]
+
+  myaccess.user_manager:
+    class: Drupal\myaccess\UserManager
+    arguments:
+      - '@externalauth.externalauth'
+      - '@user.entity.storage'
+      - '@profile.entity.storage'
+      - '@current_user'
+      - '@myaccess.session_manager'
+      - '@myaccess.group_manager'
+      - '@request_stack'
+      - '@myaccess.oidc_client'
+      - '@logger.channel.myaccess'
+      - '@entity_type.manager'
+      - '@user.data'
+
+  myaccess.applications_manager:
+    class: Drupal\myaccess\ApplicationsManager
+    arguments:
+      - '@entity_type.manager'
+      - '@logger.channel.myaccess'
+      - '@myaccess.group_manager'
+      - '@current_user'
+      - '@user.data'
+
+  myaccess.route_subscriber:
+    class: Drupal\myaccess\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }
+
+  myaccess.authentication_subscriber:
+    class: Drupal\myaccess\EventSubscriber\AuthenticationSubscriber
+    arguments:
+      - '@current_user'
+      - '@myaccess.oidc_client'
+    tags:
+      - { name: event_subscriber }
+
+  myaccess.force_password_subscriber:
+    class: Drupal\myaccess\EventSubscriber\ForcePasswordRequestSubscriber
+    arguments:
+      - '@current_user'
+      - '@myaccess.session_manager'
+      - '@language_manager'
+      - '@config.factory'
+      - '@?masquerade'
+    tags:
+      - { name: event_subscriber }
+
+  myaccess.update_applications_subscriber:
+    class: Drupal\myaccess\EventSubscriber\UpdateApplicationsSubscriber
+    arguments:
+      - '@myaccess.session_manager'
+      - '@myaccess.oidc_client'
+      - '@myaccess.applications_manager'
+      - '@myaccess.user_manager'
+      - '@logger.channel.myaccess'
+      - '@myaccess.favorite_manager'
+      - '@config.factory'
+    tags:
+      - { name: event_subscriber }
+
+  myaccess.update_user_data_subscriber:
+    class: Drupal\myaccess\EventSubscriber\UpdateUserDataSubscriber
+    arguments:
+      - '@myaccess.session_manager'
+      - '@myaccess.hmrs_client'
+      - '@myaccess.user_manager'
+      - '@myaccess.group_manager'
+      - '@logger.channel.myaccess'
+      - '@config.factory'
+    tags:
+      - { name: event_subscriber }
+
+  myaccess.retrieve_user_picture_subscriber:
+    class: Drupal\myaccess\EventSubscriber\RetrieveUserPictureSubscriber
+    arguments: [ '@myaccess.oidc_client', '@myaccess.user_manager' ]
+    tags:
+      - { name: event_subscriber }
+
+  # User authentication does not happen in a middleware, it's in the request
+  # event subscriber AuthenticationSubscriber with priority 300.
+  # Move the code for logout from middleware stack to event-subscriber for
+  # retrieve the user that logged.
+  myaccess.needs_logout_subscriber:
+    class: Drupal\myaccess\EventSubscriber\NeedsLogoutSubscriber
+    arguments: [ '@myaccess.session_manager', '@module_handler', '@current_user', '@logger.factory', '@session_manager', '@messenger' ]
+    tags:
+      - { name: event_subscriber }
+
+  # Middleware to check if the request is coming from the inside of the menarini network od from the outside.
+  # Must run as the first middleware in the chain.
+  http_middleware.is_external:
+    class: Drupal\myaccess\StackMiddleware\IsExternalMiddleware
+    tags:
+      - { name: http_middleware, priority: 1000 }
+
+  # Middleware to logout users when they switch the network.
+  # Must run after the `http_middleware.session` middleware.
+  #http_middleware.needs_logout:
+  #  class: Drupal\myaccess\StackMiddleware\NeedsLogoutMiddleware
+  #  arguments: [ '@myaccess.session_manager', '@module_handler', '@current_user', '@logger.factory', '@session_manager', '@messenger' ]
+  #  tags:
+  #    - { name: http_middleware, priority: 20 }
+
+  myaccess.application_converter:
+    class: Drupal\myaccess\Routing\ApplicationConverter
+    tags:
+      - { name: paramconverter }
+
+  myaccess.favorite_manager:
+    class: Drupal\myaccess\FavoriteManager
+    arguments:
+      - '@logger.channel.myaccess'
+      - '@flag'
+      - '@myaccess.applications_manager'
+      - '@flag.count'
+      - '@entity_type.manager'
+      - '@current_user'

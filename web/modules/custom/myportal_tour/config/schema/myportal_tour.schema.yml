@@ -1,0 +1,15 @@
+tour.tip.myp_video:
+  type: tour.tip
+  label: 'Video tour tip'
+  mapping:
+    video:
+      type: text
+      label: 'Video'
+
+tour.tip.myp_video_extended:
+  type: tour.tip
+  label: 'Video tour tip'
+  mapping:
+    video:
+      type: text
+      label: 'Video'

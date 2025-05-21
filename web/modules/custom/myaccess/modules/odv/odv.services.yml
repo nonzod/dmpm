@@ -1,0 +1,27 @@
+services:
+  logger.channel.odv:
+    class: Drupal\Core\Logger\LoggerChannel
+    factory: logger.factory:get
+    arguments: [ 'odv' ]
+
+  odv.companies_manager:
+    class: Drupal\odv\ConfigurationCompaniesManager
+    arguments: [ '@config.factory']
+
+  odv.file_cleaner.time_based:
+    class: Drupal\odv\TimeBasedFilesCleaner
+    arguments: ['@logger.channel.odv', '@file_system']
+
+  odv.zip_generator:
+    class: Drupal\odv\PdfZipReceiptGenerator
+    arguments: ['@plugin.manager.archiver', '@renderer', '@logger.channel.odv']
+
+  odv.send_email_subscriber:
+    class: Drupal\odv\EventSubscriber\SendEmailSubscriber
+    arguments: ['@current_user', '@plugin.manager.mail']
+    tags:
+      - { name: event_subscriber }
+
+  odv.upload_handler:
+    class: Drupal\odv\UploadHandler
+    arguments: ['@request_stack', '@config.factory', '@transliteration', '@language_manager']

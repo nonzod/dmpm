@@ -1,0 +1,3 @@
+auth_config_path: '/var/www/html/cdn-service-account/mgcp-mportal-190919005-32e3ff1c2c4f.json'
+project: 'mgcp-mportal-190919005'
+url_map: 'k8s2-um-avkwyedd-mportal-dev-mportal-dev-drupal-3nsfl5x0'

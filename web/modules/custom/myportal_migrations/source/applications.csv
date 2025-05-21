@@ -1,0 +1,10 @@
+id;name;image;url;bundle
+1;Gmail;/modules/custom/myaccess/icons/gmail.png;https://mail.google.com;default
+2;Calendar;/modules/custom/myaccess/icons/calendar.png;https://www.google.com/calendar;default
+3;Drive;/modules/custom/myaccess/icons/drive.png;https://drive.google.com;default
+4;Meet;/modules/custom/myaccess/icons/meet.png;https://meet.google.com;default
+5;Docs;/modules/custom/myaccess/icons/docs.png;https://docs.google.com/document;default
+6;Sheets;/modules/custom/myaccess/icons/sheets.png;https://docs.google.com/spreadsheets;default
+7;Slides;/modules/custom/myaccess/icons/slides.png;https://docs.google.com/presentation;default
+8;Chat;/modules/custom/myaccess/icons/chat.png;https://chat.google.com;default
+9;Search;/modules/custom/myaccess/icons/search.png;https://www.google.com;default

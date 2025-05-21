@@ -1,0 +1,142 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for MyPortal autologout module.
+ */
+
+use Drupal\Core\Database\StatementInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
+use Drupal\user\UserInterface;
+
+/**
+ * Implements hook_help().
+ */
+function myportal_autologout_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.myportal_autologout':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t("This module allows you to force site users to be logged out after a given amount of time due to inactivit") . '</p>';
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_user_login().
+ *
+ * Delete stale sessions for the user on login.
+ */
+function myportal_autologout_user_login(UserInterface $account) {
+  /** @var \Drupal\myportal_autologout\Service\AutologoutManagerInterface $autologout_manager */
+  $autologout_manager = \Drupal::service('myportal_autologout.manager');
+
+  // Cleanup old sessions.
+  $timeout = $autologout_manager->getUserTimeout($account);
+
+  // Do not clear sessions if autologout prevent is triggered.
+  if ($autologout_manager->preventJs()) {
+    return;
+  }
+
+  $timestamp = \Drupal::time()->getRequestTime() - $timeout;
+
+  // Find all stale sessions.
+  $database = \Drupal::database();
+  $query = $database->select('sessions', 's')
+    ->fields('s', ['sid'])
+    ->condition('uid', (string) $account->id())
+    ->condition('timestamp', (string) $timestamp, '<')
+    ->orderBy('timestamp', 'DESC')
+    ->execute();
+  $sids = $query instanceof StatementInterface ? $query->fetchCol() : [];
+
+  if (!empty($sids)) {
+    // Delete stale sessions at login.
+    $database->delete('sessions')
+      ->condition('sid', $sids, 'IN')
+      ->execute();
+  }
+
+  // Add login time cookie.
+  user_cookie_save([
+    'myportal_autologout.login' => \Drupal::time()
+      ->getCurrentTime(),
+  ]);
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function myportal_autologout_page_attachments_alter(array &$attachments) {
+  /** @var \Drupal\myportal_autologout\Service\AutologoutManagerInterface $autologout_manager */
+  $autologout_manager = \Drupal::service('myportal_autologout.manager');
+
+  // Check if JS should be included on this request.
+  if ($autologout_manager->preventJs()) {
+    return;
+  }
+
+  // Check if anything wants to be refresh only. This URL would include the
+  // javascript but will keep the login alive whilst that page is opened.
+  $refresh_only = $autologout_manager->refreshOnly();
+
+  // Get all settings JS.
+  $delay = $autologout_manager->getUserDelay();
+  $timeout = $autologout_manager->getUserTimeout();
+  $redirect_url = $autologout_manager->getUserRedirectUrl();
+  $redirect_query = \Drupal::service('redirect.destination')->getAsArray();
+
+  $settings = [
+    'delay' => $delay > 0 ? $delay * 1000 : 0,
+    'timeout' => $refresh_only ? ($timeout * 500) : ($timeout * 1000),
+    'redirect_url' => Url::fromUserInput($redirect_url, ['query' => $redirect_query])
+      ->toString(),
+    'refresh_only' => $refresh_only,
+  ];
+
+  // If this is an AJAX request, then the logout redirect url should still be
+  // referring to the page that generated this request.
+  $current_request = \Drupal::request();
+  if ($current_request->isXmlHttpRequest()) {
+    $base_url = Url::fromRoute('<front>', [], ['absolute' => TRUE])->toString();
+    assert(is_string($base_url));
+    $referer = $current_request->headers->get('referer');
+    if ($referer) {
+      $destination = str_replace($base_url . '/', '', $referer);
+    }
+    else {
+      $destination = $base_url;
+    }
+    $settings['redirect_url'] = Url::fromUserInput($redirect_url, [
+      'query' => ['destination' => urlencode($destination)],
+    ]);
+  }
+
+  myportal_autologout_attach_js($attachments, $settings);
+}
+
+/**
+ * Adds the necessary js and libraries.
+ *
+ * @param array $element
+ *   The renderable array element to #attach the js to.
+ * @param array $settings
+ *   The JS Settings.
+ */
+function myportal_autologout_attach_js(array &$element, array $settings) {
+  $element['#attached']['drupalSettings']['myportal_autologout'] = $settings;
+  $element['#attached']['library'][] = 'myportal_autologout/autologout';
+  $element['#cache']['tags'][] = 'config:myportal_autologout.settings';
+  $element['#cache']['context'][] = 'myaccess_is_external';
+}
+
+/**
+ * Helper function to unset the autologout session variable if present.
+ */
+function _check_session_variable() {
+  /** @var \Drupal\Core\TempStore\PrivateTempStoreFactory $temp_store_private */
+  $temp_store_private = \Drupal::service('tempstore.private');
+  $temp_store_private->get('myportal_autologout')->delete('autologout_last');
+}

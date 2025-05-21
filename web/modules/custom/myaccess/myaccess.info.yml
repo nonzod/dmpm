@@ -1,0 +1,11 @@
+name: 'MyAccess'
+type: module
+description: 'Integrates with Menarini authentication, application management and HMRS'
+package: 'Menarini'
+core_version_requirement: ^8.8.0 || ^9.0
+dependencies:
+  - drupal:user
+  - externalauth:externalauth
+  - flag:flag
+  - twig_tweak:twig_tweak
+  - myportal_group:myportal_group

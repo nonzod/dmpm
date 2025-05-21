@@ -1,0 +1,40 @@
+myaccess:
+  version: VERSION
+  js:
+    js/myaccess.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupal.ajax
+    - core/jquery.once
+    - jquery_ui_sortable/sortable
+
+filter:
+  version: VERSION
+  js:
+    js/filter.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - myaccess/fuse
+
+oidc_token_refresh:
+  version: VERSION
+  js:
+    js/myaccess_oidc_token_refresh.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupal.ajax
+    - core/jquery.once
+
+fuse:
+  remote: https://github.com/krisk/fuse
+  version: 6.4
+  license:
+    name: Apache License, Version 2.0
+    url: https://github.com/krisk/Fuse/blob/master/LICENSE
+    gpl-compatible: false
+  js:
+    /libraries/fuse/dist/fuse.basic.min.js:
+      minified: true

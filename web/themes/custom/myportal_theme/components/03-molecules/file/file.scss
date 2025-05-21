@@ -1,0 +1,49 @@
+@import 'settings';
+
+.node-file {
+  border-radius: $border-radius-extrasmall;
+}
+
+.file {
+
+  > .tabledrag-changed {
+    &, &:last-child {
+      border: 1px solid darken($alert-warning-border, 5%);
+    }
+    background: $alert-warning-bg;
+    border-radius: 0;
+    color: $alert-warning-text;
+  }
+
+}
+
+.file-link a{
+  @include on-event {
+    font-weight: 500;
+    color: $white;
+  }
+}
+
+.men-card-files__item {
+  display: inline-block;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  a {
+    background: $men-link-all;
+    font-size: 1.313rem;
+    line-height: 1.563rem;
+    padding: 10px 44px 13px;
+    margin-bottom: 30px;
+    color: $white;
+    display: block;
+    @extend .font-oswald-medium;
+    @include on-event {
+      background: $men-link-all-hover;
+    }
+  }
+}
+
+.card-files__grid {
+  margin-top: 10px;
+  justify-content: flex-start;
+}

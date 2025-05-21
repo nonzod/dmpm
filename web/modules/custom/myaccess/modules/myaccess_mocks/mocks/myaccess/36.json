@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "myAccessCode": "menSSOIntAris",
+  "myAccessUrl": "http://menw12aris.menarini.net",
+  "externalMyAccessCode": "menSSOPubAris",
+  "externalEnabled": true,
+  "externalMyAccessUrl": "https://mya-aris-qa.menarini.net",
+  "formAction": "/businesspublisher/login.do",
+  "postAction": null,
+  "formParams": "[ { \"name\":\"login\", \"value\":\"$username\" }, { \"name\":\"password\", \"value\":\"$password\" } ]"
+}

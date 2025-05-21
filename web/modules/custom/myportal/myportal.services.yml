@@ -1,0 +1,53 @@
+services:
+  logger.channel.myportal:
+    class: Drupal\Core\Logger\LoggerChannel
+    factory: logger.factory:get
+    arguments: [ 'myportal']
+
+  # Monolog processors.
+  monolog.processor.reference_drupal:
+    class: Drupal\myportal\Monolog\Processor\ReferenceDrupalProcessor
+
+  myportal.get_child_terms:
+    class: Drupal\myportal\GetChildTerms
+    arguments: [ '@language_manager', '@entity_type.manager', '@myportal.visible_taxonomy_content' ]
+
+  myportal.facets_information:
+    class: Drupal\myportal\FacetsInformation
+    arguments: [ '@entity_type.manager' ]
+
+  myportal.route_subscriber:
+    class: Drupal\myportal\Routing\MyPortalRouteSubscriber
+    tags:
+      - { name: event_subscriber }
+
+  myportal.navigation_access_checker:
+    class: Drupal\myportal\Access\MyPortalAccessCheck
+    arguments: [ '@current_route_match', '@current_user' ]
+    tags:
+      - { name: access_check, applies_to: _myportal_navigation_access }
+
+  myportal.search_api_alter_subscriber:
+    class: Drupal\myportal\EventSubscriber\SearchApiAlterSubscriber
+    arguments: [ '@facets.manager' ]
+    tags:
+      - { name: event_subscriber }
+
+  myportal.visible_taxonomy_content:
+    class: Drupal\myportal\VisibleTaxonomy
+    arguments: [ '@entity_type.manager', '@views.executable', '@logger.channel.myportal', '@current_user', '@language_manager', '@cache.data' ]
+
+  myportal.block_megamenu:
+    class: Drupal\myportal\MegaMenuManager
+    arguments: [ '@entity_type.manager', '@logger.channel.myportal', '@language_manager', '@myportal.visible_taxonomy_content' ]
+
+  # Twig extension.
+  myportal.twig_highlight_extension:
+    class: Drupal\myportal\Twig\Extension\TwigHighlightExtension
+    tags:
+      - { name: twig.extension }
+
+  myportal.twig_date_format_extension:
+    class: Drupal\myportal\Twig\Extension\DateFormat
+    tags:
+      - { name: twig.extension }

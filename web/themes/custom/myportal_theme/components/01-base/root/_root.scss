@@ -1,0 +1,33 @@
+:root {
+  // Gin Toolbar ovveride.
+  --ginToolbarWidthCollapsed: 68px !important;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  font-family: $font-family-webfont;
+  font-weight: 400;
+  font-size: 16px;
+	-webkit-font-smoothing: antialiased; //smooth font in webkit
+  -moz-osx-font-smoothing: grayscale; //smooth font in firefox
+  color: $body-text;
+  background-color: $body-bg;
+  height: 100%;
+  
+  &.disable-scroll {
+    overflow: hidden;
+  }
+  &.disable-scroll-nooverlay {
+    @media (max-width: 899px) and (orientation: portrait) {
+      overflow: hidden;
+    }
+  }
+}
+
+// Move the masquerade form.
+#masquerade-block-form {
+  margin-top: 100px;
+}

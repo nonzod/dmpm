@@ -1,0 +1,55 @@
+{#
+/**
+ * @file
+ * Default theme implementation to present a MyAccess application.
+ *
+ * Available variables:
+ * - application: The Application item, with limited access to object
+ *   properties and methods. Only method names starting with "get", "has",
+ *   or "is" and a few common methods such as "id", "label", and "bundle" are available.
+ *   For example:
+ *   - entity.getEntityTypeId() will return the entity type ID.
+ *   - entity.hasField('field_example') returns TRUE if the entity includes
+ *     field_example. (This does not indicate the presence of a value in this
+ *     field.)
+ *   Calling other methods, such as entity.delete(), will result in
+ *   an exception.
+ *   See \Drupal\Core\Entity\EntityInterface for a full list of methods.
+ * - name: Name of the Application.
+ * - view_mode: View mode; for example, "teaser" or "full".
+ * - flag_favorite_application: Link to flag or unflag an application.
+ * - attributes: HTML attributes for the containing element.
+ *
+ * @see template_preprocess_myaccess_application()
+ *
+ * @ingroup themeable
+ */
+#}
+
+{% set classes = [
+  'applications__tile',
+  'col',
+  'view-' ~ view_mode|clean_class,
+  'men-app'
+] %}
+<div{{ attributes.addClass(classes) }}
+  data-application-id="{{ application.id() }}">
+  <div class="applications__tile_linkwrap">
+    <a href="{{ application.getUrl }}" target="_blank">
+      {% if url_icon_image is not empty %}
+        <img class="applications__img"
+             src="{{ url_icon_image }}"
+             alt="{{ application.label }}"
+        />
+      {% else %}
+        <div class="applications__description">
+          <span>{{ application.getDescription }}</span>
+        </div>
+      {% endif %}
+    </a>
+    {% if application.hasFavorite() %}
+      {{ flag_favorite_application }}
+    {% endif %}
+  </div>
+  <p class="applications__title">{{ application.label }}</p>
+</div>

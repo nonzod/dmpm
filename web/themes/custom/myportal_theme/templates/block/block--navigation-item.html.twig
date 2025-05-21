@@ -1,0 +1,9 @@
+{% if logged_in %}
+  <ul role="navigation" class="nav navbar-nav main">
+      {% for tid, term in terms %}
+          <li>
+              <a data-drupal-tid="{{ tid }}" class="navbar-nav--item"  href="{{ path('<none>') }}" >{{ term|trim }}</a>
+          </li>
+      {% endfor %}
+  </ul>
+{% endif %}

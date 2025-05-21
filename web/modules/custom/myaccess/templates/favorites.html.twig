@@ -1,0 +1,24 @@
+<div id="applications-favorite">
+  <div class="applications-group">
+  <div class="applications-group-wrap">
+    {% if applications %}
+      {% for application in applications %}
+        {{ drupal_entity('application', application, 'favorite', check_access=false) }}
+      {% endfor %}
+      </div>
+    {% else %}
+        {% for i in 1..placeholders %}
+          <div class="applications__tile-empty">
+            <a href="{{ path('myaccess.applications-grid') }}" class="use-ajax-fullscreen">
+              <svg class="icon icon-plus-nofill">
+                <use xlink:href="#icon-plus-nofill"></use>
+              </svg>
+              <span class="sr-only">{{ 'add'|t }}</span>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+      <p>{{ 'Select up to @placeholders Apps'|t({'@placeholders': placeholders}) }}</p>
+    {% endif %}
+  </div>
+</div>

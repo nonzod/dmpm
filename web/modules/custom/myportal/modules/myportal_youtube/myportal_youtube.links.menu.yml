@@ -1,0 +1,5 @@
+myportal_youtube.admin:
+  title: 'YouTube Blocks'
+  parent: system.admin_config_services
+  description: 'Configuration page for myportal YouTube.'
+  route_name: myportal_youtube.admin

@@ -1,0 +1,6 @@
+services:
+  mylinks_migration.commands:
+    class: Drupal\mylinks_migration\Commands\ImportCommand
+    arguments: ['@myaccess.group_manager', '@entity_type.manager']
+    tags:
+      - { name: drush.command }

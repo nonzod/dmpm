@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "myAccessCode": "menSSOIntCTrials",
+  "myAccessUrl": "http://10.1.20.104",
+  "externalMyAccessCode": "menSSOPubCTrials",
+  "externalEnabled": true,
+  "externalMyAccessUrl": "https://mya-cltrials-qa.menarini.net",
+  "formAction": "/clstdy/login.asp",
+  "postAction": "",
+  "formParams": "[{\"name\":\"username\", \"value\":\"$username\"}]"
+}

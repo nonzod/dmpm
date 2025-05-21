@@ -1,0 +1,60 @@
+myportal_localadmin.main_widget:
+  path: '/admin/local-admin'
+  defaults:
+    _controller: '\Drupal\myportal_localadmin\Controller\LocalAdminController::renderIndex'
+  requirements:
+    _permission: 'access local admin panel'
+myportal_localadmin.groups_overview:
+  path: '/admin/local-admin/groups'
+  defaults:
+    _controller: '\Drupal\myportal_localadmin\Controller\LocalAdminController::renderGroups'
+  requirements:
+    _permission: 'access local admin panel'
+myportal_localadmin.group_users_overview:
+  path: '/admin/local-admin/users'
+  defaults:
+    _controller: '\Drupal\myportal_localadmin\Controller\LocalAdminController::renderUsers'
+  requirements:
+    _permission: 'access local admin panel'
+myportal_localadmin.group_user_edit:
+  path: '/admin/local-admin/users/drupalrole/{user}'
+  defaults:
+    _form: '\Drupal\myportal_localadmin\Form\LocalAdminDrupalRoleForm'
+    _title: 'Assign/Revoke drupal roles'
+  requirements:
+    _permission: 'access local admin panel'
+  options:
+    parameters:
+      user:
+        type: entity:user
+myportal_localadmin.group_role_edit:
+  path: '/admin/local-admin/users/grouprole/{member}/{group}'
+  defaults:
+    _form: '\Drupal\myportal_localadmin\Form\LocalAdminGroupRoleForm'
+    _title: 'Assign/Revoke group roles'
+  requirements:
+    _permission: 'access local admin panel'
+  options:
+    parameters:
+      member:
+        type: entity:group_content
+      group:
+        type: entity:group
+myportal_localadmin.section_user_edit:
+  path: '/admin/local-admin/users/sections/{user}'
+  defaults:
+    _form: '\Drupal\myportal_localadmin\Form\LocalAdminNavigationSectionsForm'
+    _title: 'Edit member'
+  requirements:
+    _permission: 'access local admin panel'
+  options:
+    parameters:
+      user:
+        type: entity:user
+myportal_localadmin.add_group_user:
+  path: '/admin/local-admin/groups/add-user/{group}/{plugin_id}'
+  defaults:
+    _controller: '\Drupal\myportal_localadmin\Controller\LocalAdminController::addGroupUser'
+    _title: 'Aggiungi utente al gruppo'
+  requirements:
+    _permission: 'access local admin panel'

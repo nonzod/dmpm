@@ -1,0 +1,11 @@
+entity.staff_member.add_form:
+  route_name: entity.staff_member.add_form
+  title: 'Add Staff Member'
+  appears_on:
+    - entity.staff_member.collection
+
+entity.staff_member_importer.add_form:
+  route_name: entity.staff_member_importer.add_form
+  title: 'Add Importer'
+  appears_on:
+    - entity.staff_member_importer.collection

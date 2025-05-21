@@ -1,0 +1,142 @@
+{#
+/**
+ * @file
+ * Socialbase's theme implementation to display a page.
+ *
+ * The doctype, html, head and body tags are not in this template. Instead they
+ * can be found in the html.html.twig template normally located in the
+ * core/modules/system directory.
+ *
+ * Available variables:
+ *
+ * General utility variables:
+ * - base_path: The base URL path of the Drupal installation. Will usually be
+ *   "/" unless you have installed Drupal in a sub-directory.
+ * - is_front: A flag indicating if the current page is the front page.
+ * - logged_in: A flag indicating if the user is registered and signed in.
+ * - is_admin: A flag indicating if the user has permission to access
+ *   administration pages.
+ *
+ * Site identity:
+ * - front_page: The URL of the front page. Use this instead of base_path when
+ *   linking to the front page. This includes the language domain or prefix.
+ *
+ * Page content (in order of occurrence in the default page.html.twig):
+ * - node: Fully loaded node, if there is an automatically-loaded node
+ *   associated with the page and the node ID is the second argument in the
+ *   page's path (e.g. node/12345 and node/12345/revisions, but not
+ *   comment/reply/12345).
+ *
+ *
+ * @see template_preprocess_page()
+ * @see html.html.twig
+ */
+#}
+{{ attach_library('myportal_theme/staff-directory') }}
+
+<div class="navbar-fixed-top men-header">
+  {% if page.toolbar %}
+    {{ page.toolbar }}
+  {% endif %}
+
+  {% if page.header %}
+    {{ page.header }}
+  {% endif %}
+
+  {% if page.megamenu %}
+    {{ page.megamenu }}
+  {% endif %}
+</div>
+<main id="content" class="main-container" role="main">
+
+  {# TODO: Questo è una fix temporanea, andra rimossa una volta deciso come gestirlo #}
+  {{ attach_library('socialbase/hero') }}
+  <div class="cover cover-img cover-img-gradient" style="background-image: url('{{ base_path ~ directory }}/assets/images/hero_ricerca.png');">
+    <div class="hero__bgimage-overlay"></div>
+    <div class="cover-wrap"></div>
+  </div>
+  {# @end TODO #}
+
+  {% if page.breadcrumb %}
+    {{ page.breadcrumb }}
+  {% endif %}
+
+  {% if page.hero %}
+    {{ page.hero }}
+  {% endif %}
+
+  {% if page.secondary_navigation %}
+    {{ page.secondary_navigation }}
+  {% endif %}
+
+  {% if page.content_top %}
+    {{ page.content_top }}
+  {% endif %}
+
+  {# Content attributes, see Style guide Templates for documentation #}
+  {% block section %}
+    <section class="men-layout__staff-directory">
+      <div class="men-layout__staff-directory-container">
+        <div class="men-layout__staff-directory-row">
+
+          {% if page.title and display_page_title %}
+            {{ page.title }}
+          {% endif %}
+
+          {% if page.complementary_top %}
+            <aside class="region--complementary facets" role="complementary">
+              <div class="region--complementary--facets">
+                {{ page.complementary_top }}
+              </div>
+            </aside>
+          {% endif %}
+          <main>
+          {% block content %}
+            {{ page.content }}
+          {% endblock %}
+          </main>
+          <aside class="member-details">
+            <div class="member-details-content">
+              <h3 class="json-name"></h3>
+              <p class="json-title"></p>
+
+              <h4>{{ "Contact Information" |t }}</h4>
+              <ul>
+                <li>Direct line: <span class="json-value json-direct-line"></span></li>
+                <li>Mobile: <span class="json-value json-mobile"></span></li>
+                <li>E-Mail: <span class="json-value json-email"></span></li>
+              </ul>
+
+              <h4>{{ "Work Information" |t }}</h4>
+              <ul>
+                <li>Function: <span class="json-value json-function"></span></li>
+                <li>Employee scope: <span class="json-value json-employee-type"></span></li>
+                <li>Reporting: <span class="json-value json-reporting"></span></li>
+                <li>Team: <span class="json-value json-team"></span></li>
+              </ul>
+            </div>
+          <aside>
+        </div>
+      </div>
+    </section>
+  {% endblock %}
+
+  {% if page.content_bottom %}
+    {{ page.content_bottom }}
+  {% endif %}
+
+</main>
+
+
+<button id="men-scroll-top">
+  <div class="men-icon_wrap">
+    <svg class="men-icon_top">
+      <use xlink:href="#icon-expand-less"></use>
+    </svg>
+  </div>
+  <span>{{ 'Back to top'|t }}</span>
+</button>
+
+{% if page.footer %}
+  {{ page.footer }}
+{% endif %}

@@ -1,0 +1,4 @@
+myportal_youtube:
+  css:
+    theme:
+      css/myportal_youtube_gallery.css: { }

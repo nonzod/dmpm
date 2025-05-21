@@ -1,0 +1,34 @@
+myportal_autologout.settings_form:
+  path: '/admin/config/myportal/autologout'
+  defaults:
+    _title: 'Autologout settings'
+    _form: 'Drupal\myportal_autologout\Form\SettingsForm'
+  requirements:
+    _permission: 'administer myportal_autologout configuration'
+
+myportal_autologout.ajax_logout:
+  path: '/autologout_ajax_logout'
+  defaults:
+    _controller: '\Drupal\myportal_autologout\Controller\AutologoutController::ajaxLogout'
+  options:
+    _theme: ajax_base_page
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+myportal_autologout.ajax_set_last:
+  path: '/autologout_ajax_set_last'
+  defaults:
+    _controller: '\Drupal\myportal_autologout\Controller\AutologoutController::ajaxSetLast'
+  options:
+    _theme: ajax_base_page
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+myportal_autologout.ajax_get_time_left:
+  path: '/autologout_ajax_get_time_left'
+  defaults:
+    _controller: '\Drupal\myportal_autologout\Controller\AutologoutController::ajaxGetRemainingTime'
+  options:
+    _theme: ajax_base_page
+  requirements:
+    _user_is_logged_in: 'TRUE'

@@ -1,0 +1,6 @@
+myportal_user.transfer_ownership_contents_form:
+  title: 'Transfer ownership contents'
+  route_name: myportal_user.transfer_ownership_contents_form
+  description: 'Let transfer ownership contents from user to another.'
+  parent: myportal.admin.config
+  weight: 99

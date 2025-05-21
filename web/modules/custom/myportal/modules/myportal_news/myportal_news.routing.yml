@@ -1,0 +1,9 @@
+myportal_news.settings_form:
+  path: '/admin/config/myportal/news'
+  defaults:
+    _form: '\Drupal\myportal_news\Form\SettingsForm'
+    _title: 'Setting News Channels Form'
+  requirements:
+    _permission: 'access news channels settings'
+  options:
+    _admin_route: TRUE

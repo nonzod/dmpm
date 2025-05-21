@@ -1,0 +1,26 @@
+services:
+  o11y_metrics.metrics:
+    class: Drupal\o11y_metrics\Metrics
+    arguments: [ '@config.factory', '@event_dispatcher' ]
+
+  o11y_metrics.matcher:
+    class: Drupal\o11y_metrics\RequestMatcher\RequestMatcher
+    arguments: [ '@config.factory', '@path.matcher' ]
+
+  http_middleware.o11y_metrics_memory:
+    class: Drupal\o11y_metrics\StackMiddleware\MemoryMiddleware
+    arguments: [ '@o11y_metrics.metrics', '@o11y_metrics.matcher' ]
+    tags:
+      - { name: http_middleware, priority: 1000 }
+
+  http_middleware.o11y_metrics_time:
+    class: Drupal\o11y_metrics\StackMiddleware\TimeMiddleware
+    arguments: [ '@o11y_metrics.metrics', '@o11y_metrics.matcher' ]
+    tags:
+      - { name: http_middleware, priority: 1000 }
+
+  http_middleware.o11y_metrics_request:
+    class: Drupal\o11y_metrics\StackMiddleware\RequestMiddleware
+    arguments: [ '@o11y_metrics.metrics', '@o11y_metrics.matcher' ]
+    tags:
+      - { name: http_middleware, priority: 1010 }

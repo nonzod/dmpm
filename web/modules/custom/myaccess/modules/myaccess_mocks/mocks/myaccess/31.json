@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "myAccessCode": "menSSOIntMMeSE",
+  "myAccessUrl": "https://cosmo.menarini.net/Cosmo",
+  "externalMyAccessCode": "menSSOPubMMeSE",
+  "externalEnabled": true,
+  "externalMyAccessUrl": "https://mya-cosmo-qa.menarini.net/Cosmo",
+  "formAction": "/logonProxyMMeSE.jsp",
+  "postAction": null,
+  "formParams": "[ { \"name\":\"username\", \"value\":\"$username\", \"function\":\"toUpperCase()\" }, { \"name\":\"password\", \"value\":\"$password\" } ]"
+}

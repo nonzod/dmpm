@@ -1,0 +1,4 @@
+services:
+  myportal_youtube:
+    class: Drupal\myportal_youtube\YoutubeService
+    arguments: [ '@config.factory', '@key.repository' ]

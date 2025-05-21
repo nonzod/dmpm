@@ -1,0 +1,8 @@
+access news channels settings:
+  title: 'Access News Channel Settings'
+  description: 'Allow access to configure the news channels'
+  restrict access: true
+
+access news stream:
+  title: 'Access News Stream'
+  description: 'Allow access to news stream'

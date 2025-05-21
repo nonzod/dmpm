@@ -1,0 +1,43 @@
+twocol:
+  version: VERSION
+  css:
+    theme:
+      layouts/twocol/twocol.css: {}
+
+twocol_30_70:
+  version: VERSION
+  css:
+    theme:
+      layouts/twocol_30_70/twocol_30_70.css: {}
+
+twocol_70_30:
+  version: VERSION
+  css:
+    theme:
+      layouts/twocol_70_30/twocol_70_30.css: {}
+
+threecol:
+  version: VERSION
+  css:
+    theme:
+      layouts/threecol/threecol.css: {}
+
+myportal:
+  version: VERSION
+  js:
+    js/megamenu.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupal.ajax
+    - core/jquery.once
+
+search:
+  version: VERSION
+  js:
+    js/search.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupal.ajax
+    - core/jquery.once

@@ -1,0 +1,4 @@
+access transfer ownership contents:
+  title: 'Access transfer ownership contents'
+  description: 'Allow access to transfer ownership contents'
+  restrict access: true

@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "myAccessCode": "Portal_Org3",
+  "myAccessUrl": "https://org3.menarini.net/orgcharts/Menarini_Charts/",
+  "externalMyAccessCode": "Portal_Org3",
+  "externalEnabled": true,
+  "externalMyAccessUrl": "https://mya-org3.menarini.net/orgcharts/Menarini_Charts/",
+  "formAction": null,
+  "postAction": null,
+  "formParams": null
+}

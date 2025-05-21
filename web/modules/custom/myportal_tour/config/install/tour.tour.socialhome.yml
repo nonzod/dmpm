@@ -1,0 +1,29 @@
+langcode: en
+status: true
+translatable: true
+dependencies:
+  module:
+    - social_core
+id: socialhome
+label: 'Home page stream functionality.'
+module: myportal_tour
+routes:
+  - route_name: view.search.page_2
+tips:
+  welcomehomepage:
+    id: welcomehomepage
+    plugin: text
+    label: 'Get Started'
+    body: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard
+           <img src="/themes/custom/myportal_theme/assets/images/img_Help_small.png">'
+    weight: 1
+    location: left
+    selector: '#applications-favorite-tooltip'
+  eventssite:
+    id: eventssite
+    plugin: text
+    label: 'Events sites'
+    body: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard'
+    weight: 1
+    location: left
+    selector: '#block-views-block-events-list-block-upcoming-events'

@@ -1,0 +1,7 @@
+weather_widget:
+  js:
+    js/myportal_weather_widget.js: { }
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal.autocomplete

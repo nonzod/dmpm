@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * Myportal Staff Directory module install file.
+ */
+
+/**
+ * Creates the StaffMember entity type.
+ */
+function myportal_staff_directory_update_9000(&$sandbox) {
+  \Drupal::entityTypeManager()->clearCachedDefinitions();
+
+  $entity_type = \Drupal::entityTypeManager()->getDefinition('staff_member');
+  \Drupal::entityDefinitionUpdateManager()->installEntityType($entity_type);
+}

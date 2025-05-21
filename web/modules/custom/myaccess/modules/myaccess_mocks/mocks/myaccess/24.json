@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "myAccessCode": "menSSOIntCosmoIDRA",
+  "myAccessUrl": "https://cosmo.menarini.net/Cosmo",
+  "externalMyAccessCode": "menSSOPubCosmoIDRA",
+  "externalEnabled": true,
+  "externalMyAccessUrl": "https://mya-cosmo-qa.menarini.net/Cosmo",
+  "formAction": "/logonProxyIDRA.jsp",
+  "postAction": null,
+  "formParams": "[ { \"name\":\"username\", \"value\":\"$username\", \"function\":\"toUpperCase()\" }, { \"name\":\"password\", \"value\":\"$password\" } ] "
+}

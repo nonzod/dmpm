@@ -1,0 +1,136 @@
+@import 'settings';
+
+.card__block > .list-item {
+
+  // Round the first and last items if they are a direct child of a card
+  &:first-child {
+    @include border-top-radius($list-group-border-radius);
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+    @include border-bottom-radius($list-group-border-radius);
+  }
+
+}
+
+.list-item--visibility {
+  border-top: 1px solid $list-group-border;
+}
+
+
+.list-item.disabled {
+
+  &,
+  &:hover,
+  &:focus {
+    background-color: $list-group-disabled-bg;
+    color: $list-group-disabled-color;
+  }
+
+}
+
+.list-item--active,
+.list-item--active:hover {
+  color: $list-group-active-color;
+  background-color: $list-group-active-bg;
+  border-color: $list-group-active-border;
+
+  .icon-small {
+    fill: white;
+  }
+
+  .help-block {
+    color: $list-group-active-color;
+    font-weight: 300;
+  }
+}
+
+
+.list-item__avatar img {
+  border-radius: 50%;
+}
+
+.men-modal-language_list,
+.teaser__attachment,
+.paragraph--type--attachments,
+.men-list-links {
+  padding-left: 0;
+  list-style: none;
+  .file-link a,
+  li a {
+    @extend .font-oswald-light;
+    font-size: 1.375rem;
+    line-height: 1.625rem;
+    margin-bottom: 12px;
+    display: inline-block;
+    color: $default-color;
+    &:before {
+      content: '';
+      width: 47px;
+      height: 1px;
+      background: $default-color;
+      display: inline-block;
+      margin-right: 14px;
+      margin-bottom: 3px;
+    }
+    @include on-event {
+      color: $men-link-all;
+      &:before {
+        background: $men-link-all;
+      }
+    }
+  }
+}
+
+.men-accordion--content {
+  display: none;
+  margin-bottom: 20px;
+  ul {
+    padding-left: 0;
+    list-style: none;
+  }
+}
+.men-accordion--no {
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+// Block list on sidebar
+.men-block-sidebar__list {
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  li a {
+    font-size: 1.125rem;
+    line-height: 1.625rem;
+    @extend .font-oswald-light;
+    margin-bottom: 12px;
+    display: inline-block;
+    color: $default-color;
+    &:before {
+      content: '';
+      width: 47px;
+      height: 1px;
+      background: $default-color;
+      display: inline-block;
+      margin-right: 14px;
+      margin-bottom: 3px;
+    }
+    @include on-event {
+      color: $men-link-all;
+      &:before {
+        background: $men-link-all;
+      }
+    }
+  }
+
+  .men-block-sidebar_list_child {
+    padding-left: 20px;
+    ul {
+      padding-left: 40px;
+    }
+  }
+}

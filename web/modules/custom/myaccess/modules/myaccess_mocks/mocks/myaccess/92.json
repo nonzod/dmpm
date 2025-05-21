@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "myAccessCode": "menSSOIntFactES",
+  "myAccessUrl": "http://10.1.23.89:9502/analytics",
+  "externalMyAccessCode": "menSSOPubFactES",
+  "externalEnabled": true,
+  "externalMyAccessUrl": "https://mya-factes-qa.menarini.net/analytics",
+  "formAction": "/saw.dll?Portal&PortalPath=%2Fshared%2FTagetik%20MPM%20Analytics%20SP%2F_portal%2FFACT",
+  "postAction": null,
+  "formParams": "[{\"name\":\"NQUser\", \"value\":\"$username\"}, {\"name\":\"NQPassword\", \"value\":\"$password\"}]"
+}

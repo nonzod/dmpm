@@ -1,0 +1,46 @@
+{#
+/**
+  * This is a custom hero for navigation page - copy of node hero
+  *
+  */
+#}
+
+{{ attach_library('socialbase/hero') }}
+
+{%
+  set cover_classes = [
+  'cover',
+  hero_styled_image_url ? 'cover-img cover-img-gradient',
+  hero_video_url ? 'p0',
+]
+%}
+
+<div{{ attributes.addClass(cover_classes) }} {% if hero_styled_image_url %} style="background-image: url('{{ hero_styled_image_url }}');" {% endif %}>
+
+  <div class="hero__bgimage-overlay"></div>
+  {% if node_edit_url %}
+    <div class="hero-action-button">
+      <a href="{{ node_edit_url }}" title="{% trans %}Edit content{% endtrans %}"
+         class="btn btn-raised btn-default btn-floating">
+        <svg class="icon-gray icon-medium">
+          <title>{% trans %}Edit content{% endtrans %}</title>
+          <use xlink:href="#icon-edit"></use>
+        </svg>
+      </a>
+    </div>
+  {% endif %}
+
+  <div class="cover-wrap">
+    {% if hero_video_url is not empty %}
+      <video playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
+        <source src="{{ hero_video_url }}" type="video/mp4">
+        <source src="{{ hero_video_url }}" type="video/webm">
+      </video>
+    {% endif %}
+    <header class="page-title">
+      <p>{{ title_prefix }}</p>
+      <h1{{ title_attributes }}>{{ title }}</h1>
+      <p>{{ title_suffix }}</p>
+    </header>
+  </div>
+</div>

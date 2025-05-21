@@ -1,0 +1,51 @@
+{#
+/**
+ * @file
+ *
+ * Default theme implementation for profiles.
+ *
+ * Available variables:
+ * - content: Items for the content of the profile.
+ *   Use 'content' to print them all, or print a subset such as
+ *   'content.title'. Use the following code to exclude the
+ *   printing of a given child element:
+ *   @code
+ *   {{ content|without('title') }}
+ *   @endcode
+ * - attributes: HTML attributes for the wrapper.
+ * - view_mode: The profile view mode used.
+ * - profile: The profile object.
+ * - url: The profile URL, if available.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ *
+ * @ingroup themeable
+ */
+#}
+{% set classes = [
+  'profile',
+  'profile--' ~ profile.id,
+  'profile--type--' ~ profile.bundle|clean_class,
+  profile.isDefault() ? 'profile--is-default',
+  view_mode ? 'profile--view-mode--' ~ view_mode|clean_class,
+  'clearfix',
+] %}
+<div{{ attributes.addClass(classes) }}>
+  {{ title_suffix.contextual_links }}
+  <div class="men-profile__image"><img src="{{ profile.field_google_picture.0.value }}" alt="{{ 'Profile picture'|t }}" onerror="this.onerror=null; this.src='/themes/custom/myportal_theme/user_profile.png'"></div>
+  <div class="men-profile__container">
+    <div class="men-profile__details men-profile__block">
+      <h3>{{ 'Profile Information'|t }}</h3>
+      <div class="men-profile__details-field">
+        {{ content.field_profile_first_name }}
+      </div>
+      <div class="men-profile__details-field">
+        {{ content.field_profile_last_name }}
+      </div>
+      <a href="{{ path('user.logout') }}"
+         class="btn btn-men men-btn__action men-profile__logout">
+        {{ 'Logout'|t }}
+      </a>
+    </div>
+  </div>
+</div>

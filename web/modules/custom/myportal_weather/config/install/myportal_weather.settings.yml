@@ -1,0 +1,50 @@
+default:
+  location:
+    name:
+    lat:
+    lon:
+openweathermap:
+  api_key: null
+  cache_maximum_age: '10800'
+location_hdp_mapping:
+  Hobart: 'Hobart Tasmania'
+  CR: Heredia
+  ES: 'San Salvador'
+  GG: 'Guatemala City'
+  GY: Amatitlan
+  HH: Tegucigalpa
+  Anand: Gujarat
+  Cirebon: 'Cirebon Regency'
+  Solo: Surakarta
+  'FI Ponte a Ema': Firenze
+  'FI Scandicci': Firenze
+  'FI Settesanti': Firenze
+  NN: Managua
+  PP: 'Panama City'
+  'CENTRAL GMA': PASIG
+  'NORTH GMA, SPECIALTY CARE': BULACAN
+  'SOUTH GMA': TAGUIG
+  'Regional Office': Singapore
+  DR: 'Santo Domingo'
+  Remote: 'Huntingdon Valley'
+  Central: 'Da Nang'
+  'Ho Chi Minh': 'ho chi minh city'
+  Hue: Hue Vietnam
+country_location_mapping:
+  Belgium: Machelen
+  China: Beijing
+  Colombia: Bogota
+  France: Rungis
+  Greece: Athens
+  India: Delhi
+  Ireland: DUBLIN
+  Italy: Firenze
+  Mexico: 'Mexico City'
+  Peru: Lima
+  Portugal: Lisbon
+  Spain: Barcellona
+  Switzerland: Zurich
+  Thailand: Bangkok
+  Turkey: Istanbul
+  'United Kingdom': 'Wooburn Green'
+  Vietnam: 'Ha Noi'

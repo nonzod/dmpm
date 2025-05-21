@@ -1,0 +1,9 @@
+admin staff directory:
+  title: 'Admin staff directory'
+  description: 'Allow access to staff directory panel'
+  restrict access: true
+
+access staff directory:
+  title: 'Access staff directory page'
+  description: 'Allow access to staff directory search page'
+  restrict access: true

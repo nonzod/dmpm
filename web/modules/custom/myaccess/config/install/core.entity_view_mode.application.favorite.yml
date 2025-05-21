@@ -1,0 +1,9 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - myaccess
+id: application.favorite
+label: 'Favorite'
+targetEntityType: application
+cache: true

@@ -1,0 +1,9 @@
+services:
+  myportal_cdn.compute_service:
+    class: Drupal\myportal_cdn\ComputeService
+    arguments: ['@config.factory']
+  cache_tags.invalidator.myportal_cdn:
+    class: Drupal\myportal_cdn\Cache\CdnCacheTagsInvalidator
+    arguments: [ '@entity_type.manager', '@myportal_cdn.compute_service' ]
+    tags:
+      - { name: cache_tags_invalidator }

@@ -1,0 +1,297 @@
+@import "settings";
+
+// Give the tabs something to sit on
+.nav-tabs {
+  border-bottom: 1px solid $nav-tabs-border-color;
+  > li {
+
+    // Actual tabs (as links)
+    > a {
+
+      &:hover {
+        border-color: $nav-tabs-link-hover-border-color $nav-tabs-link-hover-border-color $nav-tabs-border-color;
+      }
+    }
+
+    // Active state, and its :hover to override normal :hover
+    &.active > a {
+      &,
+      &:hover,
+      &:focus {
+        color: $nav-tabs-active-link-hover-color;
+        background-color: $nav-tabs-active-link-hover-bg;
+        border: 1px solid $nav-tabs-active-link-hover-border-color;
+      }
+    }
+  }
+
+}
+
+
+.nav-tabs > li {
+
+  > a {
+
+    &:hover,
+    &:focus {
+      background-color: $gray-lighter;
+      border-bottom-color: $gray-lighter;
+    }
+
+  }
+
+  // Active state, and its :hover to override normal :hover
+  &.active > a {
+    &,
+    &:hover,
+    &:focus {
+      font-weight: 500;
+      color: $nav-tabs-active-link-hover-color;
+      background-color: $nav-tabs-active-link-hover-bg;
+
+      @include for-tablet-landscape-up {
+        border-bottom: 2px solid $brand-primary;
+      }
+
+    }
+  }
+
+}
+
+// Tabs Left and Right
+// -------------------------
+
+.tabs-left > .nav-tabs .active > a {
+	&, &:hover, &:focus {
+		border-right: 2px solid $brand-primary;
+	}
+}
+
+.tabs-right > .nav-tabs .active > a {
+	&, &:hover, &:focus {
+		border-left: 2px solid $brand-primary;
+	}
+}
+
+.tabs-left > .nav-tabs {
+  border-radius: $border-radius-base 0 0 $border-radius-base;
+}
+
+.tabs-right > .nav-tabs {
+  border-radius: 0 $border-radius-base $border-radius-base 0;
+}
+
+//
+// Men tabs trigger
+// --------------------------------------------------
+
+// that is only for page navigation
+// need this class that omes from js
+// because the region appear always full
+.men-complementary-is_full {
+  @include for-tablet-landscape-up {
+    .men-trigger__filter-full {
+      display: block;
+    }
+  }
+  @include for-tablet-landscape-down {
+    .men-trigger__filter-bar {
+      display: block;
+    }
+  }
+}
+.men-layout__full {
+  .men-trigger__filter-bar {
+    display: none;
+  }
+}
+
+.men-trigger__filter-full {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  background-color: $calendar-bg;
+  padding: 25px;
+  span {
+    display: block;
+    font-size: 0.938rem;
+    line-height: 1.375rem;
+    @extend .font-oswald-medium;
+  }
+}
+// @end exception
+
+.men-trigger__filter-bar {
+  overflow: hidden;
+  @include for-tablet-landscape-up {
+    display: none;
+  }
+}
+
+.men-tab {
+  border: 0;
+  box-shadow: none;
+  display: inline-block;
+  width: 100%;
+}
+
+.men-trigger__tab {
+  font-size: 1.25rem;
+  line-height: 1.875rem;
+  @extend .font-oswald-light;
+  color: $default-color;
+  text-align: left;
+  display: flex!important;
+  justify-content: space-between;
+  padding: 10px 20px!important;
+  background: $calendar-bg;
+  transition: background .3s linear;
+  &:active,
+  &:focus {
+    outline: 0;
+  }
+}
+
+.men-trigger-desktop {
+  @include for-tablet-landscape-down {
+    display: none;
+  }
+}
+.men-trigger-mobile {
+  float: right;
+  @include for-tablet-landscape-up {
+    display: none;
+  }
+}
+
+.icon-sidemenu-open,
+.icon-sidemenu-close {
+  width: 36px;
+  height: 36px;
+  stroke: $default-color;
+  vertical-align: middle;
+}
+
+.men-trigger-menu__close {
+  display: none;
+}
+
+.men-complementary_open {
+  .men-trigger-menu__close {
+    display: inline-block;
+  }
+  .men-trigger-menu__open {
+    display: none;
+  }
+}
+
+//Open status
+.men-show__sidebar {
+  .men-trigger__tab {
+    background: $default-color;
+    color: $white;
+    .icon {
+      stroke: $white;
+    }
+  }
+}
+
+// Active fitlers show little dot
+.men-filter__applied {
+  .men-trigger__tab-filters {
+    position: relative;
+    &:after {
+      content: '';
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: $heading-highlight;
+      position: absolute;
+      top: 20px;
+      left: 76px;
+    }
+  }
+  .men-trigger__tab-full .men-trigger__tab-filters:after {
+    display: none;
+  }
+}
+
+// Only on search page
+.men-trigger__search-provider {
+  display: none;
+}
+body.path-search {
+  .men-trigger__filter-bar {
+    .nav-tabs {
+      display: flex;
+      flex-direction: row;
+      li {
+        flex: 0 0 50%;
+        &.men-trigger__tab-full {
+          .men-trigger__tab-filters {
+            background-color: $default-color;
+          }
+        }
+      }
+    }
+    .men-trigger__search-provider {
+      button {
+        background-color: $light-blue;
+        font-size: 1.25rem;
+        line-height: 1.875rem;
+        text-align: left;
+        padding: 10px 20px;
+        color: $white;
+        @extend .font-oswald-light;
+        display: flex;
+        justify-content: space-between;
+        transition: background .3s linear;
+        width: 100%;
+      }
+      @include for-tablet-landscape-down {
+        display: block;
+      }
+      .icon-sidemenu-close,
+      .icon-sidemenu-open {
+        stroke: transparent;
+        fill: $white;
+        width: 30px;
+      }
+      .icon-sidemenu-close {
+        width: 30px;
+      }
+      .men-trigger-provider__close {
+        display: none;
+        width: 30px;
+      }
+      &.men-trigger__tab-full {
+        button {
+          background-color: $default-color;
+        }
+        .men-trigger-provider__close {
+          display: block;
+        }
+        .men-trigger-provider__open {
+          display: none;
+        }
+      }
+    }
+  }
+  //default fitler
+  .men-trigger__tab-filters {
+    color: $white;
+    background: $search-filter-mobile;
+  }
+  .icon-sidemenu-open,
+  .icon-sidemenu-close {
+    stroke: $white;
+  }
+}
+
+.men-nav-tabs {
+  li {
+    float: none;
+  }
+}

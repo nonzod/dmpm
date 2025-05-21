@@ -1,0 +1,11 @@
+tour:
+  version: 1.0
+  css:
+    theme:
+      css/tour.css: {}
+  js:
+    js/tour.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings

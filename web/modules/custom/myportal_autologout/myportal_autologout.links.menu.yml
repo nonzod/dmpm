@@ -1,0 +1,6 @@
+myportal_autologout.settings_form:
+  title: MyPortal autologout
+  description: Configure MyPortal autologout.
+  parent: myportal.admin.config
+  route_name: myportal_autologout.settings_form
+  weight: 10

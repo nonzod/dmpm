@@ -1,0 +1,41 @@
+<div id="applications-grid" class="container">
+  <div class="applications-grid__actionsbar row">
+    <div id="applications-grid__search">
+      <label for="applications-grid__input" class="sr-only">{{ 'Search'|t }}</label>
+      <svg class="icon icon-search">
+        <use xlink:href="#icon-search"></use>
+      </svg>
+      <input type="text" id="applications-grid__input" placeholder="{{ 'Search'|t }}">
+    </div>
+
+    <h2 id="application-grid__main-title">{{ title }}</h2>
+
+    <div id="js-applications-grid__close" class="application-grid__close">
+      <svg class="icon icon-close">
+        <use xlink:href="#icon-close"></use>
+      </svg>
+      <div class="sr-only">Close</div>
+    </div>
+    <div class="applications__tabs">
+      <ul>
+        <li {% if type == 'google' %} class="active" {% endif %}>
+          <a class="use-ajax-fullscreen" href="{{ path('myaccess.applications-google') }}">{{ 'Google App'|t }}</a>
+        </li>
+        <li {% if type == 'myapp' %} class="active" {% endif %}>
+          <a class="use-ajax-fullscreen" href="{{ path('myaccess.applications-grid') }}">{{ 'My App'|t }}</a>
+        </li>
+        {% if mylinks_active is same as(true) %}
+          <li {% if type == 'mylinks' %} class="active" {% endif %}>
+            <a class="use-ajax-fullscreen" href="{{ path('myaccess.applications-mylinks') }}">{{ 'My Links'|t }}</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+  <div class="flag--messages text-align-center clearfix"></div>
+  <div class="application-grid__icon-group row">
+    {% for application in applications %}
+      {{ drupal_entity('application', application, 'grid', check_access=false) }}
+    {% endfor %}
+  </div>
+</div>

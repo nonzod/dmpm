@@ -1,0 +1,22 @@
+administer myaccess:
+  description: 'View area MyAccess Settings.'
+  title: 'Administrator MyAccess Settings'
+
+bypass password request:
+  description: 'Bypass the second request of the password.'
+  title: 'Bypass password request'
+  restrict access: TRUE
+
+bypass hmrs check:
+  description: 'Allow access even if the user is not in the HMRS system.'
+  title: 'bypass hmrs check'
+  restrict access: TRUE
+
+administer application types:
+  description: 'Administer application types'
+  title: 'Administer application types'
+  restrict access: TRUE
+
+administer local applications:
+  description: 'Administer local applications'
+  title: 'Administer local applications'

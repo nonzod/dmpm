@@ -1,0 +1,11 @@
+langcode: en
+status: true
+dependencies: {  }
+id: myportal
+label: 'MyPortal migrations'
+description: 'MyPortal migrations.'
+source_type: 'CSV files'
+module: null
+shared_configuration:
+  source:
+    key: default

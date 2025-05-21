@@ -1,0 +1,384 @@
+<?php
+
+use Drupal\Core\Database\Database;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\myaccess\Entity\Application;
+use Drupal\myaccess\GroupManagerInterface;
+use Drupal\myaccess\StackMiddleware\IsExternalMiddleware;
+
+/**
+ * Implements hook_requirements().
+ */
+function myaccess_requirements($phase) {
+  $requirements = [];
+
+  if ($phase == 'runtime'
+    && $request = \Drupal::requestStack()->getCurrentRequest()) {
+
+    $has_header = $request->headers->has(IsExternalMiddleware::HEADER);
+    $header_value = $request->headers->get(IsExternalMiddleware::HEADER, 'not-defined');
+    // See \Drupal\myaccess\StackMiddleware\IsExternalMiddleware::handle().
+    $external = $request->attributes->get(IsExternalMiddleware::KEY, TRUE);
+
+    $requirements['myaccess_is_external_middleware'] = [
+      'title' => t('Custom Middleware'),
+      'description' => t("The Menarini proxy adds the header only if the request comes from outside the network to indicate that the request comes from outside."),
+      'severity' => REQUIREMENT_INFO,
+      'value' => t('Header %name: %value  (for system you %state in VPN).', [
+        '%name' => IsExternalMiddleware::HEADER,
+        '%value' => $has_header ? $header_value : 'not found header',
+        '%state' => $external ? "are not" : "are",
+      ]),
+    ];
+  }
+
+  return $requirements;
+}
+
+/**
+ * Add fields bundle and weight for application schema.
+ */
+function myaccess_update_8100() {
+  $storage_definition = BaseFieldDefinition::create('string')
+    ->setLabel(t('Bundle'))
+    ->setReadOnly(TRUE)
+    ->setDefaultValue('default')
+    ->setTargetBundle('default')
+    ->setDescription(t('The bundle of the Application entity.'));
+
+  \Drupal::entityDefinitionUpdateManager()
+    ->installFieldStorageDefinition('bundle', 'application', 'application',
+      $storage_definition);
+
+  $storage_definition = BaseFieldDefinition::create('integer')
+    ->setLabel(t('Weight'))
+    ->setReadOnly(TRUE)
+    ->setDefaultValue(0)
+    ->setDescription(t('The Weight of the Application entity, used for order application.'))
+    ->setDisplayOptions('form', [
+      'type' => 'string_textfield',
+    ])
+    ->setDisplayConfigurable('form', TRUE);
+
+  \Drupal::entityDefinitionUpdateManager()
+    ->installFieldStorageDefinition('weight', 'application', 'application',
+      $storage_definition);
+}
+
+/**
+ * Implements hook_schema().
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+ */
+function myaccess_schema() {
+  $schema = [];
+  $schema['hmrs_mapping'] = [
+    'description' => 'Mapping hmrs',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'POS_POSGLOBALCODE' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 255,
+        'default' => '',
+      ],
+      'POS_TITLE_LOCAL' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 255,
+        'default' => '',
+      ],
+      'POS_TITLE_ENGLISH' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 255,
+        'default' => '',
+      ],
+      'POS_COMPANYCODE' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 255,
+        'default' => '',
+      ],
+      'POS_DIVISIONCODE' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 255,
+        'default' => '',
+      ],
+      'POS_DEPARTMENTCODE' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 255,
+        'default' => '',
+      ],
+      'POS_SUBAREACODE' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 255,
+        'default' => '',
+      ],
+      'POS_SUBAREA2CODE' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 255,
+        'default' => '',
+      ],
+      'POS_SUBAREA3CODE' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 255,
+        'default' => '',
+      ],
+      'POS_SUBAREA4CODE' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 255,
+        'default' => '',
+      ],
+      'POS_SUBAREA5CODE' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 255,
+        'default' => '',
+      ],
+      'POS_SUBAREA6CODE' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 255,
+        'default' => '',
+      ],
+      'POS_SUBAREA7CODE' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 255,
+        'default' => '',
+      ],
+      'POS_FUNCTIONCODE' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 255,
+        'default' => '',
+      ],
+      'POS_SUBFUNCTIONCODE' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 255,
+        'default' => '',
+      ],
+      'POS_LEGALENTITYCODE' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 255,
+        'default' => '',
+      ],
+      'POS_REGIONCODE' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 255,
+        'default' => '',
+      ],
+      'POS_COUNTRYCODE' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 255,
+        'default' => '',
+      ],
+      'POS_LOCATIONCODE' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 255,
+        'default' => '',
+      ],
+      'POS_FUNCTIONALAREA' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 255,
+        'default' => '',
+      ],
+      'POS_AREACODE' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+    ],
+    'primary key' => ['id'],
+  ];
+
+  return $schema;
+}
+
+/**
+ * Add new mapping table hmrs_mapping.
+ */
+function myaccess_update_8101() {
+  $tables = myaccess_schema();
+  $schema = Database::getConnection()->schema();
+  $schema->createTable('hmrs_mapping', $tables['hmrs_mapping']);
+}
+
+/**
+ * Add the POS_AREACODE field to hmrs_mapping.
+ */
+function myaccess_update_8103() {
+  $spec = [
+    'type' => 'varchar',
+    'length' => 255,
+    'default' => '',
+    'not null' => TRUE,
+  ];
+
+  $schema = Database::getConnection()->schema();
+  $schema->addField('hmrs_mapping', 'POS_AREACODE', $spec);
+}
+
+/**
+ * Add new google app.
+ */
+function myaccess_update_8104() {
+  $apps = [
+    'contacts' => [
+      'url' => 'https://contacts.google.com/',
+    ],
+    'translate' => [
+      'url' => 'https://translate.google.com/',
+    ],
+    'forms' => [
+      'url' => 'https://docs.google.com/forms/',
+    ],
+    'keep' => [
+      'url' => 'https://keep.google.com/',
+    ],
+    'jamboard' => [
+      'url' => 'https://jamboard.google.com/',
+    ],
+    'smartsheet' => [
+      'url' => 'https://app.smartsheet.com/',
+    ],
+  ];
+
+  foreach ($apps as $name => $data) {
+    $application = Application::create([
+      'title' => $name,
+      'description' => $name,
+      'url' => $data['url'],
+      'weight' => 0,
+      'status' => 1,
+      'bundle' => Application::GOOGLE,
+    ]);
+    $application->save();
+  }
+}
+
+/**
+ * Add new configuration for myaccess settings.
+ */
+function myaccess_update_8105() {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('myaccess.settings');
+  $config->set('event_subscriber.time_within_which_not_update', 0);
+  $config->save(TRUE);
+}
+
+/**
+ * Drop the 'type' field.
+ */
+function myaccess_update_8106() {
+  $definition = \Drupal::entityDefinitionUpdateManager()
+    ->getFieldStorageDefinition('type', 'application');
+
+  \Drupal::entityDefinitionUpdateManager()
+    ->uninstallFieldStorageDefinition($definition);
+}
+
+/**
+ * Correct the values of field 'field_group_context'.
+ */
+function myaccess_update_8107() {
+  $group_storage = \Drupal::entityTypeManager()->getStorage('group');
+  $query = $group_storage->getQuery();
+  $or_condition = $query->orConditionGroup()
+    ->notExists('field_group_context')
+    ->condition('field_group_context', 'contentCustomActionLinkController.php');
+  $groups_found = $query->condition($or_condition)->execute();
+
+  if (!empty($groups_found) && is_array($groups_found)) {
+    /** @var \Drupal\group\Entity\GroupInterface[] $groups */
+    $groups = $group_storage->loadMultiple($groups_found);
+    \Drupal::messenger()
+      ->addMessage("Found " . count($groups) . " group to update the field 'GroupContext' to default 'content'.");
+
+    foreach ($groups as $group) {
+      $group->set('field_group_context', GroupManagerInterface::CONTEXT_CONTENT);
+      $group->save();
+    }
+  }
+
+}
+
+/**
+ * Create "Smartsheet" application.
+ */
+function myaccess_update_8108() {
+  $application_storage = \Drupal::entityTypeManager()
+    ->getStorage('application');
+  /** @var \Drupal\myaccess\Entity\ApplicationInterface $app_smartsheet */
+  $app_smartsheet = $application_storage->create([
+    'title' => 'SmartSheet',
+    'description' => 'SmartSheet',
+    'imageUrl' => '/modules/custom/myaccess/icons/smartsheet.png',
+    'url' => 'https://app.smartsheet.com/',
+    'status' => TRUE,
+    'bundle' => 'google',
+  ]);
+  $app_smartsheet->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Align group visibility options for Mylinks to be the same as for
+ * content entities.
+ */
+function myaccess_update_9301(array &$sandbox): bool {
+  $group_storage = \Drupal::entityTypeManager()->getStorage('group');
+
+  // If the count is not set, get the groups IDs that meet the condition.
+  if (!isset($sandbox['count'])) {
+    $query = $group_storage->getQuery();
+    $query->condition('field_group_context', GroupManagerInterface::CONTEXT_CONTENT, '=');
+    $sandbox['ids'] = $query->execute();
+
+    // Count the number of groups.
+    $sandbox['count'] = count((array) $sandbox['ids']);
+  }
+
+  $sandbox['ids'] = (array) $sandbox['ids'];
+  $ids = array_splice($sandbox['ids'], 0, 50);
+
+  if (!empty($ids)) {
+    // Load multiple group entities by ID.
+    /** @var \Drupal\group\Entity\GroupInterface[] $groups */
+    $groups = $group_storage->loadMultiple($ids);
+    \Drupal::messenger()
+      ->addMessage("Found " . count($groups) . " group(s) to update the field 'group_context'.");
+
+    foreach ($groups as $group) {
+      $group->set('field_group_context', [
+        GroupManagerInterface::CONTEXT_CONTENT,
+        GroupManagerInterface::CONTEXT_MYLINKS,
+      ]);
+      $group->save();
+    }
+  }
+
+  // Set the progress bar.
+  $sandbox['#finished'] = empty($sandbox['ids']) ? 1 : (((int) $sandbox['count']) - count($sandbox['ids'])) / ($sandbox['count']);
+
+  return (bool) $sandbox['#finished'];
+}

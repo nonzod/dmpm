@@ -1,0 +1,113 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function myportal_user_module_implements_alter(&$implementations, $hook) {
+  switch ($hook) {
+    // Move our hook_form_alter() implementation to the end of the list, to be
+    // able to override the 'profile_privacy' section in 'user_form'.
+    case 'form_alter':
+      $group = $implementations['myportal_user'];
+      unset($implementations['myportal_user']);
+      $implementations['myportal_user'] = $group;
+      break;
+  }
+}
+
+/**
+ * Implements hook_social_user_account_header_account_links().
+ *
+ * Adds the "My profile" link to the user menu.
+ */
+function myportal_user_social_user_account_header_account_links(array $context) {
+  // We require a user for this link.
+  if (empty($context['user']) || !($context['user'] instanceof AccountInterface)) {
+    return [];
+  }
+
+  $profile_storage = Drupal::entityTypeManager()->getStorage('profile')
+    ->loadByProperties([
+      'uid' => $context['user']->id(),
+    ]);
+
+  /** @var \Drupal\profile\Entity\ProfileInterface $profile */
+  $profile = reset($profile_storage);
+
+  return [
+    'myp_edit_user' => [
+      '#type' => 'link',
+      '#attributes' => [
+        'title' => new TranslatableMarkup('Settings'),
+      ],
+      '#title' => new TranslatableMarkup('Settings'),
+      '#weight' => 600,
+    ] + Url::fromRoute('entity.user.edit_form', [
+      'user' => $context['user']->id(),
+    ])->toRenderArray(),
+    'myp_profile' => [
+      '#type' => 'link',
+      '#attributes' => [
+        'title' => new TranslatableMarkup('My profile'),
+      ],
+      '#title' => new TranslatableMarkup('My profile'),
+      '#weight' => 600,
+    ] + Url::fromRoute('entity.profile.canonical', [
+      'profile' => $profile->id(),
+    ])->toRenderArray(),
+    'unmasquerade' => [
+      '#type' => 'link',
+      '#attributes' => [
+        'title' => new TranslatableMarkup('Unmasquerade'),
+      ],
+      '#title' => new TranslatableMarkup('Unmasquerade'),
+      '#weight' => 600,
+    ] + Url::fromRoute('masquerade.unmasquerade', [
+      'profile' => $profile->id(),
+    ])->toRenderArray(),
+  ];
+
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function myportal_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'user_form') {
+    if (\Drupal::currentUser()->hasPermission('administer account settings')) {
+      return;
+    }
+
+    if (!in_array('sitemanager', \Drupal::currentUser()->getRoles())) {
+      // Hide account, notifications and privacy sections.
+      $form['account']['#access'] = FALSE;
+    }
+    else {
+      $form['account']['mail']['#access'] = FALSE;
+      $form['account']['name']['#access'] = FALSE;
+      $form['account']['pass']['#access'] = FALSE;
+      $form['account']['notify']['#access'] = FALSE;
+      $form['account']['status']['#access'] = TRUE;
+      $form['account']['roles']['#access'] = TRUE;
+    }
+
+    $form['email_notifications']['#access'] = FALSE;
+    $form['profile_privacy']['#access'] = FALSE;
+
+    if (isset($form['role_change'])) {
+      // If the user has no access to the "role_change" field, then the form
+      // will submit an empty array for the field, which will make later
+      // processing think it was intentional. Set it to the empty field value
+      // to correct this.
+      $form['role_change']['#access'] = FALSE;
+    }
+
+    // Remove the ability to delete the account.
+    unset($form['actions']['delete']);
+  }
+}

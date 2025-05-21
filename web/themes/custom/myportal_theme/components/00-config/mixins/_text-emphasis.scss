@@ -1,0 +1,39 @@
+// Typography
+
+// [converter] $parent hack
+@mixin text-emphasis-variant($parent, $color) {
+  #{$parent} {
+    color: $color;
+  }
+  a#{$parent}:hover,
+  a#{$parent}:focus {
+    color: darken($color, 10%);
+  }
+}
+
+// hover, active, focus status
+@mixin on-event($self: false, $is-active: false) {
+  @if $self {
+    &,
+    &:hover,
+    &:active,
+    &:focus {
+      @content;
+    }
+  } @else if $is-active {
+    &:hover,
+    &:active,
+    &:focus,
+    &.is-active, 
+    &.is-active:hover, 
+    &.is-active:focus  {
+      @content;
+    }
+  } @else {
+    &:hover,
+    &:active,
+    &:focus {
+      @content;
+    }
+  }
+}

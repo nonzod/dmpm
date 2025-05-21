@@ -1,0 +1,25 @@
+services:
+
+  # Services.
+  myportal_autologout.manager:
+    class: Drupal\myportal_autologout\Service\AutologoutManager
+    arguments:
+      - '@module_handler'
+      - '@config.factory'
+      - '@current_user'
+      - '@logger.factory'
+      - '@session_manager'
+      - '@datetime.time'
+      - '@current_route_match'
+      - '@path.current'
+      - '@router.admin_context'
+      - '@entity_type.manager'
+      - '@request_stack'
+      - '@tempstore.private'
+
+  # Event subscriber.
+  myportal_autologout.event_subscriber:
+    class: Drupal\myportal_autologout\EventSubscriber\AutologoutSubscriber
+    arguments: [ '@myportal_autologout.manager', '@datetime.time', '@current_user', '@entity_type.manager', '@tempstore.private' ]
+    tags:
+      - { name: event_subscriber }

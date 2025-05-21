@@ -1,0 +1,22 @@
+services:
+  o11y_traces.opentracing:
+    class: Drupal\o11y_traces\Opentracing
+
+  monolog.processor.opentracing:
+    class: Drupal\o11y_traces\Logger\Processor\OpentracingProcessor
+    arguments: [ '@o11y_traces.opentracing' ]
+
+  twig.profile:
+    class: Twig\Profiler\Profile
+
+  o11y_traces.twig.extension.profiler:
+    class: Drupal\o11y_traces\Twig\Extension\ProfilerExtension
+    arguments: [ '@twig.profile', '@o11y_traces.opentracing' ]
+    tags:
+      - { name: twig.extension, priority: 100 }
+
+  http_middleware.o11y_traces_opentracing:
+    class: Drupal\o11y_traces\StackMiddleware\OpentracingMiddleware
+    arguments: [ '@o11y_traces.opentracing' ]
+    tags:
+      - { name: http_middleware, priority: 1500 }

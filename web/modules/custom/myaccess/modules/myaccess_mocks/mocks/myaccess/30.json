@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "myAccessCode": "menSSOIntMCloud",
+  "myAccessUrl": "https://mcloudlicensing.menarini.net/licensing/cassiopea",
+  "externalMyAccessCode": "menSSOPubMCloud",
+  "externalEnabled": true,
+  "externalMyAccessUrl": "https://mya-mcloud-qa.menarini.net/licensing/cassiopea",
+  "formAction": "/Login!login.action",
+  "postAction": "/Desktop!init.action",
+  "formParams": "[ { \"name\":\"username\", \"value\":\"$username\", \"function\":\"toLowerCase()\" }, { \"name\":\"password\", \"value\":\"$password\" } ]"
+}

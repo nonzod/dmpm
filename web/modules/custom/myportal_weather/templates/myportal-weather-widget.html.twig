@@ -1,0 +1,55 @@
+{#
+/**
+  * @file
+  * Default theme implementation for smartweather.
+  *
+  * Available variables
+  * - weather: Weather data object
+  * - location: Location data object
+  * - user: current user
+*/
+#}
+
+<div class="weather-widget">
+
+  <label for="weather_widget_location">Location</label>
+  <input name="weather_widget_location" class="weather-widget-location"
+         value="{{ location.name }}">
+
+  {% if weather is empty %}
+
+    <p>
+      {% trans %}
+        Sorry we didn't found data for your location. Please change location.
+      {% endtrans %}
+    </p>
+
+  {% else %}
+
+    <div class="weather-details">
+      <div class="weather-icon">
+        <img src="{{ weather.icon }}" width="80px" height="80px"
+             alt="{{ weather.description }}">
+        <span>{{ weather.description }}</span>
+      </div>
+      <div class="weather-temp">
+        {% set unit_temp = weather.units == "metric" ? "C" : "F" %}
+        {{ "Temp"|t }}: {{ weather.temp|round }} <sup>o</sup>{{ unit_temp }}
+      </div>
+      <div class="weather-humidity">
+        {{ "Humidity"|t }}: {{ weather.humidity }}%
+      </div>
+      <div class="weather-clouds">
+        {{ "Clouds"|t }}: {{ weather.clouds ? weather.clouds : '0' }}%
+      </div>
+      <div class="weather-rain">
+        {{ "Rain"|t }}: {{ weather.rain ? weather.rain|round : '0' }}mm
+      </div>
+      <div class="weather-wind">
+        {% set unit_wind = weather.units == "metric" ? "meter/sec" : "miles/hour" %}
+        {{ "Wind"|t }}: {{ weather.wind|round }}{{ unit_wind }}
+      </div>
+    </div>
+
+  {% endif %}
+</div>

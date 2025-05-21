@@ -1,0 +1,25 @@
+<?php
+
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * Implements hook_entity_update().
+ */
+function o11y_entity_update(EntityInterface $entity) {
+  /** @var \Drupal\o11y_metrics\Metrics $metrics */
+  $metrics = \Drupal::service('o11y_metrics.metrics');
+  $counter = $metrics->getOrRegisterCounter('drupal', 'entity_update',
+    'Update an existing entity', ['type', 'bundle']);
+  $counter->incBy(1, [$entity->getEntityTypeId(), $entity->bundle()]);
+}
+
+/**
+ * Implements hook_entity_insert().
+ */
+function o11y_entity_insert(EntityInterface $entity) {
+  /** @var \Drupal\o11y_metrics\Metrics $metrics */
+  $metrics = \Drupal::service('o11y_metrics.metrics');
+  $counter = $metrics->getOrRegisterCounter('drupal', 'entity_insert',
+    'Insert a new entity', ['type', 'bundle']);
+  $counter->incBy(1, [$entity->getEntityTypeId(), $entity->bundle()]);
+}

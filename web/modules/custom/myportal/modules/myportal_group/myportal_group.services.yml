@@ -1,0 +1,12 @@
+services:
+
+  myportal_group.content_access_checker:
+    class: Drupal\myportal_group\Access\MyPortalGroupAccessCheck
+    arguments: [ '@current_route_match', '@current_user' ]
+    tags:
+      - { name: access_check, applies_to: _myportal_content_access }
+
+  myportal_group.alter_views_route_subscriber:
+    class: Drupal\myportal_group\Routing\AlterViewsRouteSubscriber
+    tags:
+      - { name: event_subscriber }

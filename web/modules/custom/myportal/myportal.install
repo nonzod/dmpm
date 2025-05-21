@@ -1,0 +1,44 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the myportal module.
+ */
+
+use Drupal\user\UserInterface;
+
+/**
+ * Set "preferred_admin_langcode" to be always EN.
+ */
+function myportal_update_9301(array &$sandbox): bool {
+  /** @var \Drupal\user\UserStorageInterface $user_storage */
+  $user_storage = \Drupal::entityTypeManager()->getStorage('user');
+
+  if (!isset($sandbox['count'])) {
+    // Get all user's IDs and set them to the sandbox.
+    $sandbox['ids'] = \Drupal::entityQuery('user')
+      ->accessCheck(FALSE)
+      ->execute();
+
+    $sandbox['count'] = count((array)$sandbox['ids']);
+  }
+
+  $sandbox['ids'] = (array)$sandbox['ids'];
+  $ids = array_splice($sandbox['ids'], 0, 50);
+
+  // Load accounts by users IDs.
+  $accounts = $user_storage->loadMultiple($ids);
+
+  /** @var \Drupal\Core\Session\AccountInterface $account */
+  foreach ($accounts as $account) {
+    if ($account instanceof UserInterface) {
+      // Set "preferred_admin_langcode" to "en".
+      $account->set('preferred_admin_langcode', 'en');
+      $account->save();
+    }
+  }
+
+  $sandbox['#finished'] = empty($sandbox['ids']) ? 1 : (((int)$sandbox['count']) - count($sandbox['ids'])) / ($sandbox['count']);
+
+  return (bool)$sandbox['#finished'];
+}

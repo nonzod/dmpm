@@ -1,0 +1,13 @@
+.marquee {
+  overflow: hidden;
+}
+
+.block-myportal-news-feed .marquee {
+  color: #fff;
+  font-size: 0.875rem;
+  font-style: italic;
+
+  span.separator {
+    padding: 0 1em;
+  }
+}

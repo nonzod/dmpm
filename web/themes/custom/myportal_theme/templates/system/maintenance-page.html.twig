@@ -1,0 +1,49 @@
+{#
+/**
+ * @file
+ * Theme override to display a single Drupal page while offline.
+ *
+ * All available variables are mirrored in page.html.twig.
+ * Some may be blank but they are provided for consistency.
+ *
+ * @see template_preprocess_maintenance_page()
+ */
+#}
+<div class="men-header">
+  <nav {{ attributes.addClass('navbar navbar-default men-header--region') }} role="banner">
+    <div class="container container--navbar">
+      <a class="men-logo-error" href="{{ path('<front>') }}" title="{% trans %} Home {% endtrans %}" rel="home">
+        <img src="/{{ directory }}/logo.svg" alt="{{ site_name }}" class="logo--highlighted" />
+      </a>
+    </div>
+  </nav>
+</div>
+<main id="content" class="main-container" role="main">
+
+  {# Content attributes, see Style guide Templates for documentation #}
+  {% block section %}
+    <section class="men-layout__full">
+
+      <div class="container">
+        <div class="row men-error-page men-page-maintenance">
+
+          {% block content %}
+            <a id="main-content" tabindex="-1"></a>
+            
+            <div class="men-error-page--content">
+              {% if title %}
+                <h1>{{ title }}</h1>
+              {% endif %}
+              <p>{{ page.content }}</p>
+            </div>
+            <div class="men-error-page--image">
+              <img src='{{ base_path ~ directory }}/assets/images/maintenance.svg'>
+            </div>
+            
+          {% endblock %}
+
+        </div>
+      </div>
+    </section>
+  {% endblock %}
+</main>

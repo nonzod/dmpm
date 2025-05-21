@@ -1,0 +1,29 @@
+uuid: 775fc48c-27d7-4e21-a42c-66d51eaa3010
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.sdblock_country
+  module:
+    - facets
+    - system
+  theme:
+    - myportal_theme
+id: sdblock_country
+theme: myportal_theme
+region: complementary_top
+weight: 0
+provider: null
+plugin: 'facet_block:sdblock_country'
+settings:
+  id: 'facet_block:sdblock_country'
+  label: Country
+  label_display: '0'
+  provider: facets
+  block_id: sdblock_country
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /page-navigation/287
+

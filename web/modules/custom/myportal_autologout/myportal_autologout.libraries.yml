@@ -1,0 +1,9 @@
+# Custom module library for general purposes.
+autologout:
+  version: VERSION
+  js:
+    js/autologout.js: { }
+  dependencies:
+    - core/drupal.ajax
+    - core/drupalSettings
+    - core/js-cookie

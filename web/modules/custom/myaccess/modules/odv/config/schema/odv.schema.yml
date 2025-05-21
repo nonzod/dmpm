@@ -1,0 +1,36 @@
+# Schema for the configuration files of the ovd module.
+
+odv.settings:
+  type: config_object
+  label: 'Odv settings'
+  mapping:
+    disclaimer:
+      type: text
+      label: 'Disclaimer message'
+    thank_you:
+      type: text
+      label: 'Thank you message'
+    companies:
+      type: sequence
+      label: 'Companies and recipient emails'
+      sequence:
+        type: mapping
+        label: 'Company and recipient emails'
+        mapping:
+          name:
+            type: string
+            label: 'Company name'
+          recipients:
+            type: sequence
+            label: 'Company recipients'
+            sequence:
+              type: string
+              label: 'recipient'
+    allowed_extensions:
+      type: string
+      label: 'Allowed extensions'
+      translatable: false
+    sender_email:
+      type: string
+      label: 'Sender email address'
+      translatable: false

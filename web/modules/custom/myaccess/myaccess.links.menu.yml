@@ -1,0 +1,21 @@
+myaccess.admin_config:
+  title: MyAccess Settings
+  parent: system.admin_config
+  route_name: myaccess.admin_config
+
+myaccess.oidc_token_refresh_settings:
+  title: 'OIDC Token Refresh Settings'
+  route_name: myaccess.oidc_token_refresh_settings_form
+  parent: myaccess.admin_config
+
+entity.mylinks.collection:
+  title: 'My Links'
+  route_name: view.mylinks_overview.overview
+  description: 'Application My Links overview'
+  parent: system.admin_content
+
+entity.application_type.manage:
+  title: 'Manage Application Types'
+  route_name: entity.application_type.collection
+  description: 'Manage application Types'
+  parent: system.admin_structure

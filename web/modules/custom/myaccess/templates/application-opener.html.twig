@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <title></title>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-98PXWF7HG4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-98PXWF7HG4');
+  </script>
+</head>
+
+<body>
+{% if application.hasPostAction %}
+  <form name="myform" method="POST" action="{{ application.getFormAction }}" target="hiddenframe">
+    {% for param in application.getFormParams %}
+      <input type="hidden" name="{{ param.name }}" value="{{ param.value }}">
+    {% endfor %}
+  </form>
+{% endif %}
+
+{% if not application.hasPostAction %}
+  <form name="myform" method="POST" action="{{ application.getFormAction }}">
+    {% for param in application.getFormParams %}
+      <input type="hidden" name="{{ param.name }}" value="{{ param.value }}">
+    {% endfor %}
+  </form>
+{% endif %}
+
+<iframe width="0" height="0" border="0" name="hiddenframe" id="hiddenframe"></iframe>
+
+<script>
+
+  function get_hostname(url) {
+    var m = url.match(/^(?:https?:\/\/)?(?:[^@\n]+@)?([^:\/\n\?\=]+)/im);
+    return m ? m[1] : null;
+  }
+
+  function submit() {
+    var postaction = '{{ application.getPostAction }}';
+    var formaction = '{{ application.getFormAction }}';
+    var myaccessurl = '{{ application.getMyAccessUrl|raw }}';
+    var myaccessAppDomain = get_hostname(myaccessurl);
+    var myaccesscode = '{{ application.myAccessCode|raw }}';
+
+    gtag('event', 'click', {
+      'app_name': myaccesscode,
+      'link_domain': myaccessAppDomain,
+      'link_url': myaccessurl
+    });
+
+    if (formaction && formaction !== '') {
+      document.forms['myform'].submit();
+    } else {
+      window.location.href = myaccessurl;
+    }
+
+    if (postaction && postaction !== '') {
+      setTimeout(function () {
+        window.location.href = postaction;
+      }, 2000);
+    }
+  }
+
+  submit();
+
+</script>
+</body>

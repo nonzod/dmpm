@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * Implements hook_uninstall().
+ *
+ * Remove config that was imported on install.
+ */
+function myportal_tour_uninstall() {
+  $configs = [
+    'tour.tour.socialhome',
+  ];
+
+  foreach ($configs as $config) {
+    // Deleting config.
+    \Drupal::configFactory()->getEditable($config)->delete();
+  }
+}

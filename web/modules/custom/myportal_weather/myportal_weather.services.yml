@@ -1,0 +1,54 @@
+services:
+
+  # Cache.
+  cache.myportal_weather:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin }
+    factory: cache_factory:get
+    arguments: [ 'myportal_weather' ]
+
+  # Services.
+  myportal_weather.chain_location_weather_resolver:
+    class: Drupal\myportal_weather\Resolver\ChainLocationWeatherResolver
+    tags:
+      - { name: service_collector, call: addResolver, tag: myportal_weather.location_weather_resolver }
+
+  # Location weather resolver.
+  myportal_weather.default_location_weather_resolver:
+    class: Drupal\myportal_weather\Resolver\DefaultLocationWeatherResolver
+    arguments:
+      - '@config.factory'
+    tags:
+      - { name: myportal_weather.location_weather_resolver, priority: -100 }
+
+  myportal_weather.user_preference_location_weather_resolver:
+    class: Drupal\myportal_weather\Resolver\UserPreferenceLocationWeatherResolver
+    arguments:
+      - '@user.data'
+      - '@current_user'
+    tags:
+      - { name: myportal_weather.location_weather_resolver, priority: 10 }
+
+  myportal_weather.user_default_location_weather_resolver:
+    class: Drupal\myportal_weather\Resolver\UserDefaultLocationWeatherResolver
+    arguments:
+      - '@current_user'
+      - '@myaccess.user_manager'
+      - '@myportal_weather.geocoding.openweathermap'
+      - '@config.factory'
+    tags:
+      - { name: myportal_weather.location_weather_resolver, priority: 0 }
+
+  # Geocoding services.
+  myportal_weather.geocoding.openweathermap:
+    class: Drupal\myportal_weather\Service\Geocoding\OpenWeatherMap
+    arguments:
+      - '@config.factory'
+
+  # Weather services.
+  myportal_weather.weather.openweathermap:
+    class: Drupal\myportal_weather\Service\Weather\OpenWeatherMap
+    arguments:
+      - '@config.factory'
+      - '@cache.myportal_weather'

@@ -1,0 +1,52 @@
+myportal_staff_directory.index:
+  path: '/admin/structure/staff-directory'
+  defaults:
+    _controller: 'Drupal\myportal_staff_directory\Controller\StaffDirectoryController::renderIndex'
+    _title: 'Staff directory'
+  requirements:
+    _permission: 'admin staff directory'
+
+myportal_staff_directory.backup_restore:
+  path: '/admin/structure/staff-directory/staff-member-backup/{import_backup}/restore'
+  defaults:
+    _entity_form: 'import_backup.restore'
+  options:
+    parameters:
+      import_backup:
+        type: entity:import_backup
+  requirements:
+    _permission: 'admin staff directory'
+
+myportal_staff_directory.json_member_details:
+  path: '/myportal-staff-directory-jmd/{staff_member}'
+  defaults:
+    _controller: 'Drupal\myportal_staff_directory\Controller\StaffDirectoryController::staffMemberDetails'
+    _title: 'Staff member details JSON'
+  methods:  [GET, POST]
+  options:
+    parameters:
+      staff_member:
+        type: entity:staff_member
+  requirements:
+    _access: 'TRUE'
+
+myportal_staff_directory.run_import:
+  path: '/myportal-staff-directory-ri/{importer}'
+  defaults:
+    _controller: 'Drupal\myportal_staff_directory\Controller\StaffDirectoryController::runImport'
+    _title: 'Run import with <importer>'
+  methods:  [GET]
+  options:
+    parameters:
+      importer:
+        type: string
+  requirements:
+    _access: 'TRUE'
+
+myportal_staff_directory.settings:
+  path: '/admin/structure/staff-directory/settings'
+  defaults:
+    _form: '\Drupal\myportal_staff_directory\Form\EmailSettingsForm'
+    _title: 'Staff directory settings'
+  requirements:
+    _permission: 'administer site configuration'

@@ -1,0 +1,18 @@
+myportal_localadmin.main_widget:
+  title: MyPortal Local Admin
+  description: 'Local admins area'
+  parent: system.admin
+  route_name: myportal_localadmin.main_widget
+  weight: 99
+myportal_localadmin.groups:
+  title: Groups
+  description: 'Groups'
+  parent: myportal_localadmin.main_widget
+  route_name: myportal_localadmin.groups_overview
+  weight: 1
+myportal_localadmin.users:
+  title: Users
+  description: 'Users'
+  parent: myportal_localadmin.main_widget
+  route_name: myportal_localadmin.group_users_overview
+  weight: 2

@@ -1,0 +1,4 @@
+administer myportal_autologout configuration:
+  title: 'Administer myportal_autologout configuration'
+  description: 'Optional description.'
+  restrict access: true

@@ -1,0 +1,96 @@
+button.tour-button {
+  border: 0;
+  background: url(../icons/icon-tour.svg) 0 0 transparent no-repeat;
+  font-size: 0;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 10px;
+}
+
+.shepherd-element {
+  color: rgba(256, 256, 256, 0.5);
+  border-radius: 0 !important;
+  background: transparent !important;
+  z-index: 1060;
+}
+
+.shepherd-content {
+  background: #143f59!important;
+}
+
+.shepherd-title {
+  display: none;
+}
+
+.tour-tip-video,
+.tour-tip-body {
+  font-size: 18px;
+  line-height: 21px;
+  color: #fff;
+  margin-bottom: 50px !important;
+}
+
+.tour-tip-body img {
+  margin-top: 20px;
+}
+
+.tour-tip-video iframe {
+  border-style: none;
+}
+
+.tour-progress {
+  color: white;
+}
+
+.shepherd-content .button--primary {
+  background: #0783ff !important;
+  color: #fff;
+  font-size: 20px;
+  text-transform: uppercase;
+  box-shadow: none;
+  border: none;
+  padding: 9px 34px;
+}
+
+@media (min-width: 600px) {
+  .shepherd-element {
+    width: 450px;
+  }
+}
+
+.shepherd-cancel-icon {
+  color: white;
+  font-weight: bold;
+  font-size: 2em;
+  line-height: 1;
+  right: 0;
+  top: 0;
+  padding: 7px 13px;
+  height: 45px;
+  width: 45px;
+  transition: 0.3s background-color ease;
+}
+
+.shepherd-cancel-icon:focus,
+.shepherd-cancel-icon:hover {
+   background-color: black;
+}
+
+.shepherd-content .button--primary {
+  position: static;
+  bottom: 27px;
+  right: 25px;
+  font-family: 'oswald', sans-serif;
+  font-weight: 400;
+}
+
+.shepherd-content .button--primary:active:not(.btn),
+.shepherd-content .button--primary:focus {
+  opacity: 1;
+  outline: 0;
+  color: #FFFFFF;
+}
+
+.shepherd-arrow:before {
+  background: #143f59;
+}

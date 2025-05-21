@@ -1,0 +1,4 @@
+services:
+  myportal_tour.tour_page_check:
+    class: Drupal\myportal_tour\TourPageCheck
+    arguments: [ '@current_route_match', '@entity_type.manager' ]

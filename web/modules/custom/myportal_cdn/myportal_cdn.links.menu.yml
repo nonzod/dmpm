@@ -1,0 +1,5 @@
+myportal_cdn.invalidate_cdn_form:
+  title: 'Invalidate cdn'
+  description: 'Invalidate the cdn cache.'
+  route_name: myportal_cdn.invalidate_cdn_form
+  parent: myportal.admin.config

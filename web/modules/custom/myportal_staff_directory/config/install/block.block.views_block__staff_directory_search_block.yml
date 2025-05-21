@@ -1,0 +1,31 @@
+uuid: 59414229-2978-4961-b35c-f290f41cf66b
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.staff_directory
+  module:
+    - system
+    - views
+  theme:
+    - myportal_theme
+id: views_block__staff_directory_search_block
+theme: myportal_theme
+region: content
+weight: 0
+provider: null
+plugin: 'views_block:staff_directory-search_block'
+settings:
+  id: 'views_block:staff_directory-search_block'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+  items_per_page: none
+  type: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /page-navigation/287
+

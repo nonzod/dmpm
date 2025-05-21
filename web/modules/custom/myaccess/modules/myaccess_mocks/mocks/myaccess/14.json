@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "myAccessCode": "menSSOIntEasywork",
+  "myAccessUrl": "https://easywork.menarini.net",
+  "externalMyAccessCode": "menSSOPubEasywork",
+  "externalEnabled": true,
+  "externalMyAccessUrl": "https://mya-easywork-qa.menarini.net",
+  "formAction": "/index.php",
+  "postAction": null,
+  "formParams": "[ { \"name\":\"url_login\", \"value\":\"$username\" }, { \"name\":\"url_password\", \"value\":\"$password\" }, { \"name\":\"url_account\", \"value\":\"50004\" } ] "
+}

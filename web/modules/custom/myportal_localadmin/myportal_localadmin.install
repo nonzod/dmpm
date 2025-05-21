@@ -1,0 +1,35 @@
+<?php
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+
+/**
+ * Implements hook_update_N().
+ * 
+ * Adds the favourite_legalentity field to users.
+ */
+/*function myportal_localadmin_update_9001() {
+  // Create field storage if it doesn't exist
+  if (!FieldStorageConfig::loadByName('user', 'favourite_legalentity')) {
+    FieldStorageConfig::create([
+      'field_name' => 'favourite_legalentity',
+      'entity_type' => 'user',
+      'type' => 'string',
+      'settings' => [],
+      'cardinality' => 1,
+    ])->save();
+  }
+  
+  // Create field configuration if it doesn't exist
+  if (!FieldConfig::loadByName('user', 'user', 'favourite_legalentity')) {
+    FieldConfig::create([
+      'field_name' => 'favourite_legalentity',
+      'entity_type' => 'user',
+      'bundle' => 'user',
+      'label' => 'Favorite Legal Entity',
+      'description' => 'The user\'s preferred legal entity.',
+      'required' => FALSE,
+    ])->save();
+  }
+  
+  return t('Favorite Legal Entity field added to users.');
+}*/

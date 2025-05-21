@@ -1,0 +1,6 @@
+myportal_news.settings_form:
+  title: 'Settings News Channels Form'
+  route_name: myportal_news.settings_form
+  description: 'Customize and configure news channels.'
+  parent: myportal.admin.config
+  weight: 99

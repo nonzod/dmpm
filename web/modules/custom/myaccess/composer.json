@@ -1,0 +1,24 @@
+{
+    "name": "drupal/myaccess",
+    "type": "drupal-module",
+    "description": "Integrates with Menarini authentication, application management and HMRS.",
+    "license": "GPL-2.0+",
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ],
+    "require": {
+        "bower-asset/fuse": "6.4.3",
+        "socialconnect/auth": "^3.0",
+        "socialconnect/http-client": "^1.0"
+    },
+    "extra": {
+        "drush": {
+            "services": {
+                "drush.services.yml": "^9"
+            }
+        }
+    }
+}

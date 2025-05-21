@@ -1,0 +1,36 @@
+<?php
+
+/**
+ * @file
+ * Controls the visual building components of the YouTube integration.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function myportal_youtube_help($route_name, RouteMatchInterface $route_match) {
+  if ($route_name == 'help.page.myportal_youtube') {
+    $output = '<h3>' . t('About') . '</h3>';
+    $output .= '<p>' . t('The myportal YouTube module allows you to connect to a YouTube account and import recent data using Youtube API. The feed data is shown as a paragraph in the page content type that contains your most recent posts.') . '</p>';
+    return $output;
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function myportal_youtube_theme(): array {
+  return [
+    'youtube_block_playlist' => [
+      'variables' => [
+        'title' => NULL,
+        'description' => NULL,
+        'more' => NULL,
+        'items' => NULL,
+      ],
+      'template' => 'youtube-block-playlist',
+    ],
+  ];
+}

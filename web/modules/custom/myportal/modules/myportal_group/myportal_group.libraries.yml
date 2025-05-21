@@ -1,0 +1,6 @@
+selector.widget:
+  js:
+    assets/js/group-selector-widget.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once

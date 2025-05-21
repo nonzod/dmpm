@@ -1,0 +1,99 @@
+uuid: 746bc7a4-9d58-4943-a1ba-cc34231594f7
+langcode: en
+status: true
+dependencies:
+  config:
+    - search_api.server.opensearch_server
+  module:
+    - myportal_staff_directory
+    - search_api
+    - myportal
+_core:
+  default_config_hash: yEImH73Q7eZFJhErlZ-y2CVrXk-bycLDmyrGOLQhmt0
+id: staff_directory
+name: 'Staff Directory'
+description: ''
+read_only: false
+field_settings:
+  country:
+    label: Country
+    datasource_id: 'entity:staff_member'
+    property_path: country
+    type: string
+    dependencies:
+      module:
+        - myportal_staff_directory
+  directline_number:
+    label: 'Direct line'
+    datasource_id: 'entity:staff_member'
+    property_path: directline_number
+    type: string
+    dependencies:
+      module:
+        - myportal_staff_directory
+  email:
+    label: 'E-Mail address'
+    datasource_id: 'entity:staff_member'
+    property_path: email
+    type: string
+    dependencies:
+      module:
+        - myportal_staff_directory
+  employee_scope:
+    label: 'Employee scope'
+    datasource_id: 'entity:staff_member'
+    property_path: employee_scope
+    type: string
+    dependencies:
+      module:
+        - myportal_staff_directory
+  function:
+    label: Function
+    datasource_id: 'entity:staff_member'
+    property_path: function
+    type: string
+    dependencies:
+      module:
+        - myportal_staff_directory
+  legalentity:
+    label: 'Legal entity'
+    datasource_id: 'entity:staff_member'
+    property_path: legalentity
+    type: string
+    dependencies:
+      module:
+        - myportal_staff_directory
+  name:
+    label: Name
+    datasource_id: 'entity:staff_member'
+    property_path: name
+    type: text
+    dependencies:
+      module:
+        - myportal_staff_directory
+  smid:
+    label: ID
+    datasource_id: 'entity:staff_member'
+    property_path: smid
+    type: integer
+    dependencies:
+      module:
+        - myportal_staff_directory
+datasource_settings:
+  'entity:staff_member': {  }
+processor_settings:
+  add_url: {  }
+  aggregated_field: {  }
+  entity_type: {  }
+  language_with_fallback: {  }
+  myportal_content_has_attachments: {  }
+  rendered_item: {  }
+tracker_settings:
+  default:
+    indexing_order: fifo
+options:
+  cron_limit: 50
+  index_directly: true
+  track_changes_in_references: true
+server: opensearch_server
+

@@ -1,0 +1,110 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for social_xoverride module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_mail_alter().
+ *
+ * @see https://wellnet.atlassian.net/browse/MEN-821
+ */
+function social_xoverride_mail_alter(&$message) {
+  $allow_modules = ['user', 'monolog', 'odv', 'myportal_staff_directory'];
+  $allow_id = ['swiftmailer_test'];
+  if (in_array($message['module'], $allow_modules) || in_array($message['id'], $allow_id)) {
+    // Allow send mail.
+    return;
+  }
+  $message['send'] = FALSE;
+
+  // Logs the email message.
+  \Drupal::logger('social_xoverride_email_blocker')
+    ->notice("Blocked mail for %to: %message.", [
+      '%to' => $message['to'],
+      '%message' => json_encode($message),
+    ]);
+}
+
+/**
+ * Implements hook_activity_send_email_notifications_alter().
+ */
+function social_xoverride_activity_send_email_notifications_alter(array &$items, array $email_message_templates) {
+  // Remove all email notifications settings.
+  $items['message_to_me']['templates'] = [];
+  $items['what_manage']['templates'] = [];
+  $items['what_follow']['templates'] = [];
+  $items['system_notifications']['templates'] = [];
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function social_xoverride_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+
+  if ($form_id == 'social_group_add') {
+    // Disable and set default value for this field.
+    $form["group_settings"]["group_type"]['#disabled'] = TRUE;
+    $form["group_settings"]["group_type"]['#default_value'] = 'flexible_group';
+  }
+
+  if (in_array($form_id, [
+    'group_flexible_group_add_form',
+    'group_flexible_group_edit_form',
+  ])) {
+    // Hide the fieldset of path.
+    $form['path']['#access'] = FALSE;
+
+    if (isset($form["field_group_allowed_visibility"])) {
+      // Disable and set default value for this field.
+      $form["field_group_allowed_visibility"]['#disabled'] = TRUE;
+      unset($form["field_group_allowed_visibility"]['#states']);
+      $form['field_group_allowed_visibility']['widget']['#default_value'] = [
+        'public',
+        'community',
+        'group',
+      ];
+
+      if ($form_id == 'group_flexible_group_add_form') {
+        // Add function for the flexible group add form to remove default states.
+        $form['#after_build'][] = 'social_xoverride_group_flexible_group_add_after_build';
+      }
+    }
+
+    if (isset($form["field_flexible_group_visibility"])) {
+      // Disable and set default value for this field.
+      $form["field_flexible_group_visibility"]['#disabled'] = TRUE;
+      $form['field_flexible_group_visibility']['widget']['#default_value'] = 'members';
+    }
+
+    if (isset($form["field_group_allowed_join_method"])) {
+      // See social_group_form_alter().
+      $form["field_group_allowed_join_method"]['#disabled'] = TRUE;
+      $form['field_group_allowed_join_method']['widget']['#default_value'] = 'added';
+    }
+  }
+}
+
+/**
+ * Function for the flexible group add form to remove default states.
+ *
+ * @param array $form
+ *   The form element.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The form state.
+ *
+ * @return mixed
+ *   The form array containing the default values & states.
+ */
+function social_xoverride_group_flexible_group_add_after_build(array $form, FormStateInterface $form_state) {
+  if (isset($form["field_group_allowed_visibility"])) {
+    unset($form['field_group_allowed_visibility']['widget']['public']['#states']);
+    unset($form['field_group_allowed_visibility']['widget']['community']['#states']);
+    unset($form['field_group_allowed_visibility']['widget']['group']['#states']);
+  }
+
+  return $form;
+}

@@ -1,0 +1,42 @@
+@import "settings";
+
+.stream-icon-new {
+  background:$brand-secondary;
+}
+
+.teaser--stream {
+  .teaser__image {
+    border-radius: 0;
+  }
+  &:last-child {
+    border-bottom-left-radius: $card-border-radius;
+    border-bottom-right-radius: $card-border-radius;
+    .card-image {
+      border-bottom-left-radius: $card-border-radius;
+    }
+  }
+}
+
+// Remove stream line and dot
+.stream {
+  margin-left: 0;
+  &:before {
+    display: none;
+  }
+}
+.card--stream {
+  margin-left: 0;
+  &:before,
+  &:after {
+    display: none;
+  }
+}
+
+// Override 'themes/contrib/socialbase/assets/css/stream.css'.
+.stream-item:first-of-type {
+  z-index: 2;
+}
+
+.stream-item .pull-right {
+  z-index: 2;
+}

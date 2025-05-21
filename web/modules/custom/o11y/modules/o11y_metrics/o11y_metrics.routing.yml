@@ -1,0 +1,7 @@
+o11y_metrics.controller_metrics:
+  path: '/metrics'
+  defaults:
+    _controller: '\Drupal\o11y_metrics\Controller\MetricsController::metrics'
+    _title: 'Metrics'
+  requirements:
+    _access: 'TRUE'

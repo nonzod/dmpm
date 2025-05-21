@@ -1,0 +1,29 @@
+uuid: 24fb3305-7b92-467c-92e5-d07ffaf4226a
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.staff_directory
+  module:
+    - system
+    - views
+  theme:
+    - myportal_theme
+id: exposedformstaff_directorysearch_block
+theme: myportal_theme
+region: content
+weight: 0
+provider: null
+plugin: 'views_exposed_filter_block:staff_directory-search_block'
+settings:
+  id: 'views_exposed_filter_block:staff_directory-search_block'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /page-navigation/287
+

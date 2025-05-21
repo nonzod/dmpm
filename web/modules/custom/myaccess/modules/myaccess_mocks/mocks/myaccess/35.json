@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "myAccessCode": "menSSOIntServDeskFO",
+  "myAccessUrl": "https://einstein2test.menarini.net",
+  "externalMyAccessCode": "menSSOPubServDeskFO",
+  "externalEnabled": true,
+  "externalMyAccessUrl": "https://mya-servdeskfo-qa.menarini.net",
+  "formAction": "/index_mya.php",
+  "postAction": "",
+  "formParams": "[{\"name\":\"login\",\"value\":\"$username\"},{\"name\":\"password\",\"value\":\"$password\"},{\"name\":\"destination\",\"value\":\"einsteintest.menarini.net\"},{\"name\":\"url\",\"value\":\"einstein2test.menarini.net/s/mrwolf\"}]"
+}

@@ -1,0 +1,28 @@
+{#
+/**
+ * @file
+ * Default theme implementation of an YouTube playlist.
+ *
+ * Available variables:
+ * - title: The youtube playlist title.
+ * - description: The youtube playlist description.
+ * - items: The youtube videos in this playlist.
+ *
+ * @ingroup themeable
+ */
+#}
+
+{% set link_classes = [
+  'btn btn-flat waves-effect waves-btn'
+]
+%}
+
+{% spaceless %}
+  <div class="youtube-playlist">
+    <div class="description">{{ description }}</div>
+    <div class="items video-container">{{ items }}</div>
+    {% if more %}
+      <div class="paragraph paragraph--type--button">{{ link(more.title, more.url, { 'class': link_classes }) }}</div>
+    {% endif %}
+  </div>
+{% endspaceless %}
